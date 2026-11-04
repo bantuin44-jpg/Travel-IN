@@ -38,19 +38,19 @@ button,input{font:inherit;color:inherit}
 .ticker{flex:1;overflow:hidden;white-space:nowrap;mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
 .ticker span{display:inline-block;padding-left:100%;animation:run 38s linear infinite}@keyframes run{to{transform:translateX(-100%)}}
 .foot b{color:var(--paper)}
-dialog{border:0;border-radius:1.2rem;background:var(--paper);color:var(--ink);padding:0;width:min(34rem,94vw);max-height:92vh;font-size:16px}
+dialog{margin:auto;text-align:center;border:0;border-radius:1.2rem;background:var(--paper);color:var(--ink);padding:0;width:min(34rem,94vw);max-height:92vh;font-size:16px}
 dialog::backdrop{background:rgba(4,36,60,.65)}dialog[open]{animation:pop .2s ease-out}@keyframes pop{from{transform:translateY(14px);opacity:0}}
 .dlg{padding:1.5rem;display:grid;gap:1rem}.dlg h2{font:700 2rem/1 'Barlow Condensed'}.dlg .btn{color:var(--ink);border-color:#b7d6ea}.dlg .btn.pri{border-color:var(--amber)}
 .x{justify-self:end;margin-bottom:-1.6rem}
 label{display:grid;gap:.3rem;font-weight:600;font-size:.95rem}
 input,select{border:1.5px solid #b7d6ea;border-radius:.6rem;padding:.65rem .8rem;background:#fff;color:var(--ink)}
-.chips{display:flex;gap:.5rem;flex-wrap:wrap}.chips input{position:absolute;opacity:0}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.4rem}#ck label{min-width:3.6rem;font:700 1.6rem 'Barlow Condensed'}#ck small{font:500 .75rem Barlow}.chips>small{color:#4d7691}input{text-align:center}.chips input{position:absolute;opacity:0}
 .chips label{border:1.5px solid #b7d6ea;border-radius:.7rem;padding:.55rem .9rem;cursor:pointer;background:#fff;min-width:5.2rem;text-align:center}
 .chips input:checked+label{background:var(--sign);color:#fff;border-color:var(--sign)}.chips input:focus-visible+label{outline:3px solid var(--amber)}
 .chips input:disabled+label{opacity:.4;cursor:not-allowed;text-decoration:line-through}.chips small{display:block;font-weight:500}
 .err{color:#b42318;font-size:.9rem;min-height:1.2em}
 .ticket{border:2px dashed var(--sign);border-radius:1rem;padding:1.2rem;display:grid;gap:.3rem}.ticket .big{font:700 3.6rem/1 'Barlow Condensed';color:var(--sign)}
-.adm{max-height:90vh;overflow:auto}.sl{border:1.5px solid #b7d6ea;border-radius:.9rem;padding:.9rem;display:grid;gap:.5rem}
+.adm{max-height:90vh;overflow:auto;text-align:left}.adm input{text-align:left}.sl{border:1.5px solid #b7d6ea;border-radius:.9rem;padding:.9rem;display:grid;gap:.5rem}
 .sl h3{display:flex;justify-content:space-between;align-items:center;font:700 1.5rem 'Barlow Condensed'}
 .row{display:grid;grid-template-columns:1.6rem 1fr auto auto;gap:.5rem;align-items:center;font-size:.92rem;padding:.3rem 0;border-top:1px solid #dcebf5}.row a{color:var(--sign);font-weight:600}.row select{padding:.3rem}
 .row .btn{padding:.25rem .6rem}.add{display:grid;grid-template-columns:1fr 1fr auto;gap:.4rem}
@@ -141,26 +141,27 @@ setInterval(tick,1e3);setInterval(()=>{subSeats();render()},3e4);
 /* ---------- pemesanan ---------- */
 const normWA=v=>{let d=v.replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return /^628\d{7,12}$/.test(d)?d:null};
 const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].toUpperCase()+".":p[0]).slice(0,32)};
-async function book({name,phone,date,slot,status="baru"}){const k=`${date}_${slot}`;
-  for(const n of [1,2,3,4,5].filter(n=>!(seats[k]||{})[n])){const id=push(ref(db,"bookings")).key,ts=serverTimestamp();
+async function book({name,phone,date,slot,seat,status="baru"}){const k=`${date}_${slot}`;
+  for(const n of (seat?[seat]:[1,2,3,4,5]).filter(n=>!(seats[k]||{})[n])){const id=push(ref(db,"bookings")).key,ts=serverTimestamp();
     try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(name),id,ts},[`bookings/${id}`]:{name:name.trim(),phone,date,slot,seat:String(n),status,ts}});return{n,id}}
     catch(e){if(!/permission/i.test(e.message))throw e}}
-  throw new Error("Kursi untuk jam ini sudah penuh.")}
+  throw new Error(seat?"Kursi itu sudah diambil, pilih kursi lain.":"Kursi untuk jam ini sudah penuh.")}
 
-let bk={date:today(),slot:null};
-function openBook(){bk={date:today(),slot:null};$("#bkBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Pesan kursi</h2>
-  <form id="fb" class="dlg" style="padding:0"><div><b>Tanggal</b><div class="chips" id="cd"></div></div><div><b>Keberangkatan</b><div class="chips" id="cs"></div></div>
+let bk={date:today(),slot:null,seat:null};
+function openBook(){bk={date:today(),slot:null,seat:null};$("#bkBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Pesan kursi</h2>
+  <form id="fb" class="dlg" style="padding:0"><div><b>Tanggal</b><div class="chips" id="cd"></div></div><div><b>Keberangkatan</b><div class="chips" id="cs"></div></div><div><b>Pilih kursi</b><div class="chips" id="ck"></div></div>
   <label>Nama lengkap<input id="nm" required minlength="2" maxlength="40" autocomplete="name"></label>
   <label>Nomor WhatsApp<input id="wa" type="tel" required placeholder="08xxxxxxxxxx" autocomplete="tel"></label>
   <div class="err" id="be"></div><button class="btn pri" id="bs">Pesan kursi</button></form>`;
   $("#dBook").showModal();bkChoices();
   $("#fb").onsubmit=async e=>{e.preventDefault();const phone=normWA($("#wa").value),err=$("#be");err.textContent="";
-    if(!bk.slot)return err.textContent="Pilih jam keberangkatan.";if(!phone)return err.textContent="Nomor WhatsApp tidak valid.";
-    $("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot});ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
+    if(!bk.slot)return err.textContent="Pilih jam keberangkatan.";if(!bk.seat||(seats[bk.date+"_"+bk.slot]||{})[bk.seat])return err.textContent="Pilih kursi yang masih kosong.";if(!phone)return err.textContent="Nomor WhatsApp tidak valid.";
+    $("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot,seat:bk.seat});ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
 function bkChoices(){const t=today();$("#cd").innerHTML=[0,1,2].map(i=>{const d=addD(t,i);return `<input type="radio" name="d" id="d${i}" value="${d}" ${d===bk.date?"checked":""}><label for="d${i}">${i?fmt(d,{weekday:"short",day:"numeric",month:"short"}):"Hari ini"}</label>`}).join("");
   $("#cs").innerHTML=SLOTS.map(sl=>{const k=`${bk.date}_${sl.id}`,f=taken(k).length,off=slots[k]?.closed||f>=Q||dep(bk.date,sl.h)-Date.now()<9e5;
     return `<input type="radio" name="s" id="s${sl.id}" value="${sl.id}" ${off?"disabled":""} ${bk.slot===sl.id&&!off?"checked":""}><label for="s${sl.id}">${sl.l}<small>${slots[k]?.closed?"Ditutup":f>=Q?"Penuh":"Sisa "+(Q-f)}</small></label>`}).join("");
-  $("#cd").onchange=e=>{bk.date=e.target.value;bk.slot=null;bkChoices()};$("#cs").onchange=e=>bk.slot=e.target.value}
+  const sk=`${bk.date}_${bk.slot}`;$("#ck").innerHTML=bk.slot?[1,2,3,4,5].map(n=>{const t=!!(seats[sk]||{})[n];return `<input type="radio" name="k" id="k${n}" value="${n}" ${t?"disabled":""} ${bk.seat===n&&!t?"checked":""}><label for="k${n}">${n}<small>${t?"Terisi":"Kosong"}</small></label>`}).join(""):"<small>Pilih jam dulu</small>";
+  $("#ck").onchange=e=>bk.seat=+e.target.value;$("#cd").onchange=e=>{bk.date=e.target.value;bk.slot=null;bk.seat=null;bkChoices()};$("#cs").onchange=e=>{bk.slot=e.target.value;bk.seat=null;bkChoices()}}
 function ticket({n,id}){const t=`TRAVEL.IN · Cirebon ⇄ Majalengka\n${fmt(bk.date,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}\nJam ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB · Kursi ${n}\nKode ${id.slice(-6).toUpperCase()}\nHadir 15 menit sebelum berangkat.`;
   $("#bkBody").innerHTML=`<h2>Kursi berhasil dipesan</h2><div class="ticket"><span>Kursi</span><span class="big">${n}</span><b>${fmt(bk.date,{weekday:"long",day:"numeric",month:"long"})} · ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB</b><span>Kode pesanan: <b>${id.slice(-6).toUpperCase()}</b></span></div>
   <p>Simpan tiket ini dan hadir 15 menit sebelum berangkat. Admin akan menghubungi lewat WhatsApp.</p><button class="btn pri" id="cp">Salin tiket</button><button class="btn" data-close>Selesai</button>`;
