@@ -10,9 +10,9 @@
 :root{--deep:#1B96D6;--sign:#0F7BBD;--paper:#F7FBFE;--ink:#0A2E4A;--amber:#FF9A1F;--red:#E5484D;--mute:#CBE8F8;--line:rgba(247,251,254,.5)}
 *{box-sizing:border-box;margin:0}
 html{font-size:clamp(10px,min(1.05vw,1.85vh),26px)}
-body{background:var(--deep);color:var(--paper);font:500 1.15rem/1.4 Barlow,sans-serif;min-height:100vh;display:flex;flex-direction:column;padding:1.2rem 1.6rem}
+body{background:linear-gradient(180deg,#1480C4 0%,#25A0E2 60%,#5CC0F0 100%) fixed;color:var(--paper);position:relative;font:500 1.15rem/1.4 Barlow,sans-serif;min-height:100vh;display:flex;flex-direction:column;padding:1.2rem 1.6rem}
 button,input{font:inherit;color:inherit}
-.bar{display:flex;align-items:center;gap:1.6rem;margin-bottom:1.2rem}
+.bar,.board,.foot{position:relative;z-index:1}.bar{display:flex;align-items:center;gap:1.6rem;margin-bottom:1.2rem}
 .brand{font:700 2.6rem/1 'Barlow Condensed';letter-spacing:.01em}.brand b{color:var(--amber)}
 .route{font:600 1.7rem 'Barlow Condensed';color:var(--mute);flex:1}.route span{color:var(--paper)}
 .clock{text-align:right;font-variant-numeric:tabular-nums}.clock strong{display:block;font:700 2.8rem/1 'Barlow Condensed'}.clock small{color:var(--mute);font-size:1rem}
@@ -22,19 +22,19 @@ button,input{font:inherit;color:inherit}
 .btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 .btn svg{width:1.2em;height:1.2em}.dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--red)}.dot.ok{background:#4ADE80}
 .board{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;min-height:0}
-.panel{background:var(--sign);border-radius:1.4rem;padding:1.4rem 1.8rem;outline:.28rem solid var(--paper);outline-offset:-.8rem;display:flex;flex-direction:column;gap:.9rem}
+.panel{background:#fff;color:var(--ink);border-radius:1.6rem;padding:1.5rem 1.8rem 1.3rem;display:flex;flex-direction:column;gap:.8rem;box-shadow:0 1.4rem 3rem rgba(3,50,85,.35),0 0 0 .3rem rgba(255,255,255,.35)}
 .panel header{display:flex;justify-content:space-between;align-items:flex-start}
-.time{font:700 8.5rem/.85 'Barlow Condensed';letter-spacing:-.01em}.time small{font-size:2rem;color:var(--mute);margin-left:.6rem;letter-spacing:.03em}
-.chip{background:var(--paper);color:var(--ink);border-radius:2rem;padding:.35rem 1.1rem;font:700 1.5rem 'Barlow Condensed'}
-.st-almost .chip,.st-boarding .chip{background:var(--amber)}.st-full .chip{background:var(--red);color:#fff}.st-closed .chip,.st-departed .chip{background:#5FB0DE;color:var(--paper)}
+.time{color:#1480C4;font:700 8.5rem/.85 'Barlow Condensed';letter-spacing:-.01em}.time small{font-size:2rem;color:#7fa3bb;margin-left:.6rem;letter-spacing:.03em}
+.chip{background:#DDF5E7;color:#0B6B3A;border-radius:2rem;padding:.35rem 1.1rem;font:700 1.5rem 'Barlow Condensed'}
+.st-almost .chip,.st-boarding .chip{background:var(--amber);color:var(--ink)}.st-boarding .chip{animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{box-shadow:0 0 0 .5rem rgba(255,154,31,.3)}}.st-full .chip{background:var(--red);color:#fff}.st-closed .chip,.st-departed .chip{background:#DCE8F0;color:#5b7c93}
 .st-departed,.st-closed{opacity:.6}
-.count{font:600 1.7rem 'Barlow Condensed';color:var(--mute);font-variant-numeric:tabular-nums}
+.count{font:600 1.7rem 'Barlow Condensed';color:#4d7691;font-variant-numeric:tabular-nums}
 .seats{list-style:none;padding:0;display:grid;gap:.6rem;flex:1}
-.seat{display:flex;align-items:center;gap:1rem;border:2px dashed var(--line);border-radius:.8rem;padding:.2rem 1rem .2rem .3rem;color:var(--mute);font:600 2rem 'Barlow Condensed'}
-.seat .no{width:2.6rem;height:2.6rem;display:grid;place-items:center;border-radius:.55rem;background:rgba(255,255,255,.1)}
-.seat.on{background:var(--paper);color:var(--ink);border:2px solid var(--paper);font-size:2.3rem}.seat.on .no{background:var(--ink);color:var(--paper)}
-.panel footer{color:var(--mute);font-size:1.05rem}
-.foot{display:flex;gap:1.6rem;align-items:center;margin-top:1.2rem;color:var(--mute);font-size:1.1rem}
+.seat{display:flex;align-items:center;gap:1rem;border:2px dashed #b7d6ea;background:#F2F8FC;border-radius:.9rem;padding:.2rem 1rem .2rem .3rem;color:#7fa3bb;font:600 2rem 'Barlow Condensed'}
+.seat .no{width:2.6rem;height:2.6rem;display:grid;place-items:center;border-radius:.6rem;background:#DCEBF5;color:#7fa3bb}
+.seat.on{background:#E6F4FD;color:var(--ink);border:2px solid #1B96D6;font-size:2.3rem}.seat.on .no{background:#FF9A1F;color:var(--ink)}
+.panel footer{display:flex;justify-content:space-between;color:#4d7691;font-weight:600;font-size:1.1rem}.mt{height:.6rem;border-radius:1rem;background:#DCEBF5;overflow:hidden}.mt span{display:block;height:100%;background:linear-gradient(90deg,#1B96D6,#FF9A1F);border-radius:1rem;transition:width .6s}.st-full .mt span{background:var(--red)}.rt{display:flex;align-items:center;gap:.7rem;color:#4d7691;font:600 1.3rem 'Barlow Condensed'}.rt i{flex:1;border-top:3px dotted #9cc7e0;position:relative}.rt i:after{content:'';position:absolute;right:-2px;top:-.45rem;width:.7rem;height:.7rem;border-top:3px solid #9cc7e0;border-right:3px solid #9cc7e0;transform:rotate(45deg)}.sky{position:fixed;left:0;bottom:0;width:100%;height:42vh;z-index:0;pointer-events:none}
+.foot{display:flex;gap:1.6rem;align-items:center;margin-top:1.2rem;color:#fff;font-size:1.1rem;background:rgba(5,64,105,.6);backdrop-filter:blur(6px);border-radius:1rem;padding:.7rem 1.3rem}
 .ticker{flex:1;overflow:hidden;white-space:nowrap;mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
 .ticker span{display:inline-block;padding-left:100%;animation:run 38s linear infinite}@keyframes run{to{transform:translateX(-100%)}}
 .foot b{color:var(--paper)}
@@ -60,6 +60,11 @@ input,select{border:1.5px solid #b7d6ea;border-radius:.6rem;padding:.65rem .8rem
 </style>
 </head>
 <body>
+<svg class="sky" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+ <path d="M60 150Q600 -90 1140 150" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-dasharray="14 12"/>
+ <g fill="#fff" fill-opacity=".9"><path d="M0 300V250l60-10 40 15 60-70 60 70 50-20 70 8V300z" fill-opacity=".35"/><path d="M180 300v-50h30v-30h14v30h26v50zM300 300v-90h36v90zM340 300v-120h30v120zM520 300v-60q40-70 80 0v60zM596 300v-80h22v80zM640 300v-110h40v110zM700 300v-70h60v70zM800 300v-130l30-30 30 30v130zM900 300v-60q40-60 80 0v60zM1000 300v-100h30v100zM1040 300v-70h50v70z"/><circle cx="560" cy="205" r="6"/><rect x="556" y="190" width="8" height="14"/><path d="M0 300V270h1200v30z"/></g>
+ <g fill="#fff"><path d="M-14 0L8-3 14 0 8 3zM-2 0L-8-9H-5L4-1zM-2 0L-8 9H-5L4 1z" transform="scale(1.8)"/><animateMotion dur="20s" repeatCount="indefinite" rotate="auto" path="M60 150Q600 -90 1140 150"/></g>
+</svg>
 <div class="bar">
   <div class="brand">Travel<b>.IN</b></div>
   <div class="route"><span>Cirebon</span> ⇄ <span>Majalengka</span> &nbsp;·&nbsp; <span id="dlabel"></span></div>
@@ -124,7 +129,7 @@ function status(k,sl){const f=taken(k).length,t=dep(k.slice(0,10),sl.h),left=t-D
 function render(){const d=viewDate();$("#dlabel").textContent=(d===today()?"Hari ini, ":"Besok, ")+fmt(d,{weekday:"long",day:"numeric",month:"long"});
   $("#board").innerHTML=SLOTS.map(sl=>{const k=`${d}_${sl.id}`,[c,t]=status(k,sl),s=seats[k]||{};
     const rows=[1,2,3,4,5].map(n=>s[n]?`<li class="seat on"><span class="no">${n}</span>${esc(s[n].name)}</li>`:`<li class="seat"><span class="no">${n}</span>Kosong</li>`).join("");
-    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><footer>${taken(k).length} dari ${Q} kursi terisi</footer></section>`}).join("");
+    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><div class="rt"><b>Cirebon</b><i></i><b>Majalengka</b></div><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><div class="mt"><span style="width:${taken(k).length/Q*100}%"></span></div><footer><span>${taken(k).length} dari ${Q} kursi terisi</span><span>${taken(k).length>=Q?"Kursi penuh":"Sisa "+(Q-taken(k).length)+" kursi"}</span></footer></section>`}).join("");
   const n=addD(today(),d===today()?1:2);$("#next").innerHTML=`${fmt(n,{weekday:"short",day:"numeric",month:"short"})}: `+SLOTS.map(sl=>`${sl.l} <b>${Q-taken(n+"_"+sl.id).length}</b> kosong`).join(" · ");
   tick();if($("#dBook").open)bkChoices();if($("#dAdm").open)admRender()}
 
