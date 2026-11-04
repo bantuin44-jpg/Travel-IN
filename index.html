@@ -1,1 +1,196 @@
-.
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Travel.IN – Jadwal Keberangkatan Cirebon ⇄ Majalengka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#1B96D6;--sign:#0F7BBD;--paper:#F7FBFE;--ink:#0A2E4A;--amber:#FF9A1F;--red:#E5484D;--mute:#CBE8F8;--line:rgba(247,251,254,.5)}
+*{box-sizing:border-box;margin:0}
+html{font-size:clamp(10px,min(1.05vw,1.85vh),26px)}
+body{background:var(--deep);color:var(--paper);font:500 1.15rem/1.4 Barlow,sans-serif;min-height:100vh;display:flex;flex-direction:column;padding:1.2rem 1.6rem}
+button,input{font:inherit;color:inherit}
+.bar{display:flex;align-items:center;gap:1.6rem;margin-bottom:1.2rem}
+.brand{font:700 2.6rem/1 'Barlow Condensed';letter-spacing:.01em}.brand b{color:var(--amber)}
+.route{font:600 1.7rem 'Barlow Condensed';color:var(--mute);flex:1}.route span{color:var(--paper)}
+.clock{text-align:right;font-variant-numeric:tabular-nums}.clock strong{display:block;font:700 2.8rem/1 'Barlow Condensed'}.clock small{color:var(--mute);font-size:1rem}
+.tools{display:flex;gap:.6rem;align-items:center;transition:opacity .4s}body.idle .tools{opacity:.25}
+.btn{border:1.5px solid var(--line);background:transparent;border-radius:.7rem;padding:.5rem 1rem;cursor:pointer;display:inline-flex;gap:.45rem;align-items:center;font-weight:600}
+.btn:hover{background:rgba(255,255,255,.08)}.btn.pri{background:var(--amber);color:var(--ink);border-color:var(--amber)}.btn.pri:hover{filter:brightness(1.07)}
+.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.btn svg{width:1.2em;height:1.2em}.dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--red)}.dot.ok{background:#4ADE80}
+.board{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;min-height:0}
+.panel{background:var(--sign);border-radius:1.4rem;padding:1.4rem 1.8rem;outline:.28rem solid var(--paper);outline-offset:-.8rem;display:flex;flex-direction:column;gap:.9rem}
+.panel header{display:flex;justify-content:space-between;align-items:flex-start}
+.time{font:700 8.5rem/.85 'Barlow Condensed';letter-spacing:-.01em}.time small{font-size:2rem;color:var(--mute);margin-left:.6rem;letter-spacing:.03em}
+.chip{background:var(--paper);color:var(--ink);border-radius:2rem;padding:.35rem 1.1rem;font:700 1.5rem 'Barlow Condensed'}
+.st-almost .chip,.st-boarding .chip{background:var(--amber)}.st-full .chip{background:var(--red);color:#fff}.st-closed .chip,.st-departed .chip{background:#5FB0DE;color:var(--paper)}
+.st-departed,.st-closed{opacity:.6}
+.count{font:600 1.7rem 'Barlow Condensed';color:var(--mute);font-variant-numeric:tabular-nums}
+.seats{list-style:none;padding:0;display:grid;gap:.6rem;flex:1}
+.seat{display:flex;align-items:center;gap:1rem;border:2px dashed var(--line);border-radius:.8rem;padding:.2rem 1rem .2rem .3rem;color:var(--mute);font:600 2rem 'Barlow Condensed'}
+.seat .no{width:2.6rem;height:2.6rem;display:grid;place-items:center;border-radius:.55rem;background:rgba(255,255,255,.1)}
+.seat.on{background:var(--paper);color:var(--ink);border:2px solid var(--paper);font-size:2.3rem}.seat.on .no{background:var(--ink);color:var(--paper)}
+.panel footer{color:var(--mute);font-size:1.05rem}
+.foot{display:flex;gap:1.6rem;align-items:center;margin-top:1.2rem;color:var(--mute);font-size:1.1rem}
+.ticker{flex:1;overflow:hidden;white-space:nowrap;mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.ticker span{display:inline-block;padding-left:100%;animation:run 38s linear infinite}@keyframes run{to{transform:translateX(-100%)}}
+.foot b{color:var(--paper)}
+dialog{border:0;border-radius:1.2rem;background:var(--paper);color:var(--ink);padding:0;width:min(34rem,94vw);max-height:92vh;font-size:16px}
+dialog::backdrop{background:rgba(4,36,60,.65)}dialog[open]{animation:pop .2s ease-out}@keyframes pop{from{transform:translateY(14px);opacity:0}}
+.dlg{padding:1.5rem;display:grid;gap:1rem}.dlg h2{font:700 2rem/1 'Barlow Condensed'}.dlg .btn{color:var(--ink);border-color:#b7d6ea}.dlg .btn.pri{border-color:var(--amber)}
+.x{justify-self:end;margin-bottom:-1.6rem}
+label{display:grid;gap:.3rem;font-weight:600;font-size:.95rem}
+input,select{border:1.5px solid #b7d6ea;border-radius:.6rem;padding:.65rem .8rem;background:#fff;color:var(--ink)}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap}.chips input{position:absolute;opacity:0}
+.chips label{border:1.5px solid #b7d6ea;border-radius:.7rem;padding:.55rem .9rem;cursor:pointer;background:#fff;min-width:5.2rem;text-align:center}
+.chips input:checked+label{background:var(--sign);color:#fff;border-color:var(--sign)}.chips input:focus-visible+label{outline:3px solid var(--amber)}
+.chips input:disabled+label{opacity:.4;cursor:not-allowed;text-decoration:line-through}.chips small{display:block;font-weight:500}
+.err{color:#b42318;font-size:.9rem;min-height:1.2em}
+.ticket{border:2px dashed var(--sign);border-radius:1rem;padding:1.2rem;display:grid;gap:.3rem}.ticket .big{font:700 3.6rem/1 'Barlow Condensed';color:var(--sign)}
+.adm{max-height:90vh;overflow:auto}.sl{border:1.5px solid #b7d6ea;border-radius:.9rem;padding:.9rem;display:grid;gap:.5rem}
+.sl h3{display:flex;justify-content:space-between;align-items:center;font:700 1.5rem 'Barlow Condensed'}
+.row{display:grid;grid-template-columns:1.6rem 1fr auto auto;gap:.5rem;align-items:center;font-size:.92rem;padding:.3rem 0;border-top:1px solid #dcebf5}.row a{color:var(--sign);font-weight:600}.row select{padding:.3rem}
+.row .btn{padding:.25rem .6rem}.add{display:grid;grid-template-columns:1fr 1fr auto;gap:.4rem}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:.7rem;font-size:16px;z-index:99}
+@media (max-aspect-ratio:1/1){html{font-size:15px}body{padding:1rem}.bar{flex-wrap:wrap;gap:.8rem}.route{order:3;flex-basis:100%}.tools{order:2;margin-left:auto}.board{grid-template-columns:1fr}.time{font-size:6rem}.foot{flex-wrap:wrap}}
+@media (prefers-reduced-motion:reduce){.ticker span{animation:none;padding:0}dialog[open]{animation:none}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="brand">Travel<b>.IN</b></div>
+  <div class="route"><span>Cirebon</span> ⇄ <span>Majalengka</span> &nbsp;·&nbsp; <span id="dlabel"></span></div>
+  <div class="tools">
+    <span class="dot" id="live" title="Koneksi"></span>
+    <button class="btn pri" id="bBook">Pesan kursi</button>
+    <button class="btn" id="bAdm" hidden>Admin</button>
+    <button class="btn" id="bFs" title="Layar penuh" aria-label="Layar penuh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <button class="btn" id="bLogin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span id="lt">Masuk</span></button>
+  </div>
+  <div class="clock"><strong id="clk">--:--:--</strong><small>WIB</small></div>
+</div>
+
+<main class="board" id="board" aria-live="polite"></main>
+
+<div class="foot">
+  <span>Pesan di <b id="host"></b></span>
+  <div class="ticker"><span>Maksimal 5 penumpang tiap keberangkatan · Hadir 15 menit sebelum berangkat · Pesan kursi lewat website ini · Nama penumpang tampil singkat demi privasi</span></div>
+  <span id="next"></span>
+</div>
+
+<dialog id="dBook"><div class="dlg" id="bkBody"></div></dialog>
+<dialog id="dLogin"><form class="dlg" id="fLogin" method="dialog">
+  <h2>Masuk admin</h2>
+  <label>Email<input type="email" id="em" value="bantuin44@gmail.com" required autocomplete="username"></label>
+  <label>Kata sandi<input type="password" id="pw" required autocomplete="current-password"></label>
+  <div class="err" id="lerr"></div>
+  <button class="btn pri" type="submit">Masuk</button>
+  <button class="btn" type="button" data-close>Batal</button>
+</form></dialog>
+<dialog id="dAdm"><div class="dlg adm" id="admBody"></div></dialog>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getDatabase,ref,onValue,update,set,push,query,orderByKey,orderByChild,startAt,endAt,equalTo,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+const app=initializeApp({apiKey:"AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",authDomain:"trevelin-295c3.firebaseapp.com",databaseURL:"https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"trevelin-295c3",storageBucket:"trevelin-295c3.firebasestorage.app",messagingSenderId:"387360938480",appId:"1:387360938480:web:c7bb1851789127cc5be535",measurementId:"G-RPXPKZHF62"});
+import("https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js").then(m=>m.getAnalytics(app)).catch(()=>{});
+const db=getDatabase(app),auth=getAuth(app);
+const ADMIN="qx2cpbYpIlXcUvDbTT0MIQneUeE2",Q=5,SLOTS=[{id:"0800",h:8,l:"08.00"},{id:"1300",h:13,l:"13.00"}];
+const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,"0"),W=7*36e5;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dk=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`,today=()=>dk(new Date(Date.now()+W));
+const parts=k=>k.split("-").map(Number),addD=(k,n)=>{const[y,m,d]=parts(k);return dk(new Date(Date.UTC(y,m-1,d+n)))};
+const dep=(k,h)=>{const[y,m,d]=parts(k);return Date.UTC(y,m-1,d,h)-W};
+const fmt=(k,o)=>{const[y,m,d]=parts(k);return new Date(Date.UTC(y,m-1,d)).toLocaleDateString("id-ID",{timeZone:"UTC",...o})};
+const viewDate=()=>{const t=today();return Date.now()>=dep(t,13)+18e5?addD(t,1):t};
+
+let seats={},slots={},bks={},isAdmin=false,subKey="",unS=null,unB=null,admDate=viewDate();
+const taken=k=>{const s=seats[k]||{};return [1,2,3,4,5].filter(n=>s[n])};
+
+function subSeats(){const t=today();if(subKey===t)return;subKey=t;unS&&unS();
+  unS=onValue(query(ref(db,"seats"),orderByKey(),startAt(t),endAt(addD(t,3)+"\uf8ff")),s=>{seats=s.val()||{};render()},()=>{})}
+onValue(ref(db,"slots"),s=>{slots=s.val()||{};render()});
+onValue(ref(db,".info/connected"),s=>$("#live").classList.toggle("ok",!!s.val()));
+
+function status(k,sl){const f=taken(k).length,t=dep(k.slice(0,10),sl.h),left=t-Date.now();
+  if(slots[k]?.closed)return["closed","Ditutup"];if(left<=0)return["departed","Sudah berangkat"];
+  if(f>=Q)return["full","Penuh"];if(left<=18e5)return["boarding","Boarding"];if(f>=Q-1)return["almost","Hampir penuh"];return["open","Tersedia"]}
+
+function render(){const d=viewDate();$("#dlabel").textContent=(d===today()?"Hari ini, ":"Besok, ")+fmt(d,{weekday:"long",day:"numeric",month:"long"});
+  $("#board").innerHTML=SLOTS.map(sl=>{const k=`${d}_${sl.id}`,[c,t]=status(k,sl),s=seats[k]||{};
+    const rows=[1,2,3,4,5].map(n=>s[n]?`<li class="seat on"><span class="no">${n}</span>${esc(s[n].name)}</li>`:`<li class="seat"><span class="no">${n}</span>Kosong</li>`).join("");
+    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><footer>${taken(k).length} dari ${Q} kursi terisi</footer></section>`}).join("");
+  const n=addD(today(),d===today()?1:2);$("#next").innerHTML=`${fmt(n,{weekday:"short",day:"numeric",month:"short"})}: `+SLOTS.map(sl=>`${sl.l} <b>${Q-taken(n+"_"+sl.id).length}</b> kosong`).join(" · ");
+  tick();if($("#dBook").open)bkChoices();if($("#dAdm").open)admRender()}
+
+function tick(){const n=new Date(Date.now()+W);$("#clk").textContent=`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}`;
+  document.querySelectorAll(".count").forEach(e=>{const s=Math.floor((e.dataset.t-Date.now())/1e3);
+    e.textContent=s>0?`Berangkat dalam ${Math.floor(s/3600)}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`:"Armada sudah berangkat"})}
+setInterval(tick,1e3);setInterval(()=>{subSeats();render()},3e4);
+
+/* ---------- pemesanan ---------- */
+const normWA=v=>{let d=v.replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return /^628\d{7,12}$/.test(d)?d:null};
+const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].toUpperCase()+".":p[0]).slice(0,32)};
+async function book({name,phone,date,slot,status="baru"}){const k=`${date}_${slot}`;
+  for(const n of [1,2,3,4,5].filter(n=>!(seats[k]||{})[n])){const id=push(ref(db,"bookings")).key,ts=serverTimestamp();
+    try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(name),id,ts},[`bookings/${id}`]:{name:name.trim(),phone,date,slot,seat:String(n),status,ts}});return{n,id}}
+    catch(e){if(!/permission/i.test(e.message))throw e}}
+  throw new Error("Kursi untuk jam ini sudah penuh.")}
+
+let bk={date:today(),slot:null};
+function openBook(){bk={date:today(),slot:null};$("#bkBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Pesan kursi</h2>
+  <form id="fb" class="dlg" style="padding:0"><div><b>Tanggal</b><div class="chips" id="cd"></div></div><div><b>Keberangkatan</b><div class="chips" id="cs"></div></div>
+  <label>Nama lengkap<input id="nm" required minlength="2" maxlength="40" autocomplete="name"></label>
+  <label>Nomor WhatsApp<input id="wa" type="tel" required placeholder="08xxxxxxxxxx" autocomplete="tel"></label>
+  <div class="err" id="be"></div><button class="btn pri" id="bs">Pesan kursi</button></form>`;
+  $("#dBook").showModal();bkChoices();
+  $("#fb").onsubmit=async e=>{e.preventDefault();const phone=normWA($("#wa").value),err=$("#be");err.textContent="";
+    if(!bk.slot)return err.textContent="Pilih jam keberangkatan.";if(!phone)return err.textContent="Nomor WhatsApp tidak valid.";
+    $("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot});ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
+function bkChoices(){const t=today();$("#cd").innerHTML=[0,1,2].map(i=>{const d=addD(t,i);return `<input type="radio" name="d" id="d${i}" value="${d}" ${d===bk.date?"checked":""}><label for="d${i}">${i?fmt(d,{weekday:"short",day:"numeric",month:"short"}):"Hari ini"}</label>`}).join("");
+  $("#cs").innerHTML=SLOTS.map(sl=>{const k=`${bk.date}_${sl.id}`,f=taken(k).length,off=slots[k]?.closed||f>=Q||dep(bk.date,sl.h)-Date.now()<9e5;
+    return `<input type="radio" name="s" id="s${sl.id}" value="${sl.id}" ${off?"disabled":""} ${bk.slot===sl.id&&!off?"checked":""}><label for="s${sl.id}">${sl.l}<small>${slots[k]?.closed?"Ditutup":f>=Q?"Penuh":"Sisa "+(Q-f)}</small></label>`}).join("");
+  $("#cd").onchange=e=>{bk.date=e.target.value;bk.slot=null;bkChoices()};$("#cs").onchange=e=>bk.slot=e.target.value}
+function ticket({n,id}){const t=`TRAVEL.IN · Cirebon ⇄ Majalengka\n${fmt(bk.date,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}\nJam ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB · Kursi ${n}\nKode ${id.slice(-6).toUpperCase()}\nHadir 15 menit sebelum berangkat.`;
+  $("#bkBody").innerHTML=`<h2>Kursi berhasil dipesan</h2><div class="ticket"><span>Kursi</span><span class="big">${n}</span><b>${fmt(bk.date,{weekday:"long",day:"numeric",month:"long"})} · ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB</b><span>Kode pesanan: <b>${id.slice(-6).toUpperCase()}</b></span></div>
+  <p>Simpan tiket ini dan hadir 15 menit sebelum berangkat. Admin akan menghubungi lewat WhatsApp.</p><button class="btn pri" id="cp">Salin tiket</button><button class="btn" data-close>Selesai</button>`;
+  $("#cp").onclick=()=>navigator.clipboard.writeText(t).then(()=>toast("Tiket disalin"))}
+
+/* ---------- admin ---------- */
+onAuthStateChanged(auth,u=>{isAdmin=!!u&&u.uid===ADMIN;if(u&&!isAdmin)signOut(auth);
+  $("#bAdm").hidden=!isAdmin;$("#lt").textContent=isAdmin?"Keluar":"Masuk";unB&&unB();bks={};if(isAdmin)subB()});
+function subB(){unB&&unB();unB=onValue(query(ref(db,"bookings"),orderByChild("date"),equalTo(admDate)),s=>{bks=s.val()||{};if($("#dAdm").open)admRender()})}
+$("#bLogin").onclick=()=>isAdmin?signOut(auth):($("#lerr").textContent="",$("#dLogin").showModal());
+$("#fLogin").onsubmit=async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$("#em").value,$("#pw").value);$("#dLogin").close();$("#pw").value="";toast("Berhasil masuk")}
+  catch(x){e.preventDefault();$("#lerr").textContent=/credential|password|user/.test(x.code)?"Email atau kata sandi salah.":"Gagal masuk: "+x.code}};
+$("#bAdm").onclick=()=>{admDate=viewDate();subB();admRender();$("#dAdm").showModal()};
+function admRender(){$("#admBody").innerHTML=`<button class="btn x" data-close>Tutup</button><h2>Panel admin</h2><label>Tanggal<input type="date" id="ad" value="${admDate}"></label>`+SLOTS.map(sl=>{
+  const k=`${admDate}_${sl.id}`,s=seats[k]||{},closed=slots[k]?.closed,f=taken(k).length;
+  return `<div class="sl"><h3><span>${sl.l} · ${f}/${Q}</span><button class="btn" data-a="close" data-k="${k}">${closed?"Buka pemesanan":"Tutup pemesanan"}</button></h3>`+
+  [1,2,3,4,5].filter(n=>s[n]).map(n=>{const b=bks[s[n].id]||{};return `<div class="row"><b>${n}</b><span>${esc(b.name||s[n].name)}${b.phone?` · <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}">${b.phone}</a>`:""}</span>
+   <select data-a="st" data-id="${s[n].id}">${["baru","dikonfirmasi","naik"].map(v=>`<option ${b.status===v?"selected":""}>${v}</option>`).join("")}</select><button class="btn" data-a="del" data-k="${k}" data-n="${n}" data-id="${s[n].id}">Batalkan</button></div>`}).join("")+
+  (f<Q?`<div class="add"><input placeholder="Nama" id="an${sl.id}"><input placeholder="08xx" id="aw${sl.id}"><button class="btn" data-a="add" data-s="${sl.id}">Tambah</button></div>`:"")+`</div>`}).join("");
+  $("#ad").onchange=e=>{admDate=e.target.value;subB();admRender()}}
+$("#admBody").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||b.tagName==="SELECT")return;const d=b.dataset;
+  try{if(d.a==="close")await set(ref(db,`slots/${d.k}`),slots[d.k]?.closed?null:{closed:true});
+    if(d.a==="del"&&confirm("Batalkan pesanan ini dan kosongkan kursi?"))await update(ref(db),{[`seats/${d.k}/${d.n}`]:null,[`bookings/${d.id}`]:null});
+    if(d.a==="add"){const p=normWA($("#aw"+d.s).value),nm=$("#an"+d.s).value;if(!p||nm.trim().length<2)return toast("Isi nama & nomor WA yang valid");await book({name:nm,phone:p,date:admDate,slot:d.s,status:"dikonfirmasi"});toast("Penumpang ditambahkan")}}
+  catch(x){toast("Gagal: "+x.message)}};
+$("#admBody").onchange=e=>{if(e.target.dataset.a==="st")update(ref(db,`bookings/${e.target.dataset.id}`),{status:e.target.value}).catch(x=>toast(x.message))};
+
+/* ---------- umum ---------- */
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2600)}
+$("#bBook").onclick=openBook;$("#host").textContent=location.host||"travel.in";
+$("#bFs").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+document.addEventListener("click",e=>{if(e.target.closest("[data-close]"))e.target.closest("dialog").close()});
+let it;const wake=()=>{document.body.classList.remove("idle");clearTimeout(it);it=setTimeout(()=>document.body.classList.add("idle"),6e3)};
+["mousemove","keydown","touchstart"].forEach(v=>addEventListener(v,wake));wake();
+subSeats();render();
+</script>
+</body>
+</html>
