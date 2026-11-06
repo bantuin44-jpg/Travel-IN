@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Travel.IN – Jadwal Keberangkatan Cirebon ⇄ Majalengka</title>
+<title>Travel.IN – Monitoring Rujukan Cirebon ⇄ Majalengka</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -71,6 +71,18 @@ dialog.wide{width:min(46rem,96vw);text-align:left}dialog.wide .dlg{max-height:90
 .empty{padding:1.2rem;text-align:center;color:#4d7691;border:1.5px dashed #b7d6ea;border-radius:.9rem}
 @media (max-aspect-ratio:1/1){html{font-size:15px}body{padding:1rem}.bar{flex-wrap:wrap;gap:.8rem}.route{order:3;flex-basis:100%}.tools{order:2;margin-left:auto}.board{grid-template-columns:1fr}.time{font-size:6rem}.foot{flex-wrap:wrap}}
 @media (prefers-reduced-motion:reduce){.ticker span{animation:none;padding:0}dialog[open]{animation:none}}
+[hidden]{display:none!important}
+.seat .md{margin-left:auto;font:600 1rem Barlow;background:#fff;border-radius:2rem;padding:.1rem .7rem;color:var(--sign)}.seat.on .md.j{background:var(--amber);color:var(--ink)}
+.drv{color:var(--sign);font-weight:700}.tabs{display:flex;gap:.4rem;flex-wrap:wrap}.tabs .btn.on{background:var(--sign);color:#fff;border-color:var(--sign)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}.stat{border:1.5px solid #b7d6ea;border-radius:.8rem;padding:.5rem .7rem;background:#fff;display:grid;gap:.2rem}
+.stat b{font:700 1.7rem/1 'Barlow Condensed';color:var(--sign)}.stat small{color:#4d7691;font-weight:600;font-size:.8rem}
+.rowx{display:grid;gap:.4rem;padding:.6rem 0;border-top:1px solid #dcebf5;font-size:.92rem}.rowx .l1{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}.rowx .l1>span{flex:1 1 12rem}
+.rowx .l1 select,.rowx .l1 .btn{padding:.3rem .6rem}.addr{color:#4d7691;font-size:.85rem}.addr a{color:var(--sign);font-weight:600}
+.ck2{display:flex;gap:.5rem;flex-wrap:wrap}.ck2 label{display:inline-flex;align-items:center;gap:.4rem;border:1.5px solid #b7d6ea;border-radius:.7rem;padding:.35rem .7rem;cursor:pointer;background:#fff;font-size:.88rem}
+.ck2 label.ok{background:#DDF5E7;border-color:#4ADE80;color:#0B6B3A}.ck2 input{width:1.1rem;height:1.1rem;accent-color:#0B9B4F}.ck2 small{font-weight:500;color:#4d7691}
+.bdg{border-radius:2rem;padding:.05rem .6rem;font-size:.75rem;font-weight:700;background:#DCEBF5;color:#4d7691}.bdg.j{background:var(--amber);color:var(--ink)}
+.add{grid-template-columns:1fr 1fr}.add .btn{grid-column:1/-1}.drvin{display:flex;gap:.5rem;align-items:center;font-size:.9rem}.drvin input{flex:1;text-align:left;padding:.35rem .6rem}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -81,7 +93,7 @@ dialog.wide{width:min(46rem,96vw);text-align:left}dialog.wide .dlg{max-height:90
 </svg>
 <div class="bar">
   <div class="brand">Travel<b>.IN</b></div>
-  <div class="route"><span>Cirebon</span> ⇄ <span>Majalengka</span> &nbsp;·&nbsp; <span id="dlabel"></span></div>
+  <div class="route"><small style="display:block;font-size:1rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85">Monitoring Rujukan Pasien</small><span>Cirebon</span> ⇄ <span>Majalengka</span> &nbsp;·&nbsp; <span id="dlabel"></span></div>
   <div class="tools">
     <span class="dot" id="live" title="Koneksi"></span>
     <button class="btn pri" id="bBook">Pesan kursi</button>
@@ -98,7 +110,7 @@ dialog.wide{width:min(46rem,96vw);text-align:left}dialog.wide .dlg{max-height:90
 
 <div class="foot">
   <span>Pesan di <b id="host"></b></span>
-  <div class="ticker"><span>Maksimal 5 penumpang tiap keberangkatan · Hadir 15 menit sebelum berangkat · Pesan kursi lewat website ini · Nama penumpang tampil singkat demi privasi</span></div>
+  <div class="ticker"><span>Maksimal 5 penumpang tiap keberangkatan · Hadir 15 menit sebelum berangkat · Pilih berangkat mandiri atau layanan antar-jemput driver · Nama penumpang tampil singkat demi privasi</span></div>
   <span id="next"></span>
 </div>
 
@@ -113,7 +125,7 @@ dialog.wide{width:min(46rem,96vw);text-align:left}dialog.wide .dlg{max-height:90
 </form></dialog>
 <dialog id="dPlan" class="wide"><div class="dlg" id="planBody"></div></dialog>
 <dialog id="dHist" class="wide"><div class="dlg" id="histBody"></div></dialog>
-<dialog id="dAdm"><div class="dlg adm" id="admBody"></div></dialog>
+<dialog id="dAdm" class="wide"><div class="dlg adm" id="admBody"></div></dialog>
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -146,8 +158,8 @@ function status(k,sl){const f=taken(k).length,t=dep(k.slice(0,10),sl.h),left=t-D
 
 function render(){const d=viewDate();$("#dlabel").textContent=(d===today()?"Hari ini, ":"Besok, ")+fmt(d,{weekday:"long",day:"numeric",month:"long"});
   $("#board").innerHTML=SLOTS.map(sl=>{const k=`${d}_${sl.id}`,[c,t]=status(k,sl),s=seats[k]||{};
-    const rows=[1,2,3,4,5].map(n=>s[n]?`<li class="seat on"><span class="no">${n}</span>${esc(s[n].name)}</li>`:`<li class="seat"><span class="no">${n}</span>Kosong</li>`).join("");
-    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><div class="rt"><b>Cirebon</b><i></i><b>Majalengka</b></div><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><div class="mt"><span style="width:${taken(k).length/Q*100}%"></span></div><footer><span>${taken(k).length} dari ${Q} kursi terisi</span><span>${taken(k).length>=Q?"Kursi penuh":"Sisa "+(Q-taken(k).length)+" kursi"}</span></footer></section>`}).join("");
+    const rows=[1,2,3,4,5].map(n=>s[n]?`<li class="seat on"><span class="no">${n}</span>${esc(s[n].name)}<em class="md ${s[n].mode==="jemput"?"j":""}">${s[n].mode==="jemput"?"🚗 Antar-jemput":"Mandiri"}</em></li>`:`<li class="seat"><span class="no">${n}</span>Kosong</li>`).join("");
+    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><div class="rt"><b>Cirebon</b><i></i><b>Majalengka</b></div><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><div class="mt"><span style="width:${taken(k).length/Q*100}%"></span></div><footer><span>${taken(k).length} dari ${Q} kursi terisi${slots[k]?.driver?` · Driver <b class="drv">${esc(slots[k].driver)}</b>`:""}</span><span>${taken(k).length>=Q?"Kursi penuh":"Sisa "+(Q-taken(k).length)+" kursi"}</span></footer></section>`}).join("");
   const n=addD(today(),d===today()?1:2);$("#next").innerHTML=`${fmt(n,{weekday:"short",day:"numeric",month:"short"})}: `+SLOTS.map(sl=>`${sl.l} <b>${Q-taken(n+"_"+sl.id).length}</b> kosong`).join(" · ");
   tick();if($("#dBook").open)bkChoices();if($("#dAdm").open)admRender();if($("#dPlan").open)planRender()}
 
@@ -159,7 +171,7 @@ setInterval(tick,1e3);setInterval(()=>{subSeats();render()},3e4);
 /* ---------- rencana 7 hari & riwayat berangkat ---------- */
 const CHIP={open:"Tersedia",almost:"Hampir penuh",boarding:"Boarding",full:"Penuh",closed:"Ditutup",departed:"Sudah berangkat"};
 function slotLine(sl,s,c,t,showSeat){const n=[1,2,3,4,5].filter(i=>s[i]);
-  return `<div class="ps st-${c}"><span class="t">${sl.l}</span><div class="who"><div class="dots">${[1,2,3,4,5].map(i=>`<i class="${s[i]?"on":""}"></i>`).join("")}<b>${n.length}/${Q}</b></div><small>${n.length?n.map(i=>(showSeat?`${i}. `:"")+esc(s[i].name)).join(" · "):"Belum ada penumpang"}</small></div><span class="pc c-${c}">${t}</span></div>`}
+  return `<div class="ps st-${c}"><span class="t">${sl.l}</span><div class="who"><div class="dots">${[1,2,3,4,5].map(i=>`<i class="${s[i]?"on":""}"></i>`).join("")}<b>${n.length}/${Q}</b></div><small>${n.length?n.map(i=>(showSeat?`${i}. `:"")+esc(s[i].name)+(s[i].mode==="jemput"?" 🚗":"")).join(" · "):"Belum ada penumpang"}</small></div><span class="pc c-${c}">${t}</span></div>`}
 function planRender(){const d0=viewDate(),t0=today();
   $("#planBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Rencana 7 hari ke depan</h2><p class="sum">Cirebon ⇄ Majalengka · tiap hari 08.00 &amp; 13.00 WIB</p>`+
   Array.from({length:7},(_,i)=>{const d=addD(d0,i),pre=d===t0?"Hari ini":d===addD(t0,1)?"Besok":"";
@@ -187,53 +199,86 @@ $("#dHist").addEventListener("close",()=>{unH&&unH();unH=null});
 /* ---------- pemesanan ---------- */
 const normWA=v=>{let d=v.replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return /^628\d{7,12}$/.test(d)?d:null};
 const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].toUpperCase()+".":p[0]).slice(0,32)};
-async function book({name,phone,date,slot,seat,status="baru"}){const k=`${date}_${slot}`;
+async function book({name,phone,date,slot,seat,status="baru",mode="mandiri",addr="",rm=""}){const k=`${date}_${slot}`;
   for(const n of (seat?[seat]:[1,2,3,4,5]).filter(n=>!(seats[k]||{})[n])){const id=push(ref(db,"bookings")).key,ts=serverTimestamp();
-    try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(name),id,ts},[`bookings/${id}`]:{name:name.trim(),phone,date,slot,seat:String(n),status,ts}});return{n,id}}
+    try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(name),id,ts,mode},[`bookings/${id}`]:{name:name.trim(),phone,date,slot,seat:String(n),status,mode,ts,...(addr&&{addr}),...(rm&&{rm})}});return{n,id}}
     catch(e){if(!/permission/i.test(e.message))throw e}}
   throw new Error(seat?"Kursi itu sudah diambil, pilih kursi lain.":"Kursi untuk jam ini sudah penuh.")}
 
 let bk={date:today(),slot:null,seat:null};
 function openBook(){bk={date:today(),slot:null,seat:null};$("#bkBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Pesan kursi</h2>
   <form id="fb" class="dlg" style="padding:0"><div><b>Tanggal</b><div class="chips" id="cd"></div></div><div><b>Keberangkatan</b><div class="chips" id="cs"></div></div><div><b>Pilih kursi</b><div class="chips" id="ck"></div></div>
-  <label>Nama lengkap<input id="nm" required minlength="2" maxlength="40" autocomplete="name"></label>
+  <div><b>Cara berangkat</b><div class="chips" id="cm"><input type="radio" name="m" id="m1" value="mandiri" checked><label for="m1">Berangkat sendiri</label><input type="radio" name="m" id="m2" value="jemput"><label for="m2">🚗 Antar-jemput driver</label></div></div><label>Nama lengkap<input id="nm" required minlength="2" maxlength="40" autocomplete="name"></label>
   <label>Nomor WhatsApp<input id="wa" type="tel" required placeholder="08xxxxxxxxxx" autocomplete="tel"></label>
-  <div class="err" id="be"></div><button class="btn pri" id="bs">Pesan kursi</button></form>`;
-  $("#dBook").showModal();bkChoices();
+  <label id="lj" hidden>Alamat penjemputan<input id="aj" maxlength="120" placeholder="Jalan, RT/RW, patokan"></label><label>No. RM / No. Rujukan (opsional)<input id="rm" maxlength="30"></label><div class="err" id="be"></div><button class="btn pri" id="bs">Pesan kursi</button></form>`;
+  $("#dBook").showModal();bkChoices();$("#cm").onchange=()=>$("#lj").hidden=document.querySelector("input[name=m]:checked").value!=="jemput";
   $("#fb").onsubmit=async e=>{e.preventDefault();const phone=normWA($("#wa").value),err=$("#be");err.textContent="";
     if(!bk.slot)return err.textContent="Pilih jam keberangkatan.";if(!bk.seat||(seats[bk.date+"_"+bk.slot]||{})[bk.seat])return err.textContent="Pilih kursi yang masih kosong.";if(!phone)return err.textContent="Nomor WhatsApp tidak valid.";
-    $("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot,seat:bk.seat});ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
+    const mode=document.querySelector("input[name=m]:checked").value,addr=$("#aj").value.trim();if(mode==="jemput"&&addr.length<5)return err.textContent="Isi alamat penjemputan.";$("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot,seat:bk.seat,mode,addr:mode==="jemput"?addr:"",rm:$("#rm").value.trim()});bk.mode=mode;ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
 function bkChoices(){const t=today();$("#cd").innerHTML=[0,1,2].map(i=>{const d=addD(t,i);return `<input type="radio" name="d" id="d${i}" value="${d}" ${d===bk.date?"checked":""}><label for="d${i}">${i?fmt(d,{weekday:"short",day:"numeric",month:"short"}):"Hari ini"}</label>`}).join("");
   $("#cs").innerHTML=SLOTS.map(sl=>{const k=`${bk.date}_${sl.id}`,f=taken(k).length,off=slots[k]?.closed||f>=Q||dep(bk.date,sl.h)-Date.now()<9e5;
     return `<input type="radio" name="s" id="s${sl.id}" value="${sl.id}" ${off?"disabled":""} ${bk.slot===sl.id&&!off?"checked":""}><label for="s${sl.id}">${sl.l}<small>${slots[k]?.closed?"Ditutup":f>=Q?"Penuh":"Sisa "+(Q-f)}</small></label>`}).join("");
   const sk=`${bk.date}_${bk.slot}`;$("#ck").innerHTML=bk.slot?[1,2,3,4,5].map(n=>{const t=!!(seats[sk]||{})[n];return `<input type="radio" name="k" id="k${n}" value="${n}" ${t?"disabled":""} ${bk.seat===n&&!t?"checked":""}><label for="k${n}">${n}<small>${t?"Terisi":"Kosong"}</small></label>`}).join(""):"<small>Pilih jam dulu</small>";
   $("#ck").onchange=e=>bk.seat=+e.target.value;$("#cd").onchange=e=>{bk.date=e.target.value;bk.slot=null;bk.seat=null;bkChoices()};$("#cs").onchange=e=>{bk.slot=e.target.value;bk.seat=null;bkChoices()}}
-function ticket({n,id}){const t=`TRAVEL.IN · Cirebon ⇄ Majalengka\n${fmt(bk.date,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}\nJam ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB · Kursi ${n}\nKode ${id.slice(-6).toUpperCase()}\nHadir 15 menit sebelum berangkat.`;
+function ticket({n,id}){const t=`TRAVEL.IN · Cirebon ⇄ Majalengka\n${fmt(bk.date,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}\nJam ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB · Kursi ${n} · ${bk.mode==="jemput"?"Antar-jemput driver":"Berangkat sendiri"}\nKode ${id.slice(-6).toUpperCase()}\nHadir 15 menit sebelum berangkat.`;
   $("#bkBody").innerHTML=`<h2>Kursi berhasil dipesan</h2><div class="ticket"><span>Kursi</span><span class="big">${n}</span><b>${fmt(bk.date,{weekday:"long",day:"numeric",month:"long"})} · ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB</b><span>Kode pesanan: <b>${id.slice(-6).toUpperCase()}</b></span></div>
-  <p>Simpan tiket ini dan hadir 15 menit sebelum berangkat. Admin akan menghubungi lewat WhatsApp.</p><button class="btn pri" id="cp">Salin tiket</button><button class="btn" data-close>Selesai</button>`;
+  <p>${bk.mode==="jemput"?"Driver akan menghubungi &amp; menjemput di alamat Anda. ":""}Simpan tiket ini dan hadir 15 menit sebelum berangkat. Admin akan menghubungi lewat WhatsApp.</p><button class="btn pri" id="cp">Salin tiket</button><button class="btn" data-close>Selesai</button>`;
   $("#cp").onclick=()=>navigator.clipboard.writeText(t).then(()=>toast("Tiket disalin"))}
 
 /* ---------- admin ---------- */
+let unR=null,rec={},admTab="mon",rng=7,flt="all";
+const ST=["baru","dikonfirmasi","naik","tiba"],CK=[["exam","Selesai Diperiksa"],["up","Sudah di Upload"]];
+const hm=t=>{const d=new Date(t+W);return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`};
+const stat=(l,v,t)=>`<div class="stat"><small>${l}</small><b>${v}${t!=null?`<span style="font-size:1rem;color:#7fa3bb"> / ${t}</span>`:""}</b></div>`;
 onAuthStateChanged(auth,u=>{isAdmin=!!u&&u.uid===ADMIN;if(u&&!isAdmin)signOut(auth);
-  $("#bAdm").hidden=!isAdmin;$("#lt").textContent=isAdmin?"Keluar":"Masuk";unB&&unB();bks={};if(isAdmin)subB()});
+  $("#bAdm").hidden=!isAdmin;$("#lt").textContent=isAdmin?"Keluar":"Masuk";unB&&unB();unR&&unR();bks={};rec={};if(isAdmin){subB();subR()}});
 function subB(){unB&&unB();unB=onValue(query(ref(db,"bookings"),orderByChild("date"),equalTo(admDate)),s=>{bks=s.val()||{};if($("#dAdm").open)admRender()})}
+function subR(){unR&&unR();const t=today();unR=onValue(query(ref(db,"bookings"),orderByChild("date"),startAt(addD(t,-rng)),endAt(t)),s=>{rec=s.val()||{};if($("#dAdm").open)admRender()},()=>{})}
 $("#bLogin").onclick=()=>isAdmin?signOut(auth):($("#lerr").textContent="",$("#dLogin").showModal());
 $("#fLogin").onsubmit=async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$("#em").value,$("#pw").value);$("#dLogin").close();$("#pw").value="";toast("Berhasil masuk")}
   catch(x){e.preventDefault();$("#lerr").textContent=/credential|password|user/.test(x.code)?"Email atau kata sandi salah.":"Gagal masuk: "+x.code}};
 $("#bAdm").onclick=()=>{admDate=viewDate();subB();admRender();$("#dAdm").showModal()};
-function admRender(){$("#admBody").innerHTML=`<button class="btn x" data-close>Tutup</button><h2>Panel admin</h2><label>Tanggal<input type="date" id="ad" value="${admDate}"></label>`+SLOTS.map(sl=>{
-  const k=`${admDate}_${sl.id}`,s=seats[k]||{},closed=slots[k]?.closed,f=taken(k).length;
-  return `<div class="sl"><h3><span>${sl.l} · ${f}/${Q}</span><button class="btn" data-a="close" data-k="${k}">${closed?"Buka pemesanan":"Tutup pemesanan"}</button></h3>`+
-  [1,2,3,4,5].filter(n=>s[n]).map(n=>{const b=bks[s[n].id]||{};return `<div class="row"><b>${n}</b><span>${esc(b.name||s[n].name)}${b.phone?` · <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}">${b.phone}</a>`:""}</span>
-   <select data-a="st" data-id="${s[n].id}">${["baru","dikonfirmasi","naik"].map(v=>`<option ${b.status===v?"selected":""}>${v}</option>`).join("")}</select><button class="btn" data-a="del" data-k="${k}" data-n="${n}" data-id="${s[n].id}">Batalkan</button></div>`}).join("")+
-  (f<Q?`<div class="add"><input placeholder="Nama" id="an${sl.id}"><input placeholder="08xx" id="aw${sl.id}"><button class="btn" data-a="add" data-s="${sl.id}">Tambah</button></div>`:"")+`</div>`}).join("");
-  $("#ad").onchange=e=>{admDate=e.target.value;subB();admRender()}}
-$("#admBody").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||b.tagName==="SELECT")return;const d=b.dataset;
-  try{if(d.a==="close")await set(ref(db,`slots/${d.k}`),slots[d.k]?.closed?null:{closed:true});
+
+const bRow=(id,b,lead)=>`<div class="rowx"><div class="l1"><b>${lead}</b><span>${esc(b.name||"")} <span class="bdg ${b.mode==="jemput"?"j":""}">${b.mode==="jemput"?"🚗 Antar-jemput":"Mandiri"}</span>${b.phone?` · <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}">${b.phone}</a>`:""}</span><select data-a="st" data-id="${id}">${ST.map(v=>`<option ${b.status===v?"selected":""}>${v}</option>`).join("")}</select><button class="btn" data-a="del" data-k="${b.date}_${b.slot}" data-n="${b.seat}" data-id="${id}">Batalkan</button></div>${b.addr?`<div class="addr">📍 ${esc(b.addr)} · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(b.addr)}">Buka peta</a></div>`:""}${b.rm?`<div class="addr">No. RM/Rujukan: ${esc(b.rm)}</div>`:""}<div class="ck2">${CK.map(([k,l])=>{const v=b.checks?.[k];return `<label class="${v?"ok":""}"><input type="checkbox" data-a="ck" data-id="${id}" data-c="${k}" ${v?"checked":""}>${l}${v?` <small>${hm(v)}</small>`:""}</label>`}).join("")}</div></div>`;
+
+function mon(){const L=Object.values(bks),n=L.length,ex=L.filter(b=>b.checks?.exam).length,up=L.filter(b=>b.checks?.up).length;
+  return `<div class="hbar"><div class="tabs"><button class="btn" data-a="dd" data-v="-1">◀</button><input type="date" id="ad" value="${admDate}" style="width:auto"><button class="btn" data-a="dd" data-v="1">▶</button></div><button class="btn" data-a="csv">Unduh CSV</button></div>
+  <div class="stats">${stat("Peserta",n,2*Q)}${stat("Antar-jemput",L.filter(b=>b.mode==="jemput").length)}${stat("Selesai Diperiksa",ex,n)}${stat("Sudah di Upload",up,n)}</div>
+  <div class="mt"><span style="width:${n?(ex+up)/(2*n)*100:0}%"></span></div>`+SLOTS.map(sl=>{
+  const k=`${admDate}_${sl.id}`,s=seats[k]||{},f=taken(k).length;
+  return `<div class="sl"><h3><span>${sl.l} · ${f}/${Q}</span><button class="btn" data-a="close" data-k="${k}">${slots[k]?.closed?"Buka pemesanan":"Tutup pemesanan"}</button></h3><label class="drvin">Driver<input data-a="drv" data-k="${k}" value="${esc(slots[k]?.driver||"")}" maxlength="30" placeholder="Nama driver (tampil di TV)"></label>`+
+  taken(k).map(n=>bRow(s[n].id,{...s[n],...bks[s[n].id],date:admDate,slot:sl.id,seat:n},n)).join("")+
+  (f<Q?`<div class="add"><input placeholder="Nama" id="an${sl.id}"><input placeholder="08xx" id="aw${sl.id}"><select id="am${sl.id}"><option value="mandiri">Berangkat sendiri</option><option value="jemput">Antar-jemput</option></select><input placeholder="Alamat jemput" id="aa${sl.id}"><button class="btn" data-a="add" data-s="${sl.id}">Tambah</button></div>`:"")+`</div>`}).join("")}
+
+function recap(){const E=Object.entries(rec).map(([id,b])=>({...b,id})),n=E.length,ex=E.filter(b=>b.checks?.exam).length,up=E.filter(b=>b.checks?.up).length;
+  const L=E.filter(b=>flt==="all"||(flt==="exam"?!b.checks?.exam:!b.checks?.up)).sort((a,b)=>(b.date+b.slot+b.seat).localeCompare(a.date+a.slot+a.seat));
+  return `<div class="hbar"><label style="display:flex;gap:.5rem;align-items:center">Rentang<select data-a="rng">${[7,14,30].map(v=>`<option value="${v}" ${v===rng?"selected":""}>${v} hari terakhir</option>`).join("")}</select></label><label style="display:flex;gap:.5rem;align-items:center">Tampilkan<select data-a="flt">${[["all","Semua"],["exam","Belum diperiksa"],["up","Belum di-upload"]].map(([v,l])=>`<option value="${v}" ${flt===v?"selected":""}>${l}</option>`).join("")}</select></label><button class="btn" data-a="csv">Unduh CSV</button></div>
+  <div class="stats">${stat("Total pasien",n)}${stat("Belum diperiksa",n-ex)}${stat("Belum di-upload",n-up)}${stat("Antar-jemput",E.filter(b=>b.mode==="jemput").length)}</div>`+
+  (L.length?L.map(b=>bRow(b.id,b,`${fmt(b.date,{day:"numeric",month:"short"})} · ${b.slot.slice(0,2)}.${b.slot.slice(2)}`)).join(""):'<div class="empty">Tidak ada data pada filter ini.</div>')}
+
+function admRender(){$("#admBody").innerHTML=`<button class="btn x" data-close>Tutup</button><h2>Panel admin</h2><div class="tabs">${[["mon","Monitoring harian"],["rec","Rekap &amp; tindak lanjut"]].map(([v,l])=>`<button class="btn ${admTab===v?"on":""}" data-a="tab" data-t="${v}">${l}</button>`).join("")}</div>`+(admTab==="mon"?mon():recap())}
+
+function csv(){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`,rows=Object.values(rec).sort((a,b)=>(a.date+a.slot+a.seat).localeCompare(b.date+b.slot+b.seat));
+  const t=[["Tanggal","Jam","Kursi","Nama","WA","Cara berangkat","Alamat jemput","No RM/Rujukan","Status","Selesai Diperiksa","Sudah di Upload"],...rows.map(b=>[b.date,b.slot.slice(0,2)+"."+b.slot.slice(2),b.seat,b.name,b.phone,b.mode==="jemput"?"Antar-jemput":"Mandiri",b.addr,b.rm,b.status,b.checks?.exam?hm(b.checks.exam):"",b.checks?.up?hm(b.checks.up):""])].map(r=>r.map(q).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download=`travelin-rekap-${today()}.csv`;a.click()}
+
+$("#admBody").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||/SELECT|INPUT/.test(b.tagName))return;const d=b.dataset;
+  try{if(d.a==="tab"){admTab=d.t;admRender()}
+    if(d.a==="dd"){admDate=addD(admDate,+d.v);subB();admRender()}
+    if(d.a==="csv")csv();
+    if(d.a==="close")await set(ref(db,`slots/${d.k}/closed`),slots[d.k]?.closed?null:true);
     if(d.a==="del"&&confirm("Batalkan pesanan ini dan kosongkan kursi?"))await update(ref(db),{[`seats/${d.k}/${d.n}`]:null,[`bookings/${d.id}`]:null});
-    if(d.a==="add"){const p=normWA($("#aw"+d.s).value),nm=$("#an"+d.s).value;if(!p||nm.trim().length<2)return toast("Isi nama & nomor WA yang valid");await book({name:nm,phone:p,date:admDate,slot:d.s,status:"dikonfirmasi"});toast("Penumpang ditambahkan")}}
+    if(d.a==="add"){const p=normWA($("#aw"+d.s).value),nm=$("#an"+d.s).value,mode=$("#am"+d.s).value,addr=$("#aa"+d.s).value.trim();
+      if(!p||nm.trim().length<2)return toast("Isi nama & nomor WA yang valid");if(mode==="jemput"&&addr.length<5)return toast("Isi alamat jemput");
+      await book({name:nm,phone:p,date:admDate,slot:d.s,status:"dikonfirmasi",mode,addr:mode==="jemput"?addr:""});toast("Penumpang ditambahkan")}}
   catch(x){toast("Gagal: "+x.message)}};
-$("#admBody").onchange=e=>{if(e.target.dataset.a==="st")update(ref(db,`bookings/${e.target.dataset.id}`),{status:e.target.value}).catch(x=>toast(x.message))};
+$("#admBody").onchange=e=>{const t=e.target,d=t.dataset,f=p=>p.catch(x=>toast(x.message));
+  if(d.a==="st")f(update(ref(db,`bookings/${d.id}`),{status:t.value}));
+  if(d.a==="ck")f(set(ref(db,`bookings/${d.id}/checks/${d.c}`),t.checked?serverTimestamp():null));
+  if(d.a==="drv")f(set(ref(db,`slots/${d.k}/driver`),t.value.trim()||null));
+  if(d.a==="rng"){rng=+t.value;subR()}
+  if(d.a==="flt"){flt=t.value;admRender()}
+  if(t.id==="ad"&&t.value){admDate=t.value;subB();admRender()}};
 
 /* ---------- umum ---------- */
 function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2600)}
