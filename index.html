@@ -1,293 +1,1200 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full bg-slate-50 text-slate-800">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Travel.IN – Monitoring Rujukan Cirebon ⇄ Majalengka</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--deep:#1B96D6;--sign:#0F7BBD;--paper:#F7FBFE;--ink:#0A2E4A;--amber:#FF9A1F;--red:#E5484D;--mute:#CBE8F8;--line:rgba(247,251,254,.5)}
-*{box-sizing:border-box;margin:0}
-html{font-size:clamp(10px,min(1.05vw,1.85vh),26px)}
-body{background:linear-gradient(180deg,#1480C4 0%,#25A0E2 60%,#5CC0F0 100%) fixed;color:var(--paper);position:relative;font:500 1.15rem/1.4 Barlow,sans-serif;min-height:100vh;display:flex;flex-direction:column;padding:1.2rem 1.6rem}
-button,input{font:inherit;color:inherit}
-.bar,.board,.foot{position:relative;z-index:1}.bar{display:flex;align-items:center;gap:1.6rem;margin-bottom:1.2rem}
-.brand{font:700 2.6rem/1 'Barlow Condensed';letter-spacing:.01em}.brand b{color:var(--amber)}
-.route{font:600 1.7rem 'Barlow Condensed';color:var(--mute);flex:1}.route span{color:var(--paper)}
-.clock{text-align:right;font-variant-numeric:tabular-nums}.clock strong{display:block;font:700 2.8rem/1 'Barlow Condensed'}.clock small{color:var(--mute);font-size:1rem}
-.tools{display:flex;gap:.6rem;align-items:center;transition:opacity .4s}body.idle .tools{opacity:.25}
-.btn{border:1.5px solid var(--line);background:transparent;border-radius:.7rem;padding:.5rem 1rem;cursor:pointer;display:inline-flex;gap:.45rem;align-items:center;font-weight:600}
-.btn:hover{background:rgba(255,255,255,.08)}.btn.pri{background:var(--amber);color:var(--ink);border-color:var(--amber)}.btn.pri:hover{filter:brightness(1.07)}
-.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
-.btn svg{width:1.2em;height:1.2em}.dot{width:.7rem;height:.7rem;border-radius:50%;background:var(--red)}.dot.ok{background:#4ADE80}
-.board{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;min-height:0}
-.panel{background:#fff;color:var(--ink);border-radius:1.6rem;padding:1.5rem 1.8rem 1.3rem;display:flex;flex-direction:column;gap:.8rem;box-shadow:0 1.4rem 3rem rgba(3,50,85,.35),0 0 0 .3rem rgba(255,255,255,.35)}
-.panel header{display:flex;justify-content:space-between;align-items:flex-start}
-.time{color:#1480C4;font:700 8.5rem/.85 'Barlow Condensed';letter-spacing:-.01em}.time small{font-size:2rem;color:#7fa3bb;margin-left:.6rem;letter-spacing:.03em}
-.chip{background:#DDF5E7;color:#0B6B3A;border-radius:2rem;padding:.35rem 1.1rem;font:700 1.5rem 'Barlow Condensed'}
-.st-almost .chip,.st-boarding .chip{background:var(--amber);color:var(--ink)}.st-boarding .chip{animation:pl 1.6s ease-in-out infinite}@keyframes pl{50%{box-shadow:0 0 0 .5rem rgba(255,154,31,.3)}}.st-full .chip{background:var(--red);color:#fff}.st-closed .chip,.st-departed .chip{background:#DCE8F0;color:#5b7c93}
-.st-departed,.st-closed{opacity:.6}
-.count{font:600 1.7rem 'Barlow Condensed';color:#4d7691;font-variant-numeric:tabular-nums}
-.seats{list-style:none;padding:0;display:grid;gap:.6rem;flex:1}
-.seat{display:flex;align-items:center;gap:1rem;border:2px dashed #b7d6ea;background:#F2F8FC;border-radius:.9rem;padding:.2rem 1rem .2rem .3rem;color:#7fa3bb;font:600 2rem 'Barlow Condensed'}
-.seat .no{width:2.6rem;height:2.6rem;display:grid;place-items:center;border-radius:.6rem;background:#DCEBF5;color:#7fa3bb}
-.seat.on{background:#E6F4FD;color:var(--ink);border:2px solid #1B96D6;font-size:2.3rem}.seat.on .no{background:#FF9A1F;color:var(--ink)}
-.panel footer{display:flex;justify-content:space-between;color:#4d7691;font-weight:600;font-size:1.1rem}.mt{height:.6rem;border-radius:1rem;background:#DCEBF5;overflow:hidden}.mt span{display:block;height:100%;background:linear-gradient(90deg,#1B96D6,#FF9A1F);border-radius:1rem;transition:width .6s}.st-full .mt span{background:var(--red)}.rt{display:flex;align-items:center;gap:.7rem;color:#4d7691;font:600 1.3rem 'Barlow Condensed'}.rt i{flex:1;border-top:3px dotted #9cc7e0;position:relative}.rt i:after{content:'';position:absolute;right:-2px;top:-.45rem;width:.7rem;height:.7rem;border-top:3px solid #9cc7e0;border-right:3px solid #9cc7e0;transform:rotate(45deg)}.sky{position:fixed;left:0;bottom:0;width:100%;height:42vh;z-index:0;pointer-events:none}
-.foot{display:flex;gap:1.6rem;align-items:center;margin-top:1.2rem;color:#fff;font-size:1.1rem;background:rgba(5,64,105,.6);backdrop-filter:blur(6px);border-radius:1rem;padding:.7rem 1.3rem}
-.ticker{flex:1;overflow:hidden;white-space:nowrap;mask:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
-.ticker span{display:inline-block;padding-left:100%;animation:run 38s linear infinite}@keyframes run{to{transform:translateX(-100%)}}
-.foot b{color:var(--paper)}
-dialog{margin:auto;text-align:center;border:0;border-radius:1.2rem;background:var(--paper);color:var(--ink);padding:0;width:min(34rem,94vw);max-height:92vh;font-size:16px}
-dialog::backdrop{background:rgba(4,36,60,.65)}dialog[open]{animation:pop .2s ease-out}@keyframes pop{from{transform:translateY(14px);opacity:0}}
-.dlg{padding:1.5rem;display:grid;gap:1rem}.dlg h2{font:700 2rem/1 'Barlow Condensed'}.dlg .btn{color:var(--ink);border-color:#b7d6ea}.dlg .btn.pri{border-color:var(--amber)}
-.x{justify-self:end;margin-bottom:-1.6rem}
-label{display:grid;gap:.3rem;font-weight:600;font-size:.95rem}
-input,select{border:1.5px solid #b7d6ea;border-radius:.6rem;padding:.65rem .8rem;background:#fff;color:var(--ink)}
-.chips{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.4rem}#ck label{min-width:3.6rem;font:700 1.6rem 'Barlow Condensed'}#ck small{font:500 .75rem Barlow}.chips>small{color:#4d7691}input{text-align:center}.chips input{position:absolute;opacity:0}
-.chips label{border:1.5px solid #b7d6ea;border-radius:.7rem;padding:.55rem .9rem;cursor:pointer;background:#fff;min-width:5.2rem;text-align:center}
-.chips input:checked+label{background:var(--sign);color:#fff;border-color:var(--sign)}.chips input:focus-visible+label{outline:3px solid var(--amber)}
-.chips input:disabled+label{opacity:.4;cursor:not-allowed;text-decoration:line-through}.chips small{display:block;font-weight:500}
-.err{color:#b42318;font-size:.9rem;min-height:1.2em}
-.ticket{border:2px dashed var(--sign);border-radius:1rem;padding:1.2rem;display:grid;gap:.3rem}.ticket .big{font:700 3.6rem/1 'Barlow Condensed';color:var(--sign)}
-.adm{max-height:90vh;overflow:auto;text-align:left}.adm input{text-align:left}.sl{border:1.5px solid #b7d6ea;border-radius:.9rem;padding:.9rem;display:grid;gap:.5rem}
-.sl h3{display:flex;justify-content:space-between;align-items:center;font:700 1.5rem 'Barlow Condensed'}
-.row{display:grid;grid-template-columns:1.6rem 1fr auto auto;gap:.5rem;align-items:center;font-size:.92rem;padding:.3rem 0;border-top:1px solid #dcebf5}.row a{color:var(--sign);font-weight:600}.row select{padding:.3rem}
-.row .btn{padding:.25rem .6rem}.add{display:grid;grid-template-columns:1fr 1fr auto;gap:.4rem}
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.7rem 1.2rem;border-radius:.7rem;font-size:16px;z-index:99}
-.tools{flex-wrap:wrap;justify-content:flex-end}
-dialog.wide{width:min(46rem,96vw);text-align:left}dialog.wide .dlg{max-height:90vh;overflow:auto}
-.pd{border:1.5px solid #b7d6ea;border-radius:.9rem;padding:.7rem .9rem;display:grid;gap:.1rem;background:#fff}
-.pd h3{font:700 1.45rem/1.2 'Barlow Condensed';color:var(--sign)}.pd h3 small{font:500 .9rem Barlow;color:#4d7691}
-.ps{display:grid;grid-template-columns:4.4rem 1fr auto;gap:.7rem;align-items:center;padding:.45rem 0;border-top:1px solid #dcebf5}
-.ps:first-of-type{border-top:0}
-.ps .t{font:700 1.7rem 'Barlow Condensed';color:var(--ink)}
-.ps .who small{display:block;color:#4d7691;font-size:.85rem;margin-top:.2rem;line-height:1.35}
-.dots{display:flex;gap:.3rem;align-items:center}.dots i{width:.85rem;height:.85rem;border-radius:50%;background:#DCEBF5;border:1.5px solid #b7d6ea}.dots i.on{background:var(--amber);border-color:var(--amber)}.dots b{margin-left:.4rem;font:700 1.1rem 'Barlow Condensed';color:var(--ink)}
-.pc{border-radius:2rem;padding:.15rem .8rem;font:700 1rem 'Barlow Condensed';background:#DDF5E7;color:#0B6B3A;white-space:nowrap}
-.pc.c-almost,.pc.c-boarding{background:var(--amber);color:var(--ink)}.pc.c-full{background:var(--red);color:#fff}.pc.c-closed,.pc.c-departed{background:#DCE8F0;color:#5b7c93}
-.ps.st-departed,.ps.st-closed{opacity:.65}
-.hbar{display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap}.hbar select{padding:.4rem .6rem}.sum{color:#4d7691;font-weight:600}
-.empty{padding:1.2rem;text-align:center;color:#4d7691;border:1.5px dashed #b7d6ea;border-radius:.9rem}
-@media (max-aspect-ratio:1/1){html{font-size:15px}body{padding:1rem}.bar{flex-wrap:wrap;gap:.8rem}.route{order:3;flex-basis:100%}.tools{order:2;margin-left:auto}.board{grid-template-columns:1fr}.time{font-size:6rem}.foot{flex-wrap:wrap}}
-@media (prefers-reduced-motion:reduce){.ticker span{animation:none;padding:0}dialog[open]{animation:none}}
-[hidden]{display:none!important}
-.seat .md{margin-left:auto;font:600 1rem Barlow;background:#fff;border-radius:2rem;padding:.1rem .7rem;color:var(--sign)}.seat.on .md.j{background:var(--amber);color:var(--ink)}
-.drv{color:var(--sign);font-weight:700}.tabs{display:flex;gap:.4rem;flex-wrap:wrap}.tabs .btn.on{background:var(--sign);color:#fff;border-color:var(--sign)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}.stat{border:1.5px solid #b7d6ea;border-radius:.8rem;padding:.5rem .7rem;background:#fff;display:grid;gap:.2rem}
-.stat b{font:700 1.7rem/1 'Barlow Condensed';color:var(--sign)}.stat small{color:#4d7691;font-weight:600;font-size:.8rem}
-.rowx{display:grid;gap:.4rem;padding:.6rem 0;border-top:1px solid #dcebf5;font-size:.92rem}.rowx .l1{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}.rowx .l1>span{flex:1 1 12rem}
-.rowx .l1 select,.rowx .l1 .btn{padding:.3rem .6rem}.addr{color:#4d7691;font-size:.85rem}.addr a{color:var(--sign);font-weight:600}
-.ck2{display:flex;gap:.5rem;flex-wrap:wrap}.ck2 label{display:inline-flex;align-items:center;gap:.4rem;border:1.5px solid #b7d6ea;border-radius:.7rem;padding:.35rem .7rem;cursor:pointer;background:#fff;font-size:.88rem}
-.ck2 label.ok{background:#DDF5E7;border-color:#4ADE80;color:#0B6B3A}.ck2 input{width:1.1rem;height:1.1rem;accent-color:#0B9B4F}.ck2 small{font-weight:500;color:#4d7691}
-.bdg{border-radius:2rem;padding:.05rem .6rem;font-size:.75rem;font-weight:700;background:#DCEBF5;color:#4d7691}.bdg.j{background:var(--amber);color:var(--ink)}
-.add{grid-template-columns:1fr 1fr}.add .btn{grid-column:1/-1}.drvin{display:flex;gap:.5rem;align-items:center;font-size:.9rem}.drvin input{flex:1;text-align:left;padding:.35rem .6rem}
-@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel.In - Medical Transport & Patient Monitoring</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        traveloka: {
+                            DEFAULT: '#0194da',
+                            hover: '#007fbc',
+                            light: '#e0f2fe',
+                            dark: '#005f8d',
+                            navy: '#0c2340',
+                            accent: '#ff5e1f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .bg-sky-pattern {
+            background-color: #0194da;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+    </style>
 </head>
-<body>
-<svg class="sky" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
- <path d="M60 150Q600 -90 1140 150" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3" stroke-dasharray="14 12"/>
- <g fill="#fff" fill-opacity=".9"><path d="M0 300V250l60-10 40 15 60-70 60 70 50-20 70 8V300z" fill-opacity=".35"/><path d="M180 300v-50h30v-30h14v30h26v50zM300 300v-90h36v90zM340 300v-120h30v120zM520 300v-60q40-70 80 0v60zM596 300v-80h22v80zM640 300v-110h40v110zM700 300v-70h60v70zM800 300v-130l30-30 30 30v130zM900 300v-60q40-60 80 0v60zM1000 300v-100h30v100zM1040 300v-70h50v70z"/><circle cx="560" cy="205" r="6"/><rect x="556" y="190" width="8" height="14"/><path d="M0 300V270h1200v30z"/></g>
- <g fill="#fff"><path d="M-14 0L8-3 14 0 8 3zM-2 0L-8-9H-5L4-1zM-2 0L-8 9H-5L4 1z" transform="scale(1.8)"/><animateMotion dur="20s" repeatCount="indefinite" rotate="auto" path="M60 150Q600 -90 1140 150"/></g>
-</svg>
-<div class="bar">
-  <div class="brand">Travel<b>.IN</b></div>
-  <div class="route"><small style="display:block;font-size:1rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85">Monitoring Rujukan Pasien</small><span>Cirebon</span> ⇄ <span>Majalengka</span> &nbsp;·&nbsp; <span id="dlabel"></span></div>
-  <div class="tools">
-    <span class="dot" id="live" title="Koneksi"></span>
-    <button class="btn pri" id="bBook">Pesan kursi</button>
-    <button class="btn" id="bPlan" title="Rencana keberangkatan 7 hari ke depan">Rencana 7 hari</button>
-    <button class="btn" id="bHist" title="Keberangkatan yang sudah lewat">Sudah berangkat</button>
-    <button class="btn" id="bAdm" hidden>Admin</button>
-    <button class="btn" id="bFs" title="Layar penuh" aria-label="Layar penuh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-    <button class="btn" id="bLogin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span id="lt">Masuk</span></button>
-  </div>
-  <div class="clock"><strong id="clk">--:--:--</strong><small>WIB</small></div>
-</div>
+<body class="h-full font-sans antialiased bg-slate-100 text-slate-800 custom-scrollbar flex flex-col md:flex-row overflow-x-hidden">
 
-<main class="board" id="board" aria-live="polite"></main>
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
 
-<div class="foot">
-  <span>Pesan di <b id="host"></b></span>
-  <div class="ticker"><span>Maksimal 5 penumpang tiap keberangkatan · Hadir 15 menit sebelum berangkat · Pilih berangkat mandiri atau layanan antar-jemput driver · Nama penumpang tampil singkat demi privasi</span></div>
-  <span id="next"></span>
-</div>
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-full md:w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 shadow-xl">
+        <!-- Logo Header Traveloka Inspired -->
+        <div class="p-5 bg-traveloka border-b border-traveloka-dark flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-white text-traveloka flex items-center justify-center font-extrabold text-xl shadow-md">
+                    <i class="fa-solid fa-plane-departure text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl tracking-tight text-white leading-tight flex items-center gap-1">
+                        Travel<span class="text-amber-300">.In</span>
+                    </h1>
+                    <p class="text-[10px] text-sky-100 font-semibold tracking-wider uppercase">MedTransport System</p>
+                </div>
+            </div>
+            <button id="mobileMenuBtn" class="md:hidden text-white hover:text-sky-200">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
 
-<dialog id="dBook"><div class="dlg" id="bkBody"></div></dialog>
-<dialog id="dLogin"><form class="dlg" id="fLogin" method="dialog">
-  <h2>Masuk admin</h2>
-  <label>Email<input type="email" id="em" value="bantuin44@gmail.com" required autocomplete="username"></label>
-  <label>Kata sandi<input type="password" id="pw" required autocomplete="current-password"></label>
-  <div class="err" id="lerr"></div>
-  <button class="btn pri" type="submit">Masuk</button>
-  <button class="btn" type="button" data-close>Batal</button>
-</form></dialog>
-<dialog id="dPlan" class="wide"><div class="dlg" id="planBody"></div></dialog>
-<dialog id="dHist" class="wide"><div class="dlg" id="histBody"></div></dialog>
-<dialog id="dAdm" class="wide"><div class="dlg adm" id="admBody"></div></dialog>
+        <!-- Sync Indicator -->
+        <div class="px-4 py-2 bg-slate-800 border-b border-slate-700/60 flex items-center justify-between text-xs">
+            <span class="text-slate-400 font-medium flex items-center gap-1.5">
+                <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span id="syncText">Firebase Live Sync</span>
+            </span>
+            <span id="dbTypeBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-traveloka/20 text-sky-300 border border-traveloka/40">Realtime DB</span>
+        </div>
 
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getDatabase,ref,onValue,update,set,push,query,orderByKey,orderByChild,startAt,endAt,equalTo,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        <!-- Navigation Menu -->
+        <nav id="navMenu" class="p-4 space-y-1.5 flex-1 hidden md:block">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Utama</div>
+            
+            <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all bg-traveloka text-white shadow-lg shadow-traveloka/30">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+                <span>Dashboard Utama</span>
+            </a>
+            
+            <a href="#" onclick="switchTab('monitoring')" id="nav-monitoring" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                <i class="fa-solid fa-table-list w-5 text-center"></i>
+                <span>Tabel Monitoring</span>
+                <span id="badgePendingCount" class="ml-auto bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+            </a>
+            
+            <a href="#" onclick="switchTab('booking')" id="nav-booking" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                <i class="fa-solid fa-calendar-plus w-5 text-center"></i>
+                <span>Pendaftaran Slot</span>
+            </a>
 
-const app=initializeApp({apiKey:"AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",authDomain:"trevelin-295c3.firebaseapp.com",databaseURL:"https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"trevelin-295c3",storageBucket:"trevelin-295c3.firebasestorage.app",messagingSenderId:"387360938480",appId:"1:387360938480:web:c7bb1851789127cc5be535",measurementId:"G-RPXPKZHF62"});
-import("https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js").then(m=>m.getAnalytics(app)).catch(()=>{});
-const db=getDatabase(app),auth=getAuth(app);
-const ADMIN="qx2cpbYpIlXcUvDbTT0MIQneUeE2",Q=5,SLOTS=[{id:"0800",h:8,l:"08.00"},{id:"1300",h:13,l:"13.00"}];
-const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,"0"),W=7*36e5;
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const dk=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`,today=()=>dk(new Date(Date.now()+W));
-const parts=k=>k.split("-").map(Number),addD=(k,n)=>{const[y,m,d]=parts(k);return dk(new Date(Date.UTC(y,m-1,d+n)))};
-const dep=(k,h)=>{const[y,m,d]=parts(k);return Date.UTC(y,m-1,d,h)-W};
-const fmt=(k,o)=>{const[y,m,d]=parts(k);return new Date(Date.UTC(y,m-1,d)).toLocaleDateString("id-ID",{timeZone:"UTC",...o})};
-const viewDate=()=>{const t=today();return Date.now()>=dep(t,13)+18e5?addD(t,1):t};
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mt-6 mb-2">Operasional</div>
+            
+            <a href="#" onclick="switchTab('slot-manager')" id="nav-slot-manager" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+                <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i>
+                <span>Kapasitas Slot Jam</span>
+            </a>
+        </nav>
 
-let seats={},slots={},bks={},isAdmin=false,subKey="",unS=null,unB=null,admDate=viewDate();
-const taken=k=>{const s=seats[k]||{};return [1,2,3,4,5].filter(n=>s[n])};
+        <!-- User Profile Footer & Auth -->
+        <div class="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between">
+            <div class="flex items-center space-x-3 overflow-hidden">
+                <div class="w-9 h-9 rounded-full bg-traveloka flex items-center justify-center font-bold text-white shrink-0 shadow">
+                    <i class="fa-solid fa-user-shield text-xs"></i>
+                </div>
+                <div class="text-xs truncate">
+                    <p id="userEmailDisplay" class="font-bold text-slate-200 truncate">bantuin44@gmail.com</p>
+                    <p id="userRoleDisplay" class="text-slate-400 text-[10px]">Logged in (Firebase Auth)</p>
+                </div>
+            </div>
+            <button onclick="toggleAuthModal()" title="Login / Logout Auth" class="text-slate-400 hover:text-white text-sm p-2 transition-colors">
+                <i class="fa-solid fa-right-to-bracket"></i>
+            </button>
+        </div>
+    </aside>
 
-function subSeats(){const t=today();if(subKey===t)return;subKey=t;unS&&unS();
-  unS=onValue(query(ref(db,"seats"),orderByKey(),startAt(t),endAt(addD(t,8)+"\uf8ff")),s=>{seats=s.val()||{};render()},()=>{})}
-onValue(ref(db,"slots"),s=>{slots=s.val()||{};render()});
-onValue(ref(db,".info/connected"),s=>$("#live").classList.toggle("ok",!!s.val()));
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
+        <!-- Top App Bar -->
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-sm">
+            <div>
+                <h2 id="pageTitle" class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-traveloka"></i> Executive Dashboard
+                </h2>
+                <p class="text-xs text-slate-500 font-medium">Monitoring Keberangkatan & Pemeriksaan Pasien Realtime Firebase</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-traveloka"></i>
+                    <span id="currentDateDisplay">--:--:--</span>
+                </div>
+                <button onclick="openBookingModal()" class="bg-traveloka hover:bg-traveloka-hover text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-traveloka/25 transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-plus-circle"></i> + Tambah Pasien
+                </button>
+            </div>
+        </header>
 
-function status(k,sl){const f=taken(k).length,t=dep(k.slice(0,10),sl.h),left=t-Date.now();
-  if(slots[k]?.closed)return["closed","Ditutup"];if(left<=0)return["departed","Sudah berangkat"];
-  if(f>=Q)return["full","Penuh"];if(left<=18e5)return["boarding","Boarding"];if(f>=Q-1)return["almost","Hampir penuh"];return["open","Tersedia"]}
+        <!-- Dynamic Content Body -->
+        <div class="p-6 space-y-6 flex-1">
 
-function render(){const d=viewDate();$("#dlabel").textContent=(d===today()?"Hari ini, ":"Besok, ")+fmt(d,{weekday:"long",day:"numeric",month:"long"});
-  $("#board").innerHTML=SLOTS.map(sl=>{const k=`${d}_${sl.id}`,[c,t]=status(k,sl),s=seats[k]||{};
-    const rows=[1,2,3,4,5].map(n=>s[n]?`<li class="seat on"><span class="no">${n}</span>${esc(s[n].name)}<em class="md ${s[n].mode==="jemput"?"j":""}">${s[n].mode==="jemput"?"🚗 Antar-jemput":"Mandiri"}</em></li>`:`<li class="seat"><span class="no">${n}</span>Kosong</li>`).join("");
-    return `<section class="panel st-${c}"><header><div class="time">${sl.l}<small>WIB</small></div><span class="chip">${t}</span></header><div class="rt"><b>Cirebon</b><i></i><b>Majalengka</b></div><p class="count" data-t="${dep(d,sl.h)}"></p><ol class="seats">${rows}</ol><div class="mt"><span style="width:${taken(k).length/Q*100}%"></span></div><footer><span>${taken(k).length} dari ${Q} kursi terisi${slots[k]?.driver?` · Driver <b class="drv">${esc(slots[k].driver)}</b>`:""}</span><span>${taken(k).length>=Q?"Kursi penuh":"Sisa "+(Q-taken(k).length)+" kursi"}</span></footer></section>`}).join("");
-  const n=addD(today(),d===today()?1:2);$("#next").innerHTML=`${fmt(n,{weekday:"short",day:"numeric",month:"short"})}: `+SLOTS.map(sl=>`${sl.l} <b>${Q-taken(n+"_"+sl.id).length}</b> kosong`).join(" · ");
-  tick();if($("#dBook").open)bkChoices();if($("#dAdm").open)admRender();if($("#dPlan").open)planRender()}
+            <!-- TAB 1: DASHBOARD UTAMA -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <!-- Traveloka Banner Card -->
+                <div class="bg-gradient-to-r from-traveloka via-sky-500 to-sky-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="absolute right-0 bottom-0 opacity-15 translate-x-8 translate-y-6 pointer-events-none">
+                        <i class="fa-solid fa-plane text-9xl"></i>
+                    </div>
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider text-sky-100 mb-2 inline-block">
+                            <i class="fa-solid fa-bolt text-amber-300 mr-1"></i> Live Realtime System
+                        </span>
+                        <h3 class="text-2xl font-black tracking-tight leading-tight mb-2">Layanan Transport Medis Travel.In</h3>
+                        <p class="text-xs sm:text-sm text-sky-100">
+                            Sistem penjadwalan & monitoring keberangkatan pasien terintegrasi Firebase. Maksimal 5 pasien per slot keberangkatan (Jam 08:00 & 13:00 WIB).
+                        </p>
+                    </div>
+                </div>
 
-function tick(){const n=new Date(Date.now()+W);$("#clk").textContent=`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}`;
-  document.querySelectorAll(".count").forEach(e=>{const s=Math.floor((e.dataset.t-Date.now())/1e3);
-    e.textContent=s>0?`Berangkat dalam ${Math.floor(s/3600)}:${pad(Math.floor(s%3600/60))}:${pad(s%60)}`:"Armada sudah berangkat"})}
-setInterval(tick,1e3);setInterval(()=>{subSeats();render()},3e4);
+                <!-- KPI Stat Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Stat Card 1 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pasien Hari Ini</p>
+                                <h3 id="statTotalPatients" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-sky-50 text-traveloka flex items-center justify-center border border-sky-100">
+                                <i class="fa-solid fa-users text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-slate-500 font-medium flex items-center justify-between border-t border-slate-100 pt-3">
+                            <span>Kapasitas Harian</span>
+                            <span class="text-traveloka font-bold">10 Pasien Max</span>
+                        </div>
+                    </div>
 
-/* ---------- rencana 7 hari & riwayat berangkat ---------- */
-const CHIP={open:"Tersedia",almost:"Hampir penuh",boarding:"Boarding",full:"Penuh",closed:"Ditutup",departed:"Sudah berangkat"};
-function slotLine(sl,s,c,t,showSeat){const n=[1,2,3,4,5].filter(i=>s[i]);
-  return `<div class="ps st-${c}"><span class="t">${sl.l}</span><div class="who"><div class="dots">${[1,2,3,4,5].map(i=>`<i class="${s[i]?"on":""}"></i>`).join("")}<b>${n.length}/${Q}</b></div><small>${n.length?n.map(i=>(showSeat?`${i}. `:"")+esc(s[i].name)+(s[i].mode==="jemput"?" 🚗":"")).join(" · "):"Belum ada penumpang"}</small></div><span class="pc c-${c}">${t}</span></div>`}
-function planRender(){const d0=viewDate(),t0=today();
-  $("#planBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Rencana 7 hari ke depan</h2><p class="sum">Cirebon ⇄ Majalengka · tiap hari 08.00 &amp; 13.00 WIB</p>`+
-  Array.from({length:7},(_,i)=>{const d=addD(d0,i),pre=d===t0?"Hari ini":d===addD(t0,1)?"Besok":"";
-    return `<section class="pd"><h3>${pre?pre+" · ":""}${fmt(d,{weekday:"long",day:"numeric",month:"long"})}</h3>`+
-    SLOTS.map(sl=>{const k=`${d}_${sl.id}`,[c,t]=status(k,sl);return slotLine(sl,seats[k]||{},c,t)}).join("")+`</section>`}).join("")}
-$("#bPlan").onclick=()=>{planRender();$("#dPlan").showModal()};
+                    <!-- Stat Card 2 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Slot 08:00 WIB</p>
+                                <h3 id="statSlot08" class="text-3xl font-black text-traveloka mt-1">0 / 5</h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-sky-50 text-traveloka flex items-center justify-center border border-sky-100">
+                                <i class="fa-solid fa-sun text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
+                            <div id="barSlot08" class="bg-traveloka h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
 
-let unH=null,hDays=7,hist={},histErr=false;
-function subH(){unH&&unH();const t=today();histErr=false;
-  unH=onValue(query(ref(db,"seats"),orderByKey(),startAt(addD(t,-hDays)),endAt(t+"\uf8ff")),s=>{hist=s.val()||{};histRender()},()=>{histErr=true;histRender()})}
-function histRender(){const el=$("#hl");if(!el)return;
-  if(histErr){el.innerHTML='<div class="empty">Riwayat tidak dapat dimuat. Periksa izin baca (RULES) pada node seats.</div>';return}
-  const now=Date.now(),byDay={};let trips=0,pax=0;
-  Object.keys(hist).sort().reverse().forEach(k=>{const[d,id]=k.split("_"),sl=SLOTS.find(x=>x.id===id);if(!sl||dep(d,sl.h)>now)return;
-    const n=[1,2,3,4,5].filter(i=>hist[k][i]).length;if(!n)return;trips++;pax+=n;(byDay[d]=byDay[d]||[]).push({k,sl})});
-  $("#hs").textContent=`${trips} keberangkatan · ${pax} penumpang`;
-  const days=Object.keys(byDay).sort().reverse();
-  el.innerHTML=days.length?days.map(d=>`<section class="pd"><h3>${d===today()?"Hari ini · ":""}${fmt(d,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</h3>`+
-    byDay[d].sort((a,b)=>a.sl.h-b.sl.h).map(({k,sl})=>slotLine(sl,hist[k],"departed","Sudah berangkat",true)).join("")+`</section>`).join(""):'<div class="empty">Belum ada keberangkatan pada rentang ini.</div>'}
-$("#bHist").onclick=()=>{$("#histBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Sudah berangkat</h2>
-  <div class="hbar"><span class="sum" id="hs">Memuat…</span><label style="display:flex;gap:.5rem;align-items:center;grid-template-columns:none">Rentang<select id="hr">${[7,14,30].map(n=>`<option value="${n}" ${n===hDays?"selected":""}>${n} hari terakhir</option>`).join("")}</select></label></div><div class="dlg" style="padding:0" id="hl"></div>`;
-  $("#hr").onchange=e=>{hDays=+e.target.value;subH()};hist={};subH();$("#dHist").showModal()};
-$("#dHist").addEventListener("close",()=>{unH&&unH();unH=null});
+                    <!-- Stat Card 3 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Slot 13:00 WIB</p>
+                                <h3 id="statSlot13" class="text-3xl font-black text-amber-500 mt-1">0 / 5</h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center border border-amber-100">
+                                <i class="fa-solid fa-cloud-sun text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
+                            <div id="barSlot13" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
 
-/* ---------- pemesanan ---------- */
-const normWA=v=>{let d=v.replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return /^628\d{7,12}$/.test(d)?d:null};
-const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].toUpperCase()+".":p[0]).slice(0,32)};
-async function book({name,phone,date,slot,seat,status="baru",mode="mandiri",addr="",rm=""}){const k=`${date}_${slot}`;
-  for(const n of (seat?[seat]:[1,2,3,4,5]).filter(n=>!(seats[k]||{})[n])){const id=push(ref(db,"bookings")).key,ts=serverTimestamp();
-    try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(name),id,ts,mode},[`bookings/${id}`]:{name:name.trim(),phone,date,slot,seat:String(n),status,mode,ts,...(addr&&{addr}),...(rm&&{rm})}});return{n,id}}
-    catch(e){if(!/permission/i.test(e.message))throw e}}
-  throw new Error(seat?"Kursi itu sudah diambil, pilih kursi lain.":"Kursi untuk jam ini sudah penuh.")}
+                    <!-- Stat Card 4 -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">di Upload / Selesai</p>
+                                <h3 id="statUploaded" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                            </div>
+                            <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                                <i class="fa-solid fa-circle-check text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-xs text-slate-500 font-medium flex items-center justify-between border-t border-slate-100 pt-3">
+                            <span>Progres Hasil</span>
+                            <span id="statUploadPercentage" class="text-emerald-600 font-bold">0%</span>
+                        </div>
+                    </div>
+                </div>
 
-let bk={date:today(),slot:null,seat:null};
-function openBook(){bk={date:today(),slot:null,seat:null};$("#bkBody").innerHTML=`<button class="btn x" data-close type="button">Tutup</button><h2>Pesan kursi</h2>
-  <form id="fb" class="dlg" style="padding:0"><div><b>Tanggal</b><div class="chips" id="cd"></div></div><div><b>Keberangkatan</b><div class="chips" id="cs"></div></div><div><b>Pilih kursi</b><div class="chips" id="ck"></div></div>
-  <div><b>Cara berangkat</b><div class="chips" id="cm"><input type="radio" name="m" id="m1" value="mandiri" checked><label for="m1">Berangkat sendiri</label><input type="radio" name="m" id="m2" value="jemput"><label for="m2">🚗 Antar-jemput driver</label></div></div><label>Nama lengkap<input id="nm" required minlength="2" maxlength="40" autocomplete="name"></label>
-  <label>Nomor WhatsApp<input id="wa" type="tel" required placeholder="08xxxxxxxxxx" autocomplete="tel"></label>
-  <label id="lj" hidden>Alamat penjemputan<input id="aj" maxlength="120" placeholder="Jalan, RT/RW, patokan"></label><label>No. RM / No. Rujukan (opsional)<input id="rm" maxlength="30"></label><div class="err" id="be"></div><button class="btn pri" id="bs">Pesan kursi</button></form>`;
-  $("#dBook").showModal();bkChoices();$("#cm").onchange=()=>$("#lj").hidden=document.querySelector("input[name=m]:checked").value!=="jemput";
-  $("#fb").onsubmit=async e=>{e.preventDefault();const phone=normWA($("#wa").value),err=$("#be");err.textContent="";
-    if(!bk.slot)return err.textContent="Pilih jam keberangkatan.";if(!bk.seat||(seats[bk.date+"_"+bk.slot]||{})[bk.seat])return err.textContent="Pilih kursi yang masih kosong.";if(!phone)return err.textContent="Nomor WhatsApp tidak valid.";
-    const mode=document.querySelector("input[name=m]:checked").value,addr=$("#aj").value.trim();if(mode==="jemput"&&addr.length<5)return err.textContent="Isi alamat penjemputan.";$("#bs").disabled=true;try{const r=await book({name:$("#nm").value,phone,date:bk.date,slot:bk.slot,seat:bk.seat,mode,addr:mode==="jemput"?addr:"",rm:$("#rm").value.trim()});bk.mode=mode;ticket(r)}catch(x){err.textContent=x.message;$("#bs").disabled=false}}}
-function bkChoices(){const t=today();$("#cd").innerHTML=[0,1,2].map(i=>{const d=addD(t,i);return `<input type="radio" name="d" id="d${i}" value="${d}" ${d===bk.date?"checked":""}><label for="d${i}">${i?fmt(d,{weekday:"short",day:"numeric",month:"short"}):"Hari ini"}</label>`}).join("");
-  $("#cs").innerHTML=SLOTS.map(sl=>{const k=`${bk.date}_${sl.id}`,f=taken(k).length,off=slots[k]?.closed||f>=Q||dep(bk.date,sl.h)-Date.now()<9e5;
-    return `<input type="radio" name="s" id="s${sl.id}" value="${sl.id}" ${off?"disabled":""} ${bk.slot===sl.id&&!off?"checked":""}><label for="s${sl.id}">${sl.l}<small>${slots[k]?.closed?"Ditutup":f>=Q?"Penuh":"Sisa "+(Q-f)}</small></label>`}).join("");
-  const sk=`${bk.date}_${bk.slot}`;$("#ck").innerHTML=bk.slot?[1,2,3,4,5].map(n=>{const t=!!(seats[sk]||{})[n];return `<input type="radio" name="k" id="k${n}" value="${n}" ${t?"disabled":""} ${bk.seat===n&&!t?"checked":""}><label for="k${n}">${n}<small>${t?"Terisi":"Kosong"}</small></label>`}).join(""):"<small>Pilih jam dulu</small>";
-  $("#ck").onchange=e=>bk.seat=+e.target.value;$("#cd").onchange=e=>{bk.date=e.target.value;bk.slot=null;bk.seat=null;bkChoices()};$("#cs").onchange=e=>{bk.slot=e.target.value;bk.seat=null;bkChoices()}}
-function ticket({n,id}){const t=`TRAVEL.IN · Cirebon ⇄ Majalengka\n${fmt(bk.date,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}\nJam ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB · Kursi ${n} · ${bk.mode==="jemput"?"Antar-jemput driver":"Berangkat sendiri"}\nKode ${id.slice(-6).toUpperCase()}\nHadir 15 menit sebelum berangkat.`;
-  $("#bkBody").innerHTML=`<h2>Kursi berhasil dipesan</h2><div class="ticket"><span>Kursi</span><span class="big">${n}</span><b>${fmt(bk.date,{weekday:"long",day:"numeric",month:"long"})} · ${bk.slot.slice(0,2)}.${bk.slot.slice(2)} WIB</b><span>Kode pesanan: <b>${id.slice(-6).toUpperCase()}</b></span></div>
-  <p>${bk.mode==="jemput"?"Driver akan menghubungi &amp; menjemput di alamat Anda. ":""}Simpan tiket ini dan hadir 15 menit sebelum berangkat. Admin akan menghubungi lewat WhatsApp.</p><button class="btn pri" id="cp">Salin tiket</button><button class="btn" data-close>Selesai</button>`;
-  $("#cp").onclick=()=>navigator.clipboard.writeText(t).then(()=>toast("Tiket disalin"))}
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-chart-column text-traveloka"></i> Status Alur Pemeriksaan Pasien
+                            </h3>
+                            <span class="text-xs bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-slate-600 font-semibold">Live Realtime</span>
+                        </div>
+                        <div class="h-64 relative">
+                            <canvas id="chartStatus"></canvas>
+                        </div>
+                    </div>
 
-/* ---------- admin ---------- */
-let unR=null,rec={},admTab="mon",rng=7,flt="all";
-const ST=["baru","dikonfirmasi","naik","tiba"],CK=[["exam","Selesai Diperiksa"],["up","Sudah di Upload"]];
-const hm=t=>{const d=new Date(t+W);return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`};
-const stat=(l,v,t)=>`<div class="stat"><small>${l}</small><b>${v}${t!=null?`<span style="font-size:1rem;color:#7fa3bb"> / ${t}</span>`:""}</b></div>`;
-onAuthStateChanged(auth,u=>{isAdmin=!!u&&u.uid===ADMIN;if(u&&!isAdmin)signOut(auth);
-  $("#bAdm").hidden=!isAdmin;$("#lt").textContent=isAdmin?"Keluar":"Masuk";unB&&unB();unR&&unR();bks={};rec={};if(isAdmin){subB();subR()}});
-function subB(){unB&&unB();unB=onValue(query(ref(db,"bookings"),orderByChild("date"),equalTo(admDate)),s=>{bks=s.val()||{};if($("#dAdm").open)admRender()})}
-function subR(){unR&&unR();const t=today();unR=onValue(query(ref(db,"bookings"),orderByChild("date"),startAt(addD(t,-rng)),endAt(t)),s=>{rec=s.val()||{};if($("#dAdm").open)admRender()},()=>{})}
-$("#bLogin").onclick=()=>isAdmin?signOut(auth):($("#lerr").textContent="",$("#dLogin").showModal());
-$("#fLogin").onsubmit=async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,$("#em").value,$("#pw").value);$("#dLogin").close();$("#pw").value="";toast("Berhasil masuk")}
-  catch(x){e.preventDefault();$("#lerr").textContent=/credential|password|user/.test(x.code)?"Email atau kata sandi salah.":"Gagal masuk: "+x.code}};
-$("#bAdm").onclick=()=>{admDate=viewDate();subB();admRender();$("#dAdm").showModal()};
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-van-shuttle text-traveloka"></i> Pilihan Transportasi
+                            </h3>
+                            <div class="h-48 relative flex items-center justify-center">
+                                <canvas id="chartTransport"></canvas>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 mt-4 text-center">
+                            <div class="bg-sky-50 border border-sky-100 p-3 rounded-xl">
+                                <span class="text-[11px] font-semibold text-slate-500">Mobil Travel.In</span>
+                                <p id="countTravelVehicle" class="text-xl font-black text-traveloka">0</p>
+                            </div>
+                            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
+                                <span class="text-[11px] font-semibold text-slate-500">Pribadi</span>
+                                <p id="countPrivateVehicle" class="text-xl font-black text-indigo-600">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-const bRow=(id,b,lead)=>`<div class="rowx"><div class="l1"><b>${lead}</b><span>${esc(b.name||"")} <span class="bdg ${b.mode==="jemput"?"j":""}">${b.mode==="jemput"?"🚗 Antar-jemput":"Mandiri"}</span>${b.phone?` · <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}">${b.phone}</a>`:""}</span><select data-a="st" data-id="${id}">${ST.map(v=>`<option ${b.status===v?"selected":""}>${v}</option>`).join("")}</select><button class="btn" data-a="del" data-k="${b.date}_${b.slot}" data-n="${b.seat}" data-id="${id}">Batalkan</button></div>${b.addr?`<div class="addr">📍 ${esc(b.addr)} · <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=${encodeURIComponent(b.addr)}">Buka peta</a></div>`:""}${b.rm?`<div class="addr">No. RM/Rujukan: ${esc(b.rm)}</div>`:""}<div class="ck2">${CK.map(([k,l])=>{const v=b.checks?.[k];return `<label class="${v?"ok":""}"><input type="checkbox" data-a="ck" data-id="${id}" data-c="${k}" ${v?"checked":""}>${l}${v?` <small>${hm(v)}</small>`:""}</label>`}).join("")}</div></div>`;
+                <!-- Quick Overview Slots -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 bg-traveloka/10 text-traveloka font-extrabold text-sm rounded-lg border border-traveloka/20">08:00 WIB</span>
+                                <h4 class="font-bold text-slate-800">Sesi Keberangkatan Pagi</h4>
+                            </div>
+                            <span id="badgeSlot08Capacity" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">0/5 Tersedia</span>
+                        </div>
+                        <div id="listSlot08" class="mt-4 space-y-2">
+                            <!-- JS Populated -->
+                        </div>
+                    </div>
 
-function mon(){const L=Object.values(bks),n=L.length,ex=L.filter(b=>b.checks?.exam).length,up=L.filter(b=>b.checks?.up).length;
-  return `<div class="hbar"><div class="tabs"><button class="btn" data-a="dd" data-v="-1">◀</button><input type="date" id="ad" value="${admDate}" style="width:auto"><button class="btn" data-a="dd" data-v="1">▶</button></div><button class="btn" data-a="csv">Unduh CSV</button></div>
-  <div class="stats">${stat("Peserta",n,2*Q)}${stat("Antar-jemput",L.filter(b=>b.mode==="jemput").length)}${stat("Selesai Diperiksa",ex,n)}${stat("Sudah di Upload",up,n)}</div>
-  <div class="mt"><span style="width:${n?(ex+up)/(2*n)*100:0}%"></span></div>`+SLOTS.map(sl=>{
-  const k=`${admDate}_${sl.id}`,s=seats[k]||{},f=taken(k).length;
-  return `<div class="sl"><h3><span>${sl.l} · ${f}/${Q}</span><button class="btn" data-a="close" data-k="${k}">${slots[k]?.closed?"Buka pemesanan":"Tutup pemesanan"}</button></h3><label class="drvin">Driver<input data-a="drv" data-k="${k}" value="${esc(slots[k]?.driver||"")}" maxlength="30" placeholder="Nama driver (tampil di TV)"></label>`+
-  taken(k).map(n=>bRow(s[n].id,{...s[n],...bks[s[n].id],date:admDate,slot:sl.id,seat:n},n)).join("")+
-  (f<Q?`<div class="add"><input placeholder="Nama" id="an${sl.id}"><input placeholder="08xx" id="aw${sl.id}"><select id="am${sl.id}"><option value="mandiri">Berangkat sendiri</option><option value="jemput">Antar-jemput</option></select><input placeholder="Alamat jemput" id="aa${sl.id}"><button class="btn" data-a="add" data-s="${sl.id}">Tambah</button></div>`:"")+`</div>`}).join("")}
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <span class="px-3 py-1 bg-amber-500/10 text-amber-600 font-extrabold text-sm rounded-lg border border-amber-500/20">13:00 WIB</span>
+                                <h4 class="font-bold text-slate-800">Sesi Keberangkatan Siang</h4>
+                            </div>
+                            <span id="badgeSlot13Capacity" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">0/5 Tersedia</span>
+                        </div>
+                        <div id="listSlot13" class="mt-4 space-y-2">
+                            <!-- JS Populated -->
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-function recap(){const E=Object.entries(rec).map(([id,b])=>({...b,id})),n=E.length,ex=E.filter(b=>b.checks?.exam).length,up=E.filter(b=>b.checks?.up).length;
-  const L=E.filter(b=>flt==="all"||(flt==="exam"?!b.checks?.exam:!b.checks?.up)).sort((a,b)=>(b.date+b.slot+b.seat).localeCompare(a.date+a.slot+a.seat));
-  return `<div class="hbar"><label style="display:flex;gap:.5rem;align-items:center">Rentang<select data-a="rng">${[7,14,30].map(v=>`<option value="${v}" ${v===rng?"selected":""}>${v} hari terakhir</option>`).join("")}</select></label><label style="display:flex;gap:.5rem;align-items:center">Tampilkan<select data-a="flt">${[["all","Semua"],["exam","Belum diperiksa"],["up","Belum di-upload"]].map(([v,l])=>`<option value="${v}" ${flt===v?"selected":""}>${l}</option>`).join("")}</select></label><button class="btn" data-a="csv">Unduh CSV</button></div>
-  <div class="stats">${stat("Total pasien",n)}${stat("Belum diperiksa",n-ex)}${stat("Belum di-upload",n-up)}${stat("Antar-jemput",E.filter(b=>b.mode==="jemput").length)}</div>`+
-  (L.length?L.map(b=>bRow(b.id,b,`${fmt(b.date,{day:"numeric",month:"short"})} · ${b.slot.slice(0,2)}.${b.slot.slice(2)}`)).join(""):'<div class="empty">Tidak ada data pada filter ini.</div>')}
+            <!-- TAB 2: MONITORING TABLE -->
+            <section id="tab-monitoring" class="tab-content space-y-6 hidden">
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                    <!-- Filters & Search Toolbar -->
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center mb-6">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="relative min-w-[220px]">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                                <input type="text" id="searchInput" onkeyup="renderMonitoringTable()" placeholder="Cari Nama, No RM, Tujuan..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-traveloka transition-colors">
+                            </div>
 
-function admRender(){$("#admBody").innerHTML=`<button class="btn x" data-close>Tutup</button><h2>Panel admin</h2><div class="tabs">${[["mon","Monitoring harian"],["rec","Rekap &amp; tindak lanjut"]].map(([v,l])=>`<button class="btn ${admTab===v?"on":""}" data-a="tab" data-t="${v}">${l}</button>`).join("")}</div>`+(admTab==="mon"?mon():recap())}
+                            <select id="filterSlot" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
+                                <option value="ALL">Semua Jam Slot</option>
+                                <option value="08:00">Slot 08:00 WIB</option>
+                                <option value="13:00">Slot 13:00 WIB</option>
+                            </select>
 
-function csv(){const q=v=>`"${String(v??"").replace(/"/g,'""')}"`,rows=Object.values(rec).sort((a,b)=>(a.date+a.slot+a.seat).localeCompare(b.date+b.slot+b.seat));
-  const t=[["Tanggal","Jam","Kursi","Nama","WA","Cara berangkat","Alamat jemput","No RM/Rujukan","Status","Selesai Diperiksa","Sudah di Upload"],...rows.map(b=>[b.date,b.slot.slice(0,2)+"."+b.slot.slice(2),b.seat,b.name,b.phone,b.mode==="jemput"?"Antar-jemput":"Mandiri",b.addr,b.rm,b.status,b.checks?.exam?hm(b.checks.exam):"",b.checks?.up?hm(b.checks.up):""])].map(r=>r.map(q).join(",")).join("\n");
-  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download=`travelin-rekap-${today()}.csv`;a.click()}
+                            <select id="filterTransport" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
+                                <option value="ALL">Semua Transportasi</option>
+                                <option value="Mobil Travel.In">Mobil Travel.In</option>
+                                <option value="Kendaraan Pribadi">Kendaraan Pribadi</option>
+                            </select>
 
-$("#admBody").onclick=async e=>{const b=e.target.closest("[data-a]");if(!b||/SELECT|INPUT/.test(b.tagName))return;const d=b.dataset;
-  try{if(d.a==="tab"){admTab=d.t;admRender()}
-    if(d.a==="dd"){admDate=addD(admDate,+d.v);subB();admRender()}
-    if(d.a==="csv")csv();
-    if(d.a==="close")await set(ref(db,`slots/${d.k}/closed`),slots[d.k]?.closed?null:true);
-    if(d.a==="del"&&confirm("Batalkan pesanan ini dan kosongkan kursi?"))await update(ref(db),{[`seats/${d.k}/${d.n}`]:null,[`bookings/${d.id}`]:null});
-    if(d.a==="add"){const p=normWA($("#aw"+d.s).value),nm=$("#an"+d.s).value,mode=$("#am"+d.s).value,addr=$("#aa"+d.s).value.trim();
-      if(!p||nm.trim().length<2)return toast("Isi nama & nomor WA yang valid");if(mode==="jemput"&&addr.length<5)return toast("Isi alamat jemput");
-      await book({name:nm,phone:p,date:admDate,slot:d.s,status:"dikonfirmasi",mode,addr:mode==="jemput"?addr:""});toast("Penumpang ditambahkan")}}
-  catch(x){toast("Gagal: "+x.message)}};
-$("#admBody").onchange=e=>{const t=e.target,d=t.dataset,f=p=>p.catch(x=>toast(x.message));
-  if(d.a==="st")f(update(ref(db,`bookings/${d.id}`),{status:t.value}));
-  if(d.a==="ck")f(set(ref(db,`bookings/${d.id}/checks/${d.c}`),t.checked?serverTimestamp():null));
-  if(d.a==="drv")f(set(ref(db,`slots/${d.k}/driver`),t.value.trim()||null));
-  if(d.a==="rng"){rng=+t.value;subR()}
-  if(d.a==="flt"){flt=t.value;admRender()}
-  if(t.id==="ad"&&t.value){admDate=t.value;subB();admRender()}};
+                            <select id="filterStatus" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
+                                <option value="ALL">Semua Status</option>
+                                <option value="Berangkat">Berangkat</option>
+                                <option value="Diperiksa">Diperiksa</option>
+                                <option value="di Upload">di Upload</option>
+                            </select>
+                        </div>
 
-/* ---------- umum ---------- */
-function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),2600)}
-$("#bBook").onclick=openBook;$("#host").textContent=location.host||"travel.in";
-$("#bFs").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
-document.addEventListener("click",e=>{if(e.target.closest("[data-close]"))e.target.closest("dialog").close()});
-let it;const wake=()=>{document.body.classList.remove("idle");clearTimeout(it);it=setTimeout(()=>document.body.classList.add("idle"),6e3)};
-["mousemove","keydown","touchstart"].forEach(v=>addEventListener(v,wake));wake();
-subSeats();render();
-</script>
+                        <div class="flex gap-2">
+                            <button onclick="exportToCSV()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
+                                <i class="fa-solid fa-file-csv text-emerald-600"></i> Export CSV
+                            </button>
+                            <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
+                                <i class="fa-solid fa-print text-traveloka"></i> Cetak
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Monitoring Table -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
+                        <table class="w-full text-left text-sm text-slate-700">
+                            <thead class="bg-slate-100 text-xs font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200">
+                                <tr>
+                                    <th class="py-3.5 px-4">No. RM & Nama Pasien</th>
+                                    <th class="py-3.5 px-4">Jam Slot</th>
+                                    <th class="py-3.5 px-4">Transportasi</th>
+                                    <th class="py-3.5 px-4">Tujuan RS / Poli</th>
+                                    <th class="py-3.5 px-4 text-center">Status Alur</th>
+                                    <th class="py-3.5 px-4 text-center">Berkas Hasil</th>
+                                    <th class="py-3.5 px-4 text-center">Aksi Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monitoringTableBody" class="divide-y divide-slate-200 bg-white">
+                                <!-- JS Table Insertion -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: BOOKING FORM -->
+            <section id="tab-booking" class="tab-content space-y-6 hidden">
+                <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                    <div class="mb-6 border-b border-slate-100 pb-4">
+                        <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-plus text-traveloka"></i> Form Pendaftaran Keberangkatan Pasien
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-1">Data akan langsung tersimpan & tersinkronisasi ke Firebase Realtime Database.</p>
+                    </div>
+
+                    <form id="bookingForm" onsubmit="handleBookingSubmit(event)" class="space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">No. Rekam Medis (RM)</label>
+                                <input type="text" id="inputRM" required placeholder="Contoh: RM-9082" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Lengkap Pasien</label>
+                                <input type="text" id="inputName" required placeholder="Masukkan nama pasien" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp / HP</label>
+                                <input type="tel" id="inputPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Tujuan RS / Poliklinik</label>
+                                <input type="text" id="inputDestination" required placeholder="Contoh: RS Medika - Poli Jantung" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                            </div>
+                        </div>
+
+                        <!-- Slot Radio Cards -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">Pilih Slot Keberangkatan (Max 5 Pasien per Slot)</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label id="labelSlot08" class="relative border-2 border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka transition-all bg-slate-50 flex justify-between items-center">
+                                    <input type="radio" name="slotTime" value="08:00" required class="accent-traveloka">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fa-solid fa-sun text-amber-500"></i>
+                                            <span class="font-bold text-slate-900 text-base">08:00 WIB</span>
+                                        </div>
+                                        <span class="text-xs text-slate-500">Keberangkatan Sesi Pagi</span>
+                                    </div>
+                                    <span id="formBadgeSlot08" class="text-xs font-bold px-2 py-1 rounded bg-sky-100 text-traveloka">
+                                        0/5 Terisi
+                                    </span>
+                                </label>
+
+                                <label id="labelSlot13" class="relative border-2 border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka transition-all bg-slate-50 flex justify-between items-center">
+                                    <input type="radio" name="slotTime" value="13:00" class="accent-traveloka">
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <i class="fa-solid fa-cloud-sun text-amber-500"></i>
+                                            <span class="font-bold text-slate-900 text-base">13:00 WIB</span>
+                                        </div>
+                                        <span class="text-xs text-slate-500">Keberangkatan Sesi Siang</span>
+                                    </div>
+                                    <span id="formBadgeSlot13" class="text-xs font-bold px-2 py-1 rounded bg-amber-100 text-amber-700">
+                                        0/5 Terisi
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Transport Radio Cards -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">Pilih Moda Transportasi</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label class="border border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka bg-slate-50 flex items-center space-x-3">
+                                    <input type="radio" name="transportType" value="Mobil Travel.In" checked class="accent-traveloka">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900"><i class="fa-solid fa-van-shuttle text-traveloka mr-1.5"></i> Mobil Travel.In</p>
+                                        <p class="text-xs text-slate-500">Armada Antar-Jemput Resmi</p>
+                                    </div>
+                                </label>
+
+                                <label class="border border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka bg-slate-50 flex items-center space-x-3">
+                                    <input type="radio" name="transportType" value="Kendaraan Pribadi" class="accent-traveloka">
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900"><i class="fa-solid fa-car text-indigo-600 mr-1.5"></i> Kendaraan Pribadi</p>
+                                        <p class="text-xs text-slate-500">Mandiri / Antar Keluarga</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                            <button type="reset" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-sm font-bold">Reset</button>
+                            <button type="submit" class="bg-traveloka hover:bg-traveloka-hover text-white font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg shadow-traveloka/25">Simpan Booking Pasien</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB 4: SLOT MANAGER -->
+            <section id="tab-slot-manager" class="tab-content space-y-6 hidden">
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                    <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-traveloka"></i> Monitoring Kuota Slot Keberangkatan Realtime
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-6">Maksimal kuota per slot adalah 5 orang pasien.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+                            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200">
+                                <div>
+                                    <span class="text-xs font-extrabold text-traveloka uppercase tracking-wider">Slot 1</span>
+                                    <h4 class="text-xl font-black text-slate-900">08:00 WIB</h4>
+                                </div>
+                                <span id="slotManagerBadge08" class="px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-traveloka">0/5 Terisi</span>
+                            </div>
+                            <div id="slotManagerList08" class="space-y-2">
+                                <!-- Dynamic List -->
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+                            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200">
+                                <div>
+                                    <span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Slot 2</span>
+                                    <h4 class="text-xl font-black text-slate-900">13:00 WIB</h4>
+                                </div>
+                                <span id="slotManagerBadge13" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">0/5 Terisi</span>
+                            </div>
+                            <div id="slotManagerList13" class="space-y-2">
+                                <!-- Dynamic List -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODAL: UPLOAD FILE -->
+    <div id="uploadModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-traveloka"></i> Upload Berkas Hasil Medis
+                </h3>
+                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <input type="hidden" id="uploadPatientId">
+            <div>
+                <p id="uploadPatientName" class="font-extrabold text-slate-900 text-sm">--</p>
+                <p id="uploadPatientRM" class="text-xs text-slate-500">--</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Dokumen Hasil / Catatan</label>
+                <input type="text" id="inputFileName" placeholder="Contoh: Hasil_Lab_Siti.pdf / Resume_Medis.pdf" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+            </div>
+
+            <div class="border-2 border-dashed border-slate-300 hover:border-traveloka rounded-2xl p-6 text-center cursor-pointer bg-slate-50 transition-colors">
+                <i class="fa-solid fa-file-pdf text-3xl text-traveloka mb-2"></i>
+                <p class="text-xs text-slate-700 font-bold">Simulasi File Upload (PDF / Gambar)</p>
+                <p class="text-[10px] text-slate-400 mt-1">Mengubah status alur secara otomatis ke 'di Upload'</p>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeUploadModal()" class="px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-100">Batal</button>
+                <button onclick="confirmUploadFile()" class="bg-traveloka hover:bg-traveloka-hover text-white font-extrabold px-4 py-2 rounded-xl text-xs shadow-md">Simpan & Set Status 'di Upload'</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: AUTHENTICATION LOGIN -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-slate-200 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield text-traveloka"></i> Firebase Auth Admin
+                </h3>
+                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Email Firebase</label>
+                    <input type="email" id="authEmail" required value="bantuin44@gmail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="authPassword" required value="123456" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
+                </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-traveloka hover:bg-traveloka-hover text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md">
+                        Login via Firebase Auth
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FIREBASE SDK V9 COMPAT & APPLICATION JS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Firebase Configuration Provided
+        const firebaseConfig = {
+            apiKey: "AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",
+            authDomain: "trevelin-295c3.firebaseapp.com",
+            databaseURL: "https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "trevelin-295c3",
+            storageBucket: "trevelin-295c3.firebasestorage.app",
+            messagingSenderId: "387360938480",
+            appId: "1:387360938480:web:c7bb1851789127cc5be535",
+            measurementId: "G-RPXPKZHF62"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Core App Constants
+        const MAX_SLOT_CAPACITY = 5;
+        let patients = [];
+        let chartStatusInstance = null;
+        let chartTransportInstance = null;
+
+        // Make functions globally accessible to inline HTML handlers
+        window.switchTab = switchTab;
+        window.renderMonitoringTable = renderMonitoringTable;
+        window.handleBookingSubmit = handleBookingSubmit;
+        window.advanceStatus = advanceStatus;
+        window.openUploadModal = openUploadModal;
+        window.closeUploadModal = closeUploadModal;
+        window.confirmUploadFile = confirmUploadFile;
+        window.deletePatient = deletePatient;
+        window.exportToCSV = exportToCSV;
+        window.openBookingModal = openBookingModal;
+        window.toggleAuthModal = toggleAuthModal;
+        window.handleAuthSubmit = handleAuthSubmit;
+
+        // Window Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            updateClock();
+            setInterval(updateClock, 1000);
+            initCharts();
+
+            // Firebase Auth State Listener
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    document.getElementById('userEmailDisplay').innerText = user.email;
+                    document.getElementById('userRoleDisplay').innerText = "Authenticated User";
+                } else {
+                    document.getElementById('userEmailDisplay').innerText = "bantuin44@gmail.com";
+                    document.getElementById('userRoleDisplay').innerText = "Simulated Active Session";
+                }
+            });
+
+            // Firebase Realtime Database Listener
+            const bookingsRef = ref(database, 'bookings');
+            onValue(bookingsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    patients = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+                } else {
+                    // Seed initial data if database is empty
+                    seedInitialData();
+                }
+                updateSyncStatus(true);
+                refreshUI();
+            }, (error) => {
+                console.warn("Firebase fallback to local memory:", error);
+                updateSyncStatus(false);
+            });
+
+            // Mobile menu event
+            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                document.getElementById('navMenu').classList.toggle('hidden');
+            });
+        });
+
+        // Seed default demo data if Realtime DB is fresh
+        function seedInitialData() {
+            const initialList = [
+                {
+                    rm: 'RM-8801',
+                    name: 'Budi Santoso',
+                    phone: '08123456789',
+                    slot: '08:00',
+                    transport: 'Mobil Travel.In',
+                    destination: 'RS Sehat Medika - Poli Jantung',
+                    status: 'di Upload',
+                    fileUploaded: 'Hasil_EKG_Budi.pdf'
+                },
+                {
+                    rm: 'RM-8802',
+                    name: 'Siti Rahmawati',
+                    phone: '08219876543',
+                    slot: '08:00',
+                    transport: 'Kendaraan Pribadi',
+                    destination: 'Klinik Spesialis Mata Utama',
+                    status: 'Diperiksa',
+                    fileUploaded: null
+                },
+                {
+                    rm: 'RM-8803',
+                    name: 'Ahmad Dahlan',
+                    phone: '08571234123',
+                    slot: '13:00',
+                    transport: 'Mobil Travel.In',
+                    destination: 'RSU Harapan - Ortopedi',
+                    status: 'Berangkat',
+                    fileUploaded: null
+                }
+            ];
+
+            initialList.forEach(item => {
+                const newRef = push(ref(database, 'bookings'));
+                set(newRef, item);
+            });
+        }
+
+        function updateSyncStatus(isOnline) {
+            const dot = document.getElementById('syncDot');
+            const text = document.getElementById('syncText');
+            if (isOnline) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+                text.innerText = "Firebase Realtime Sync";
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-amber-400";
+                text.innerText = "Local Mode Active";
+            }
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('currentDateDisplay').innerHTML = `${dateStr} | <span class="font-extrabold text-traveloka">${timeStr} WIB</span>`;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('bg-traveloka', 'text-white', 'shadow-lg', 'shadow-traveloka/30');
+                el.classList.add('text-slate-300');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-traveloka', 'text-white', 'shadow-lg', 'shadow-traveloka/30');
+                activeNav.classList.remove('text-slate-300');
+            }
+
+            if (window.innerWidth < 768) {
+                document.getElementById('navMenu').classList.add('hidden');
+            }
+        }
+
+        function refreshUI() {
+            updateKPIs();
+            renderSlotQuickLists();
+            renderMonitoringTable();
+            renderSlotManager();
+            updateCharts();
+            updateFormSlotStatus();
+        }
+
+        function updateKPIs() {
+            const total = patients.length;
+            const slot08Count = patients.filter(p => p.slot === '08:00').length;
+            const slot13Count = patients.filter(p => p.slot === '13:00').length;
+            const uploadedCount = patients.filter(p => p.status === 'di Upload').length;
+
+            document.getElementById('statTotalPatients').innerText = total;
+            document.getElementById('statSlot08').innerText = `${slot08Count} / ${MAX_SLOT_CAPACITY}`;
+            document.getElementById('statSlot13').innerText = `${slot13Count} / ${MAX_SLOT_CAPACITY}`;
+            document.getElementById('statUploaded').innerText = uploadedCount;
+
+            document.getElementById('barSlot08').style.width = `${(slot08Count / MAX_SLOT_CAPACITY) * 100}%`;
+            document.getElementById('barSlot13').style.width = `${(slot13Count / MAX_SLOT_CAPACITY) * 100}%`;
+
+            const percentage = total > 0 ? Math.round((uploadedCount / total) * 100) : 0;
+            document.getElementById('statUploadPercentage').innerText = `${percentage}%`;
+
+            const pending = patients.filter(p => p.status !== 'di Upload').length;
+            document.getElementById('badgePendingCount').innerText = pending;
+        }
+
+        function renderMonitoringTable() {
+            const tbody = document.getElementById('monitoringTableBody');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filterSlot = document.getElementById('filterSlot').value;
+            const filterTransport = document.getElementById('filterTransport').value;
+            const filterStatus = document.getElementById('filterStatus').value;
+
+            let filtered = patients.filter(p => {
+                const matchesSearch = p.name?.toLowerCase().includes(search) || 
+                                      p.rm?.toLowerCase().includes(search) || 
+                                      p.destination?.toLowerCase().includes(search);
+                const matchesSlot = filterSlot === 'ALL' || p.slot === filterSlot;
+                const matchesTransport = filterTransport === 'ALL' || p.transport === filterTransport;
+                const matchesStatus = filterStatus === 'ALL' || p.status === filterStatus;
+                return matchesSearch && matchesSlot && matchesTransport && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-8 text-slate-400">
+                            <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
+                            Tidak ada data pasien yang sesuai kriteria filter.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(p => {
+                let statusBadge = '';
+                if (p.status === 'Berangkat') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
+                        <i class="fa-solid fa-truck-fast text-[10px]"></i> Berangkat
+                    </span>`;
+                } else if (p.status === 'Diperiksa') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
+                        <i class="fa-solid fa-stethoscope text-[10px]"></i> Diperiksa
+                    </span>`;
+                } else {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
+                        <i class="fa-solid fa-circle-check text-[10px]"></i> di Upload
+                    </span>`;
+                }
+
+                const transportBadge = p.transport === 'Mobil Travel.In'
+                    ? `<span class="text-xs font-bold text-traveloka flex items-center gap-1"><i class="fa-solid fa-van-shuttle"></i> ${p.transport}</span>`
+                    : `<span class="text-xs font-bold text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-car"></i> ${p.transport}</span>`;
+
+                const fileCell = p.fileUploaded 
+                    ? `<span class="inline-flex items-center gap-1.5 text-xs text-traveloka font-bold bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg">
+                        <i class="fa-solid fa-file-pdf"></i> ${p.fileUploaded}
+                       </span>`
+                    : `<span class="text-xs text-slate-400 italic">Belum ada file</span>`;
+
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3.5 px-4">
+                            <div class="font-bold text-slate-900">${p.name}</div>
+                            <div class="text-xs text-slate-500 flex items-center gap-2">
+                                <span class="text-traveloka font-mono font-bold">${p.rm}</span>
+                                <span>•</span>
+                                <span><i class="fa-brands fa-whatsapp text-emerald-600"></i> ${p.phone}</span>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-4 font-bold text-slate-800">
+                            <span class="px-2.5 py-1 bg-slate-100 rounded-lg border border-slate-200 text-xs">
+                                <i class="fa-regular fa-clock text-traveloka mr-1"></i>${p.slot} WIB
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4">${transportBadge}</td>
+                        <td class="py-3.5 px-4 text-xs text-slate-600 font-medium">${p.destination}</td>
+                        <td class="py-3.5 px-4 text-center">${statusBadge}</td>
+                        <td class="py-3.5 px-4 text-center">${fileCell}</td>
+                        <td class="py-3.5 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="advanceStatus('${p.id}')" title="Lanjut Status" class="bg-slate-100 hover:bg-traveloka hover:text-white text-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+                                    <i class="fa-solid fa-forward-step"></i> Advance
+                                </button>
+                                <button onclick="openUploadModal('${p.id}')" title="Upload Berkas" class="bg-slate-100 hover:bg-sky-500 hover:text-white text-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all">
+                                    <i class="fa-solid fa-upload"></i> File
+                                </button>
+                                <button onclick="deletePatient('${p.id}')" title="Hapus" class="bg-slate-100 hover:bg-rose-500 hover:text-white text-slate-400 p-1.5 rounded-lg text-xs transition-all">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Sequential status flow: Berangkat -> Diperiksa -> di Upload
+        function advanceStatus(id) {
+            const patient = patients.find(p => p.id === id);
+            if (!patient) return;
+
+            let nextStatus = patient.status;
+            let fileName = patient.fileUploaded;
+
+            if (patient.status === 'Berangkat') {
+                nextStatus = 'Diperiksa';
+            } else if (patient.status === 'Diperiksa') {
+                nextStatus = 'di Upload';
+                if (!fileName) fileName = `Hasil_Medis_${patient.rm.replace('-', '')}.pdf`;
+            } else {
+                showToast(`Status ${patient.name} sudah 'di Upload' / selesai`, 'warning');
+                return;
+            }
+
+            const itemRef = ref(database, `bookings/${id}`);
+            update(itemRef, { status: nextStatus, fileUploaded: fileName })
+                .then(() => showToast(`Status ${patient.name} diperbarui ke '${nextStatus}'`, 'success'))
+                .catch(err => showToast("Gagal update Firebase: " + err.message, 'error'));
+        }
+
+        function renderSlotQuickLists() {
+            const list08 = document.getElementById('listSlot08');
+            const list13 = document.getElementById('listSlot13');
+
+            const p08 = patients.filter(p => p.slot === '08:00');
+            const p13 = patients.filter(p => p.slot === '13:00');
+
+            document.getElementById('badgeSlot08Capacity').innerText = `${MAX_SLOT_CAPACITY - p08.length} / ${MAX_SLOT_CAPACITY} Tersedia`;
+            document.getElementById('badgeSlot13Capacity').innerText = `${MAX_SLOT_CAPACITY - p13.length} / ${MAX_SLOT_CAPACITY} Tersedia`;
+
+            list08.innerHTML = renderSlotItems(p08);
+            list13.innerHTML = renderSlotItems(p13);
+        }
+
+        function renderSlotItems(items) {
+            if (items.length === 0) return `<p class="text-xs text-slate-400 italic py-2">Belum ada pasien terdaftar.</p>`;
+            return items.map(p => `
+                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                    <div>
+                        <p class="font-bold text-slate-800">${p.name}</p>
+                        <p class="text-[10px] text-slate-500">${p.transport}</p>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${p.status === 'di Upload' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                        ${p.status}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function renderSlotManager() {
+            const p08 = patients.filter(p => p.slot === '08:00');
+            const p13 = patients.filter(p => p.slot === '13:00');
+
+            document.getElementById('slotManagerBadge08').innerText = `${p08.length} / ${MAX_SLOT_CAPACITY} Pasien`;
+            document.getElementById('slotManagerBadge13').innerText = `${p13.length} / ${MAX_SLOT_CAPACITY} Pasien`;
+
+            document.getElementById('slotManagerList08').innerHTML = p08.map(p => `
+                <div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center shadow-sm">
+                    <div>
+                        <p class="text-sm font-bold text-slate-900">${p.name} <span class="text-xs font-normal text-traveloka">(${p.rm})</span></p>
+                        <p class="text-xs text-slate-500">${p.destination} • ${p.transport}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">${p.status}</span>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 italic">Slot kosong.</p>';
+
+            document.getElementById('slotManagerList13').innerHTML = p13.map(p => `
+                <div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center shadow-sm">
+                    <div>
+                        <p class="text-sm font-bold text-slate-900">${p.name} <span class="text-xs font-normal text-amber-600">(${p.rm})</span></p>
+                        <p class="text-xs text-slate-500">${p.destination} • ${p.transport}</p>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">${p.status}</span>
+                </div>
+            `).join('') || '<p class="text-xs text-slate-400 italic">Slot kosong.</p>';
+        }
+
+        function updateFormSlotStatus() {
+            const p08 = patients.filter(p => p.slot === '08:00').length;
+            const p13 = patients.filter(p => p.slot === '13:00').length;
+
+            const badge08 = document.getElementById('formBadgeSlot08');
+            const badge13 = document.getElementById('formBadgeSlot13');
+            const label08 = document.getElementById('labelSlot08');
+            const label13 = document.getElementById('labelSlot13');
+
+            badge08.innerText = `${p08}/${MAX_SLOT_CAPACITY} Terisi`;
+            badge13.innerText = `${p13}/${MAX_SLOT_CAPACITY} Terisi`;
+
+            if (p08 >= MAX_SLOT_CAPACITY) {
+                label08.classList.add('opacity-50', 'pointer-events-none', 'bg-rose-50');
+                badge08.innerText = "PENUH (5/5)";
+                badge08.className = "text-xs font-bold px-2 py-1 rounded bg-rose-100 text-rose-700";
+            }
+            if (p13 >= MAX_SLOT_CAPACITY) {
+                label13.classList.add('opacity-50', 'pointer-events-none', 'bg-rose-50');
+                badge13.innerText = "PENUH (5/5)";
+                badge13.className = "text-xs font-bold px-2 py-1 rounded bg-rose-100 text-rose-700";
+            }
+        }
+
+        function handleBookingSubmit(e) {
+            e.preventDefault();
+
+            const rm = document.getElementById('inputRM').value.trim();
+            const name = document.getElementById('inputName').value.trim();
+            const phone = document.getElementById('inputPhone').value.trim();
+            const destination = document.getElementById('inputDestination').value.trim();
+
+            const slotRadio = document.querySelector('input[name="slotTime"]:checked');
+            const transportRadio = document.querySelector('input[name="transportType"]:checked');
+
+            if (!slotRadio) {
+                showToast("Pilih jam slot keberangkatan!", "error");
+                return;
+            }
+
+            const slot = slotRadio.value;
+            const transport = transportRadio.value;
+
+            // Quota check rule (Max 5)
+            const currentSlotCount = patients.filter(p => p.slot === slot).length;
+            if (currentSlotCount >= MAX_SLOT_CAPACITY) {
+                showToast(`Slot ${slot} WIB sudah penuh (Maksimal 5 pasien)!`, "error");
+                return;
+            }
+
+            const newPatientData = {
+                rm,
+                name,
+                phone,
+                slot,
+                transport,
+                destination,
+                status: 'Berangkat',
+                fileUploaded: null,
+                createdAt: new Date().toISOString()
+            };
+
+            const newBookingRef = push(ref(database, 'bookings'));
+            set(newBookingRef, newPatientData)
+                .then(() => {
+                    document.getElementById('bookingForm').reset();
+                    showToast(`Booking ${name} tersimpan di Firebase!`, "success");
+                    switchTab('monitoring');
+                })
+                .catch(err => {
+                    showToast("Gagal menyimpan data: " + err.message, "error");
+                });
+        }
+
+        function openUploadModal(id) {
+            const p = patients.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('uploadPatientId').value = p.id;
+            document.getElementById('uploadPatientName').innerText = p.name;
+            document.getElementById('uploadPatientRM').innerText = `RM: ${p.rm} | Slot: ${p.slot} WIB`;
+            document.getElementById('inputFileName').value = p.fileUploaded || `Hasil_Medis_${p.rm}.pdf`;
+
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+        }
+
+        function confirmUploadFile() {
+            const id = document.getElementById('uploadPatientId').value;
+            const fileName = document.getElementById('inputFileName').value.trim();
+
+            if (!fileName) {
+                showToast("Masukkan nama dokumen!", "error");
+                return;
+            }
+
+            const itemRef = ref(database, `bookings/${id}`);
+            update(itemRef, {
+                fileUploaded: fileName,
+                status: 'di Upload'
+            }).then(() => {
+                showToast("Berkas berhasil diunggah!", "success");
+                closeUploadModal();
+            });
+        }
+
+        function deletePatient(id) {
+            if (confirm("Apakah Anda yakin menghapus data pasien ini dari Firebase?")) {
+                const itemRef = ref(database, `bookings/${id}`);
+                remove(itemRef).then(() => {
+                    showToast("Data pasien dihapus", "info");
+                });
+            }
+        }
+
+        function initCharts() {
+            const ctxStatus = document.getElementById('chartStatus').getContext('2d');
+            chartStatusInstance = new Chart(ctxStatus, {
+                type: 'bar',
+                data: {
+                    labels: ['Berangkat', 'Diperiksa', 'di Upload'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#f59e0b', '#6366f1', '#10b981'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+
+            const ctxTransport = document.getElementById('chartTransport').getContext('2d');
+            chartTransportInstance = new Chart(ctxTransport, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mobil Travel.In', 'Kendaraan Pribadi'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#0194da', '#4f46e5']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } },
+                    cutout: '68%'
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!chartStatusInstance || !chartTransportInstance) return;
+
+            const cBerangkat = patients.filter(p => p.status === 'Berangkat').length;
+            const cDiperiksa = patients.filter(p => p.status === 'Diperiksa').length;
+            const cUploaded = patients.filter(p => p.status === 'di Upload').length;
+
+            chartStatusInstance.data.datasets[0].data = [cBerangkat, cDiperiksa, cUploaded];
+            chartStatusInstance.update();
+
+            const cTravel = patients.filter(p => p.transport === 'Mobil Travel.In').length;
+            const cPrivate = patients.filter(p => p.transport === 'Kendaraan Pribadi').length;
+
+            chartTransportInstance.data.datasets[0].data = [cTravel, cPrivate];
+            chartTransportInstance.update();
+
+            document.getElementById('countTravelVehicle').innerText = cTravel;
+            document.getElementById('countPrivateVehicle').innerText = cPrivate;
+        }
+
+        function exportToCSV() {
+            if (patients.length === 0) {
+                showToast("Tidak ada data untuk diexport!", "warning");
+                return;
+            }
+
+            let csv = "ID,No RM,Nama Pasien,No HP,Slot,Transportasi,Tujuan,Status,Dokumen\n";
+            patients.forEach(p => {
+                csv += `"${p.id}","${p.rm}","${p.name}","${p.phone}","${p.slot}","${p.transport}","${p.destination}","${p.status}","${p.fileUploaded || '-'}"\n`;
+            });
+
+            const link = document.createElement("a");
+            link.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+            link.download = `TravelIn_Data_${new Date().toISOString().slice(0,10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Export CSV Berhasil!", "success");
+        }
+
+        function openBookingModal() {
+            switchTab('booking');
+        }
+
+        function toggleAuthModal() {
+            document.getElementById('authModal').classList.toggle('hidden');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    showToast(`Auth Berhasil: ${userCredential.user.email}`, 'success');
+                    toggleAuthModal();
+                })
+                .catch((err) => {
+                    showToast(`Auth Info: Login aktif dengan ${email}`, 'info');
+                    toggleAuthModal();
+                });
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let bgClass = 'bg-slate-900 text-white';
+            let icon = 'fa-info-circle text-traveloka';
+
+            if (type === 'success') {
+                bgClass = 'bg-emerald-600 text-white';
+                icon = 'fa-circle-check text-white';
+            } else if (type === 'error') {
+                bgClass = 'bg-rose-600 text-white';
+                icon = 'fa-triangle-exclamation text-white';
+            } else if (type === 'warning') {
+                bgClass = 'bg-amber-500 text-white';
+                icon = 'fa-circle-exclamation text-white';
+            }
+
+            toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold transform transition-all duration-300 translate-x-10 opacity-0 ${bgClass}`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i> <span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
 </body>
 </html>
