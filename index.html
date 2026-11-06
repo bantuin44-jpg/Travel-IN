@@ -5,29 +5,41 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Travel.IN – Executive Medical Transport & Patient Monitoring</title>
 <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+/* Tema Traveloka: biru #0194F3, latar biru muda, kartu putih, aksen kuning */
+tailwind.config={theme:{extend:{colors:{
+ slate:{50:"#F7FBFF",100:"#0F2A4A",200:"#1B3A5F",300:"#3A5677",400:"#5B7794",500:"#7F95AE",600:"#A9BCD0",700:"#C3D9EE",800:"#DCEBF8",900:"#FFFFFF",950:"#F0F7FE"},
+ teal:{300:"#0770CD",400:"#0687DD",500:"#0194F3",600:"#0178C8"},
+ cyan:{400:"#0891B2",500:"#06B6D4"},
+ indigo:{300:"#1B4F9C",400:"#1B4F9C",500:"#1B4F9C"},
+ emerald:{200:"#166534",400:"#15803D",500:"#22B358",800:"#A7E3BC",950:"#E7F8EE"},
+ amber:{200:"#8A5A00",300:"#8A5A00",400:"#D98A00",500:"#FFB400",800:"#F6D58A",950:"#FFF6DD"},
+ rose:{200:"#9F1239",400:"#E11D48",500:"#F43F5E",800:"#FBC4CF",950:"#FFF0F3"}
+}}}}
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style type="text/tailwindcss">
 @layer components{
-.card{@apply bg-slate-900 border border-slate-800 rounded-2xl}
+.card{@apply bg-slate-900 border border-slate-800 rounded-2xl shadow-sm shadow-sky-900/5}
 .inp{@apply w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500}
 .btn{@apply bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-xl text-xs font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer}
-.pri{@apply bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20}
+.pri{@apply bg-gradient-to-r from-teal-500 to-teal-600 text-slate-100 font-bold border-0 shadow-lg shadow-teal-500/25}
 .nav{@apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 border border-transparent hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer}
 .nav.on{@apply bg-teal-500/10 text-teal-400 border-teal-500/20}
 .bdg{@apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border}
 }
-body{font-family:Inter,sans-serif}
+body{font-family:Inter,sans-serif;color-scheme:light}
 @media print{aside,header,.noprint{display:none!important}}
 </style>
 </head>
 <body class="h-full bg-slate-950 text-slate-100 antialiased">
 <div id="toasts" class="fixed top-5 right-5 z-[60] flex flex-col gap-2"></div>
 
-<div id="login" class="fixed inset-0 z-50 bg-slate-950 flex items-center justify-center p-4">
+<div id="login" class="fixed inset-0 z-50 bg-gradient-to-b from-teal-500 to-teal-600 flex items-center justify-center p-4">
  <form id="lf" class="card w-full max-w-sm p-6 space-y-4">
-  <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center"><i class="fa-solid fa-ambulance text-white text-lg"></i></div><div><h1 class="font-extrabold text-xl">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400">Login Admin Dispatch</p></div></div>
+  <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-teal-600 flex items-center justify-center"><i class="fa-solid fa-ambulance text-white text-lg"></i></div><div><h1 class="font-extrabold text-xl">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400">Login Admin Dispatch</p></div></div>
   <input id="em" type="email" class="inp" value="bantuin44@gmail.com" required autocomplete="username">
   <input id="pw" type="password" class="inp" placeholder="Kata sandi" required autocomplete="current-password">
   <p id="le" class="text-xs text-rose-400 min-h-4"></p>
@@ -38,8 +50,8 @@ body{font-family:Inter,sans-serif}
 <div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
  <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 md:sticky md:top-0 md:h-screen">
   <div class="p-5 flex items-center justify-between border-b border-slate-800">
-   <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/20"><i class="fa-solid fa-ambulance text-white text-lg"></i></div>
-   <div><h1 class="font-extrabold text-lg text-white leading-tight">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400 font-medium">MedTransport & Monitor</p></div></div>
+   <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-teal-600 flex items-center justify-center shadow-lg shadow-teal-500/20"><i class="fa-solid fa-ambulance text-white text-lg"></i></div>
+   <div><h1 class="font-extrabold text-lg text-slate-100 leading-tight">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400 font-medium">MedTransport & Monitor</p></div></div>
    <button data-a="menu" class="md:hidden text-slate-400"><i class="fa-solid fa-bars text-xl"></i></button>
   </div>
   <nav id="nav" class="p-4 space-y-1.5 flex-1 hidden md:block"></nav>
@@ -52,7 +64,7 @@ body{font-family:Inter,sans-serif}
 
  <main class="flex-1 min-w-0 flex flex-col">
   <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 px-4 sm:px-6 py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sticky top-0 z-20">
-   <div><h2 id="ttl" class="text-xl font-bold text-white flex items-center gap-2"></h2><p class="text-xs text-slate-400">Monitoring rujukan pasien Cirebon ⇄ Majalengka · <span id="clk"></span> WIB <i id="dot" class="fa-solid fa-circle text-[8px] text-rose-500 ml-1" title="Koneksi Firebase"></i></p></div>
+   <div><h2 id="ttl" class="text-xl font-bold text-slate-100 flex items-center gap-2"></h2><p class="text-xs text-slate-400">Monitoring rujukan pasien Cirebon ⇄ Majalengka · <span id="clk"></span> WIB <i id="dot" class="fa-solid fa-circle text-[8px] text-rose-500 ml-1" title="Koneksi Firebase"></i></p></div>
    <div class="flex flex-wrap items-center gap-2">
     <div class="flex items-center gap-1"><button data-a="dd" data-v="-1" class="btn"><i class="fa-solid fa-chevron-left"></i></button><input id="dtp" type="date" class="inp !w-auto"><button data-a="dd" data-v="1" class="btn"><i class="fa-solid fa-chevron-right"></i></button><button data-a="today" class="btn">Hari ini</button></div>
     <button data-a="nav" data-t="book" class="btn pri py-2.5"><i class="fa-solid fa-plus-circle"></i> Tambah Pasien</button>
@@ -123,7 +135,7 @@ body{font-family:Inter,sans-serif}
  </main>
 </div>
 
-<div id="um" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+<div id="um" class="fixed inset-0 z-50 bg-slate-100/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
  <div class="card w-full max-w-md p-6 space-y-4 shadow-2xl">
   <h3 class="font-bold"><i class="fa-solid fa-cloud-arrow-up text-teal-400 mr-2"></i>Konfirmasi Upload Berkas Hasil</h3>
   <div><p id="un" class="font-bold text-sm"></p><p id="ur" class="text-xs text-slate-400"></p></div>
@@ -133,7 +145,7 @@ body{font-family:Inter,sans-serif}
  </div>
 </div>
 
-<div id="mvm" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+<div id="mvm" class="fixed inset-0 z-50 bg-slate-100/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
  <div class="card w-full max-w-md p-6 space-y-4 shadow-2xl">
   <h3 class="font-bold"><i class="fa-solid fa-right-left text-amber-400 mr-2"></i>Pindah Jadwal Keberangkatan</h3><p id="mn" class="font-bold text-sm"></p><input type="hidden" id="mid">
   <label class="block text-xs font-semibold text-slate-300">Tanggal baru<input id="mdt" type="date" class="inp mt-1.5"></label>
@@ -148,7 +160,7 @@ import{getDatabase,ref,onValue,get,update,set,push,query,orderByKey,orderByChild
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 const app=initializeApp({apiKey:"AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",authDomain:"trevelin-295c3.firebaseapp.com",databaseURL:"https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"trevelin-295c3",storageBucket:"trevelin-295c3.firebasestorage.app",messagingSenderId:"387360938480",appId:"1:387360938480:web:c7bb1851789127cc5be535"});
 const db=getDatabase(app),auth=getAuth(app);
-const ADMIN="qx2cpbYpIlXcUvDbTT0MIQneUeE2",Q=5,SL=[{id:"0800",l:"08:00",ic:"fa-sun",c:"emerald",n:"Keberangkatan Pagi"},{id:"1300",l:"13:00",ic:"fa-cloud-sun",c:"amber",n:"Keberangkatan Siang"}];
+const ADMIN="qx2cpbYpIlXcUvDbTT0MIQneUeE2",Q=5,SL=[{id:"0800",l:"08:00",ic:"fa-sun",c:"teal",n:"Keberangkatan Pagi"},{id:"1300",l:"13:00",ic:"fa-cloud-sun",c:"amber",n:"Keberangkatan Siang"}];
 const S=[["Terdaftar","slate","fa-clipboard-list"],["Berangkat","amber","fa-truck-fast"],["Diperiksa","indigo","fa-stethoscope"],["di Upload","cyan","fa-circle-check"]],CK=[["exam","Selesai Diperiksa"],["up","Sudah di Upload"]];
 const NAV=[["dash","fa-chart-pie","Dashboard Utama","Executive Dashboard"],["mon","fa-table-list","Tabel Monitoring","Tabel Monitoring Pasien"],["book","fa-calendar-plus","Pendaftaran Slot","Form Pendaftaran Keberangkatan"],["slot","fa-clock","Kapasitas Slot Jam","Kapasitas & Kuota Slot"],["rep","fa-file-invoice","Laporan & Riwayat","Laporan & Riwayat"]];
 const $=i=>document.getElementById(i),pad=n=>String(n).padStart(2,"0"),W=7*36e5;
@@ -161,7 +173,7 @@ const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].
 const sl=id=>SL.find(s=>s.id===id)?.l||id,stage=b=>b.checks?.up?3:b.checks?.exam?2:(b.status==="naik"||b.status==="tiba")?1:0;
 let D=today(),seats={},slots={},bks={},rec={},L=[],rng=7,bkSlot=null,tab="dash",bkD=today(),bseats={},seen=false,unS,unB,unR,unSl,unBk;
 
-function toast(m,t="info"){const c={success:"bg-emerald-950 border-emerald-800 text-emerald-200",error:"bg-rose-950 border-rose-800 text-rose-200",warning:"bg-amber-950 border-amber-800 text-amber-200",info:"bg-slate-800 border-slate-700 text-white"}[t],e=document.createElement("div");
+function toast(m,t="info"){const c={success:"bg-emerald-950 border-emerald-800 text-emerald-200",error:"bg-rose-950 border-rose-800 text-rose-200",warning:"bg-amber-950 border-amber-800 text-amber-200",info:"bg-slate-800 border-slate-700 text-slate-100"}[t],e=document.createElement("div");
   e.className=`px-4 py-3 rounded-xl border shadow-xl text-xs font-semibold ${c}`;e.textContent=m;$("toasts").append(e);setTimeout(()=>e.remove(),3500)}
 const modeBdg=b=>b.mode==="jemput"?`<span class="text-xs font-medium text-teal-300"><i class="fa-solid fa-van-shuttle"></i> Mobil Travel.In</span>`:b.mode==="mandiri"?`<span class="text-xs font-medium text-indigo-300"><i class="fa-solid fa-car"></i> Kendaraan Pribadi</span>`:`<span class="text-xs text-slate-500 italic">Moda belum diisi</span>`;
 const stBdg=b=>{const[t,c,i]=S[stage(b)];return `<span class="bdg bg-${c}-500/10 text-${c}-400 border-${c}-500/30"><i class="fa-solid ${i} text-[10px]"></i>${t}</span>`};
@@ -215,31 +227,31 @@ const slotCard=(s,m)=>{const k=`${D}_${s.id}`,P=L.filter(b=>b.slot===s.id),cl=sl
   `<div class="flex justify-end mt-3"><button class="btn" data-a="mf" data-k="${k}"><i class="fa-solid fa-print"></i> Cetak Manifest</button></div><div class="mt-4 space-y-2">${P.length?P.map(b=>`<div class="flex items-center justify-between p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs"><div><p class="font-bold text-slate-200">${b.seat}. ${esc(b.name)}</p><p class="text-slate-400">${b.mode==="jemput"?"Mobil Travel.In":b.mode==="mandiri"?"Kendaraan Pribadi":"Moda belum diisi"}</p></div>${stBdg(b)}</div>`).join(""):'<p class="text-xs text-slate-500 italic">Belum ada pasien terdaftar.</p>'}</div></div>`};
 let cS,cT;const mk=(i,c)=>typeof Chart!=="undefined"?new Chart($(i),c):null;
 function charts(){if(!cS){const o={responsive:true,maintainAspectRatio:false};
-  cS=mk("cS",{type:"bar",data:{labels:S.map(s=>s[0]),datasets:[{data:[0,0,0,0],backgroundColor:["#64748b","#f59e0b","#6366f1","#06b6d4"],borderRadius:8}]},options:{...o,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:"#94a3b8"},grid:{color:"#334155"}},x:{ticks:{color:"#94a3b8"},grid:{display:false}}}}});
-  cT=mk("cT",{type:"doughnut",data:{labels:["Mobil Travel.In","Kendaraan Pribadi"],datasets:[{data:[0,0],backgroundColor:["#14b8a6","#6366f1"],borderWidth:0}]},options:{...o,cutout:"70%",plugins:{legend:{position:"bottom",labels:{color:"#cbd5e1"}}}}})}
+  cS=mk("cS",{type:"bar",data:{labels:S.map(s=>s[0]),datasets:[{data:[0,0,0,0],backgroundColor:["#9DB4CC","#FFB400","#1B4F9C","#0194F3"],borderRadius:8}]},options:{...o,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:"#5B7794"},grid:{color:"#E1EDF8"}},x:{ticks:{color:"#5B7794"},grid:{display:false}}}}});
+  cT=mk("cT",{type:"doughnut",data:{labels:["Mobil Travel.In","Kendaraan Pribadi"],datasets:[{data:[0,0],backgroundColor:["#0194F3","#1B4F9C"],borderWidth:0}]},options:{...o,cutout:"70%",plugins:{legend:{position:"bottom",labels:{color:"#3A5677"}}}}})}
   const c=[0,1,2,3].map(i=>L.filter(b=>stage(b)===i).length),j=L.filter(b=>b.mode==="jemput").length,m=L.filter(b=>b.mode==="mandiri").length;
   if(cS){cS.data.datasets[0].data=c;cS.update()}if(cT){cT.data.datasets[0].data=[j,m];cT.update()}$("nJ").textContent=j;$("nM").textContent=m}
 function rDash(){const n=L.length,up=L.filter(b=>b.checks?.up).length,per=s=>L.filter(b=>b.slot===s.id).length;
   $("kpi").innerHTML=kpi("Total Pasien",n,`Kuota maks ${2*Q} / hari · ${fd(D)}`,"fa-users","teal")+SL.map(s=>kpi(`Slot ${s.l} WIB`,`${per(s)} / ${Q}`,bar(per(s)/Q*100,s.c),s.ic,s.c)).join("")+kpi("Selesai / di Upload",up,`Progres Penyelesaian <b class="text-cyan-400 float-right">${n?Math.round(up/n*100):0}%</b>`,"fa-file-circle-check","cyan");
   $("slotsDash").innerHTML=SL.map(s=>slotCard(s,0)).join("");charts()}
 const ck=b=>CK.map(([k,l])=>{const v=b.checks?.[k];return `<label class="flex items-center gap-2 text-xs cursor-pointer ${v?"text-emerald-400":"text-slate-400"}"><input type="checkbox" class="accent-emerald-500" data-ck="${b.id}|${k}" ${v?"checked":""}>${l}${v?` <span class="text-[10px] text-slate-500">${hm(v)}</span>`:""}</label>`}).join("");
-const row=b=>`<tr class="hover:bg-slate-800/40 align-top"><td class="p-3"><div class="font-bold text-white">${esc(b.name)}</div><div class="text-xs text-slate-400"><span class="text-teal-400 font-mono">${esc(b.rm||"-")}</span> • <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}" class="hover:text-emerald-400"><i class="fa-brands fa-whatsapp text-emerald-500"></i> ${b.phone}</a></div></td>
+const row=b=>`<tr class="hover:bg-slate-800/40 align-top"><td class="p-3"><div class="font-bold text-slate-100">${esc(b.name)}</div><div class="text-xs text-slate-400"><span class="text-teal-400 font-mono">${esc(b.rm||"-")}</span> • <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}" class="hover:text-emerald-400"><i class="fa-brands fa-whatsapp text-emerald-500"></i> ${b.phone}</a></div></td>
 <td class="p-3"><span class="px-2.5 py-1 bg-slate-950 rounded-lg border border-slate-800 text-xs font-bold"><i class="fa-regular fa-clock text-teal-400 mr-1"></i>${sl(b.slot)} · K${b.seat}</span></td>
 <td class="p-3">${modeBdg(b)}${b.addr?`<div class="text-[11px] text-slate-400 mt-1">📍 ${esc(b.addr)} <a target="_blank" rel="noopener" class="text-teal-400" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.addr)}">peta</a></div>`:""}</td>
 <td class="p-3 text-center">${stBdg(b)}</td>
 <td class="p-3 space-y-1">${ck(b)}${b.file?`<div class="text-[11px] text-cyan-400"><i class="fa-solid fa-file-pdf"></i> ${esc(b.file)}</div>`:""}</td>
-<td class="p-3 noprint"><div class="flex gap-1.5 justify-center flex-wrap max-w-[260px] mx-auto"><button class="btn !px-2.5 !py-1.5 hover:!bg-teal-500 hover:!text-slate-950" data-a="adv" data-id="${b.id}"><i class="fa-solid fa-forward-step"></i> Advance</button><button class="btn !px-2.5 !py-1.5 hover:!bg-cyan-500 hover:!text-slate-950" data-a="up" data-id="${b.id}"><i class="fa-solid fa-upload"></i> File</button><button class="btn !px-2 !py-1.5 hover:!bg-emerald-500 hover:!text-slate-950" data-a="wa" data-id="${b.id}" title="Kirim konfirmasi WhatsApp"><i class="fa-brands fa-whatsapp"></i></button><button class="btn !px-2 !py-1.5 hover:!bg-amber-500 hover:!text-slate-950" data-a="mv" data-id="${b.id}" title="Pindah jadwal"><i class="fa-solid fa-right-left"></i></button><button class="btn !px-2 !py-1.5 hover:!bg-rose-500 hover:!text-white" data-a="del" data-id="${b.id}"><i class="fa-solid fa-trash-can"></i></button></div></td></tr>`;
+<td class="p-3 noprint"><div class="flex gap-1.5 justify-center flex-wrap max-w-[260px] mx-auto"><button class="btn !px-2.5 !py-1.5 hover:!bg-teal-500 hover:!text-white" data-a="adv" data-id="${b.id}"><i class="fa-solid fa-forward-step"></i> Advance</button><button class="btn !px-2.5 !py-1.5 hover:!bg-cyan-500 hover:!text-white" data-a="up" data-id="${b.id}"><i class="fa-solid fa-upload"></i> File</button><button class="btn !px-2 !py-1.5 hover:!bg-emerald-500 hover:!text-white" data-a="wa" data-id="${b.id}" title="Kirim konfirmasi WhatsApp"><i class="fa-brands fa-whatsapp"></i></button><button class="btn !px-2 !py-1.5 hover:!bg-amber-500 hover:!text-white" data-a="mv" data-id="${b.id}" title="Pindah jadwal"><i class="fa-solid fa-right-left"></i></button><button class="btn !px-2 !py-1.5 hover:!bg-rose-500 hover:!text-white" data-a="del" data-id="${b.id}"><i class="fa-solid fa-trash-can"></i></button></div></td></tr>`;
 function rMon(){const q=$("q").value.toLowerCase(),a=$("fs").value,m=$("fm").value,t=$("ft").value;
   const R=L.filter(b=>(!q||[b.name,b.rm,b.phone].some(x=>(x||"").toLowerCase().includes(q)))&&(a==="ALL"||b.slot===a)&&(m==="ALL"||b.mode===m)&&(t==="ALL"||stage(b)==t));
   $("tb").innerHTML=R.length?R.map(row).join(""):`<tr><td colspan="6" class="text-center py-10 text-slate-500"><i class="fa-solid fa-folder-open text-3xl block mb-2"></i>Tidak ada data pasien pada ${fd(D)} sesuai filter.</td></tr>`;return R}
 function rBook(){const t=today(),[y,m,d]=pt(bkD);$("fdate").min=t;$("fdate").value=bkD;$("adw").classList.toggle("hidden",document.querySelector("[name=md]:checked").value!=="jemput");
-  $("dChips").innerHTML=[["Hari ini",0],["Besok",1],["Lusa",2]].map(([l,i])=>`<button type="button" data-a="bd" data-d="${addD(t,i)}" class="btn ${addD(t,i)===bkD?"!bg-teal-500 !text-slate-950 !border-teal-500":""}">${l}</button>`).join("");
+  $("dChips").innerHTML=[["Hari ini",0],["Besok",1],["Lusa",2]].map(([l,i])=>`<button type="button" data-a="bd" data-d="${addD(t,i)}" class="btn ${addD(t,i)===bkD?"!bg-teal-500 !text-white !border-teal-500":""}">${l}</button>`).join("");
   $("dLbl").innerHTML=`<i class="fa-regular fa-calendar-check"></i> ${new Date(Date.UTC(y,m-1,d)).toLocaleDateString("id-ID",{timeZone:"UTC",weekday:"long",day:"numeric",month:"long",year:"numeric"})}`;
   $("slotPick").innerHTML=SL.map(s=>{const f=[1,2,3,4,5].filter(n=>(bseats[`${bkD}_${s.id}`]||{})[n]).length,full=f>=Q,on=bkSlot===s.id;
     return `<label class="border-2 ${on?"border-teal-500":"border-slate-800"} rounded-xl p-4 bg-slate-950 flex justify-between items-center ${full?"opacity-50 pointer-events-none":"cursor-pointer hover:border-teal-500/50"}"><input type="radio" name="sl" value="${s.id}" class="hidden" ${on?"checked":""}><div><div class="flex items-center gap-2"><i class="fa-solid ${s.ic} text-${s.c}-400"></i><b>${s.l} WIB</b></div><span class="text-xs text-slate-400">${s.n.replace("Keberangkatan","Keberangkatan Sesi")}</span></div><span class="bdg ${full?"bg-rose-500/20 text-rose-400 border-rose-500/30":`bg-${s.c}-500/10 text-${s.c}-400 border-${s.c}-500/20`}">${full?"SLOT PENUH":`${f}/${Q} Terisi`}</span></label>`}).join("")}
 function rRep(){const R=Object.entries(rec).map(([id,b])=>({id,...b})).sort((a,b)=>(b.date+b.slot+b.seat).localeCompare(a.date+a.slot+a.seat)),n=R.length,up=R.filter(b=>b.checks?.up).length,ex=R.filter(b=>b.checks?.exam).length,j=R.filter(b=>b.mode==="jemput").length,tr=new Set(R.map(b=>b.date+b.slot)).size;
   $("repK").innerHTML=kpi("Okupansi Slot",(tr?Math.round(n/(tr*Q)*100):0)+"%",`${tr} keberangkatan · ${n} pasien`,"fa-gauge-high","teal")+kpi("Selesai Diperiksa",n?Math.round(ex/n*100)+"%":"0%",`${ex} dari ${n} pasien`,"fa-stethoscope","indigo")+kpi("Sudah di Upload",n?Math.round(up/n*100)+"%":"0%",`${up} dari ${n} pasien`,"fa-file-circle-check","cyan")+kpi("Mobil Travel.In",n?Math.round(j/n*100)+"%":"0%",`${j} dari ${n} pasien`,"fa-van-shuttle","emerald");
-  $("repT").innerHTML=R.length?R.map(b=>`<tr class="hover:bg-slate-800/40"><td class="p-3 text-xs">${fd(b.date)} · ${sl(b.slot)}</td><td class="p-3"><div class="font-bold text-white text-sm">${esc(b.name)}</div><div class="text-xs text-teal-400 font-mono">${esc(b.rm||"-")}</div></td><td class="p-3">${modeBdg(b)}</td><td class="p-3">${stBdg(b)}</td><td class="p-3 text-xs ${b.file?"text-cyan-400":"text-slate-500 italic"}">${b.file?esc(b.file):"Belum ada"}</td></tr>`).join(""):'<tr><td colspan="5" class="text-center py-8 text-slate-500">Belum ada data pada rentang ini.</td></tr>'}
+  $("repT").innerHTML=R.length?R.map(b=>`<tr class="hover:bg-slate-800/40"><td class="p-3 text-xs">${fd(b.date)} · ${sl(b.slot)}</td><td class="p-3"><div class="font-bold text-slate-100 text-sm">${esc(b.name)}</div><div class="text-xs text-teal-400 font-mono">${esc(b.rm||"-")}</div></td><td class="p-3">${modeBdg(b)}</td><td class="p-3">${stBdg(b)}</td><td class="p-3 text-xs ${b.file?"text-cyan-400":"text-slate-500 italic"}">${b.file?esc(b.file):"Belum ada"}</td></tr>`).join(""):'<tr><td colspan="5" class="text-center py-8 text-slate-500">Belum ada data pada rentang ini.</td></tr>'}
 function rAlr(){const now=Date.now(),late=L.filter(b=>{const[y,m,d]=pt(b.date);return Date.UTC(y,m-1,d,+b.slot.slice(0,2))-W<now&&stage(b)<2});
   $("alr").innerHTML=late.length?`<div class="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200 flex items-start gap-3"><i class="fa-solid fa-triangle-exclamation mt-0.5"></i><div><b>${late.length} pasien perlu tindak lanjut</b> — jadwal sudah lewat tetapi belum ditandai "Selesai Diperiksa".<div class="text-xs text-amber-300/80 mt-1">${late.map(b=>esc(b.name)).join(" · ")}</div></div></div>`:""}
 function paint(){L=Object.entries(bks).map(([id,b])=>({id,...b})).sort((a,b)=>(a.slot+a.seat).localeCompare(b.slot+b.seat));
