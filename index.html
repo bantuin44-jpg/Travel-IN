@@ -1,1200 +1,259 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-50 text-slate-800">
+<html lang="id" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel.In - Medical Transport & Patient Monitoring</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        traveloka: {
-                            DEFAULT: '#0194da',
-                            hover: '#007fbc',
-                            light: '#e0f2fe',
-                            dark: '#005f8d',
-                            navy: '#0c2340',
-                            accent: '#ff5e1f'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        .bg-sky-pattern {
-            background-color: #0194da;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0);
-            background-size: 16px 16px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Travel.IN – Executive Medical Transport & Patient Monitoring</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style type="text/tailwindcss">
+@layer components{
+.card{@apply bg-slate-900 border border-slate-800 rounded-2xl}
+.inp{@apply w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-teal-500}
+.btn{@apply bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-xl text-xs font-semibold inline-flex items-center gap-2 transition-colors cursor-pointer}
+.pri{@apply bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 font-bold border-0 shadow-lg shadow-teal-500/20}
+.nav{@apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 border border-transparent hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer}
+.nav.on{@apply bg-teal-500/10 text-teal-400 border-teal-500/20}
+.bdg{@apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border}
+}
+body{font-family:Inter,sans-serif}
+@media print{aside,header,.noprint{display:none!important}}
+</style>
 </head>
-<body class="h-full font-sans antialiased bg-slate-100 text-slate-800 custom-scrollbar flex flex-col md:flex-row overflow-x-hidden">
+<body class="h-full bg-slate-950 text-slate-100 antialiased">
+<div id="toasts" class="fixed top-5 right-5 z-[60] flex flex-col gap-2"></div>
 
-    <!-- Toast Notification Container -->
-    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3"></div>
+<div id="login" class="fixed inset-0 z-50 bg-slate-950 flex items-center justify-center p-4">
+ <form id="lf" class="card w-full max-w-sm p-6 space-y-4">
+  <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center"><i class="fa-solid fa-ambulance text-white text-lg"></i></div><div><h1 class="font-extrabold text-xl">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400">Login Admin Dispatch</p></div></div>
+  <input id="em" type="email" class="inp" value="bantuin44@gmail.com" required autocomplete="username">
+  <input id="pw" type="password" class="inp" placeholder="Kata sandi" required autocomplete="current-password">
+  <p id="le" class="text-xs text-rose-400 min-h-4"></p>
+  <button class="btn pri w-full justify-center py-2.5">Masuk</button>
+ </form>
+</div>
 
-    <!-- SIDEBAR NAVIGATION -->
-    <aside class="w-full md:w-64 bg-slate-900 text-slate-100 flex flex-col shrink-0 border-r border-slate-800 shadow-xl">
-        <!-- Logo Header Traveloka Inspired -->
-        <div class="p-5 bg-traveloka border-b border-traveloka-dark flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-2xl bg-white text-traveloka flex items-center justify-center font-extrabold text-xl shadow-md">
-                    <i class="fa-solid fa-plane-departure text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-xl tracking-tight text-white leading-tight flex items-center gap-1">
-                        Travel<span class="text-amber-300">.In</span>
-                    </h1>
-                    <p class="text-[10px] text-sky-100 font-semibold tracking-wider uppercase">MedTransport System</p>
-                </div>
-            </div>
-            <button id="mobileMenuBtn" class="md:hidden text-white hover:text-sky-200">
-                <i class="fa-solid fa-bars text-xl"></i>
-            </button>
-        </div>
+<div id="app" class="hidden min-h-screen flex flex-col md:flex-row">
+ <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 md:sticky md:top-0 md:h-screen">
+  <div class="p-5 flex items-center justify-between border-b border-slate-800">
+   <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/20"><i class="fa-solid fa-ambulance text-white text-lg"></i></div>
+   <div><h1 class="font-extrabold text-lg text-white leading-tight">Travel<span class="text-teal-400">.IN</span></h1><p class="text-xs text-slate-400 font-medium">MedTransport & Monitor</p></div></div>
+   <button data-a="menu" class="md:hidden text-slate-400"><i class="fa-solid fa-bars text-xl"></i></button>
+  </div>
+  <nav id="nav" class="p-4 space-y-1.5 flex-1 hidden md:block"></nav>
+  <div class="p-4 border-t border-slate-800 flex items-center justify-between">
+   <div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-teal-400 shrink-0">AD</div>
+   <div class="text-xs min-w-0"><p class="font-semibold text-slate-200">Admin Dispatch</p><p id="who" class="text-slate-400 truncate"></p></div></div>
+   <button data-a="out" title="Keluar" class="text-slate-500 hover:text-rose-400 p-2"><i class="fa-solid fa-right-from-bracket"></i></button>
+  </div>
+ </aside>
 
-        <!-- Sync Indicator -->
-        <div class="px-4 py-2 bg-slate-800 border-b border-slate-700/60 flex items-center justify-between text-xs">
-            <span class="text-slate-400 font-medium flex items-center gap-1.5">
-                <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span id="syncText">Firebase Live Sync</span>
-            </span>
-            <span id="dbTypeBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-traveloka/20 text-sky-300 border border-traveloka/40">Realtime DB</span>
-        </div>
+ <main class="flex-1 min-w-0 flex flex-col">
+  <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 px-4 sm:px-6 py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sticky top-0 z-20">
+   <div><h2 id="ttl" class="text-xl font-bold text-white flex items-center gap-2"></h2><p class="text-xs text-slate-400">Monitoring rujukan pasien Cirebon ⇄ Majalengka · <span id="clk"></span> WIB <i id="dot" class="fa-solid fa-circle text-[8px] text-rose-500 ml-1" title="Koneksi Firebase"></i></p></div>
+   <div class="flex flex-wrap items-center gap-2">
+    <div class="flex items-center gap-1"><button data-a="dd" data-v="-1" class="btn"><i class="fa-solid fa-chevron-left"></i></button><input id="dtp" type="date" class="inp !w-auto"><button data-a="dd" data-v="1" class="btn"><i class="fa-solid fa-chevron-right"></i></button><button data-a="today" class="btn">Hari ini</button></div>
+    <button data-a="nav" data-t="book" class="btn pri py-2.5"><i class="fa-solid fa-plus-circle"></i> Tambah Pasien</button>
+   </div>
+  </header>
 
-        <!-- Navigation Menu -->
-        <nav id="navMenu" class="p-4 space-y-1.5 flex-1 hidden md:block">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">Utama</div>
-            
-            <a href="#" onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all bg-traveloka text-white shadow-lg shadow-traveloka/30">
-                <i class="fa-solid fa-chart-pie w-5 text-center"></i>
-                <span>Dashboard Utama</span>
-            </a>
-            
-            <a href="#" onclick="switchTab('monitoring')" id="nav-monitoring" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-                <i class="fa-solid fa-table-list w-5 text-center"></i>
-                <span>Tabel Monitoring</span>
-                <span id="badgePendingCount" class="ml-auto bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
-            </a>
-            
-            <a href="#" onclick="switchTab('booking')" id="nav-booking" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-                <i class="fa-solid fa-calendar-plus w-5 text-center"></i>
-                <span>Pendaftaran Slot</span>
-            </a>
-
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 mt-6 mb-2">Operasional</div>
-            
-            <a href="#" onclick="switchTab('slot-manager')" id="nav-slot-manager" class="nav-item flex items-center space-x-3 px-3.5 py-3 rounded-xl text-sm font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-                <i class="fa-solid fa-clock-rotate-left w-5 text-center"></i>
-                <span>Kapasitas Slot Jam</span>
-            </a>
-        </nav>
-
-        <!-- User Profile Footer & Auth -->
-        <div class="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between">
-            <div class="flex items-center space-x-3 overflow-hidden">
-                <div class="w-9 h-9 rounded-full bg-traveloka flex items-center justify-center font-bold text-white shrink-0 shadow">
-                    <i class="fa-solid fa-user-shield text-xs"></i>
-                </div>
-                <div class="text-xs truncate">
-                    <p id="userEmailDisplay" class="font-bold text-slate-200 truncate">bantuin44@gmail.com</p>
-                    <p id="userRoleDisplay" class="text-slate-400 text-[10px]">Logged in (Firebase Auth)</p>
-                </div>
-            </div>
-            <button onclick="toggleAuthModal()" title="Login / Logout Auth" class="text-slate-400 hover:text-white text-sm p-2 transition-colors">
-                <i class="fa-solid fa-right-to-bracket"></i>
-            </button>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT AREA -->
-    <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
-        <!-- Top App Bar -->
-        <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sticky top-0 z-20 shadow-sm">
-            <div>
-                <h2 id="pageTitle" class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-traveloka"></i> Executive Dashboard
-                </h2>
-                <p class="text-xs text-slate-500 font-medium">Monitoring Keberangkatan & Pemeriksaan Pasien Realtime Firebase</p>
-            </div>
-            <div class="flex items-center gap-3">
-                <div class="bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 flex items-center gap-2">
-                    <i class="fa-solid fa-clock text-traveloka"></i>
-                    <span id="currentDateDisplay">--:--:--</span>
-                </div>
-                <button onclick="openBookingModal()" class="bg-traveloka hover:bg-traveloka-hover text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow-lg shadow-traveloka/25 transition-all transform hover:-translate-y-0.5">
-                    <i class="fa-solid fa-plus-circle"></i> + Tambah Pasien
-                </button>
-            </div>
-        </header>
-
-        <!-- Dynamic Content Body -->
-        <div class="p-6 space-y-6 flex-1">
-
-            <!-- TAB 1: DASHBOARD UTAMA -->
-            <section id="tab-dashboard" class="tab-content space-y-6">
-                <!-- Traveloka Banner Card -->
-                <div class="bg-gradient-to-r from-traveloka via-sky-500 to-sky-600 rounded-3xl p-6 text-white shadow-lg relative overflow-hidden">
-                    <div class="absolute right-0 bottom-0 opacity-15 translate-x-8 translate-y-6 pointer-events-none">
-                        <i class="fa-solid fa-plane text-9xl"></i>
-                    </div>
-                    <div class="relative z-10 max-w-2xl">
-                        <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider text-sky-100 mb-2 inline-block">
-                            <i class="fa-solid fa-bolt text-amber-300 mr-1"></i> Live Realtime System
-                        </span>
-                        <h3 class="text-2xl font-black tracking-tight leading-tight mb-2">Layanan Transport Medis Travel.In</h3>
-                        <p class="text-xs sm:text-sm text-sky-100">
-                            Sistem penjadwalan & monitoring keberangkatan pasien terintegrasi Firebase. Maksimal 5 pasien per slot keberangkatan (Jam 08:00 & 13:00 WIB).
-                        </p>
-                    </div>
-                </div>
-
-                <!-- KPI Stat Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Stat Card 1 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Pasien Hari Ini</p>
-                                <h3 id="statTotalPatients" class="text-3xl font-black text-slate-900 mt-1">0</h3>
-                            </div>
-                            <div class="w-11 h-11 rounded-2xl bg-sky-50 text-traveloka flex items-center justify-center border border-sky-100">
-                                <i class="fa-solid fa-users text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-xs text-slate-500 font-medium flex items-center justify-between border-t border-slate-100 pt-3">
-                            <span>Kapasitas Harian</span>
-                            <span class="text-traveloka font-bold">10 Pasien Max</span>
-                        </div>
-                    </div>
-
-                    <!-- Stat Card 2 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Slot 08:00 WIB</p>
-                                <h3 id="statSlot08" class="text-3xl font-black text-traveloka mt-1">0 / 5</h3>
-                            </div>
-                            <div class="w-11 h-11 rounded-2xl bg-sky-50 text-traveloka flex items-center justify-center border border-sky-100">
-                                <i class="fa-solid fa-sun text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
-                            <div id="barSlot08" class="bg-traveloka h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Stat Card 3 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Slot 13:00 WIB</p>
-                                <h3 id="statSlot13" class="text-3xl font-black text-amber-500 mt-1">0 / 5</h3>
-                            </div>
-                            <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center border border-amber-100">
-                                <i class="fa-solid fa-cloud-sun text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 mt-4 overflow-hidden">
-                            <div id="barSlot13" class="bg-amber-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Stat Card 4 -->
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">di Upload / Selesai</p>
-                                <h3 id="statUploaded" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
-                            </div>
-                            <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
-                                <i class="fa-solid fa-circle-check text-xl"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-xs text-slate-500 font-medium flex items-center justify-between border-t border-slate-100 pt-3">
-                            <span>Progres Hasil</span>
-                            <span id="statUploadPercentage" class="text-emerald-600 font-bold">0%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Charts Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-                                <i class="fa-solid fa-chart-column text-traveloka"></i> Status Alur Pemeriksaan Pasien
-                            </h3>
-                            <span class="text-xs bg-slate-100 border border-slate-200 px-3 py-1 rounded-full text-slate-600 font-semibold">Live Realtime</span>
-                        </div>
-                        <div class="h-64 relative">
-                            <canvas id="chartStatus"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-extrabold text-slate-900 text-base mb-4 flex items-center gap-2">
-                                <i class="fa-solid fa-van-shuttle text-traveloka"></i> Pilihan Transportasi
-                            </h3>
-                            <div class="h-48 relative flex items-center justify-center">
-                                <canvas id="chartTransport"></canvas>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3 mt-4 text-center">
-                            <div class="bg-sky-50 border border-sky-100 p-3 rounded-xl">
-                                <span class="text-[11px] font-semibold text-slate-500">Mobil Travel.In</span>
-                                <p id="countTravelVehicle" class="text-xl font-black text-traveloka">0</p>
-                            </div>
-                            <div class="bg-indigo-50 border border-indigo-100 p-3 rounded-xl">
-                                <span class="text-[11px] font-semibold text-slate-500">Pribadi</span>
-                                <p id="countPrivateVehicle" class="text-xl font-black text-indigo-600">0</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Overview Slots -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                            <div class="flex items-center gap-3">
-                                <span class="px-3 py-1 bg-traveloka/10 text-traveloka font-extrabold text-sm rounded-lg border border-traveloka/20">08:00 WIB</span>
-                                <h4 class="font-bold text-slate-800">Sesi Keberangkatan Pagi</h4>
-                            </div>
-                            <span id="badgeSlot08Capacity" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">0/5 Tersedia</span>
-                        </div>
-                        <div id="listSlot08" class="mt-4 space-y-2">
-                            <!-- JS Populated -->
-                        </div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                        <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-                            <div class="flex items-center gap-3">
-                                <span class="px-3 py-1 bg-amber-500/10 text-amber-600 font-extrabold text-sm rounded-lg border border-amber-500/20">13:00 WIB</span>
-                                <h4 class="font-bold text-slate-800">Sesi Keberangkatan Siang</h4>
-                            </div>
-                            <span id="badgeSlot13Capacity" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">0/5 Tersedia</span>
-                        </div>
-                        <div id="listSlot13" class="mt-4 space-y-2">
-                            <!-- JS Populated -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB 2: MONITORING TABLE -->
-            <section id="tab-monitoring" class="tab-content space-y-6 hidden">
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                    <!-- Filters & Search Toolbar -->
-                    <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center mb-6">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <div class="relative min-w-[220px]">
-                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                                <input type="text" id="searchInput" onkeyup="renderMonitoringTable()" placeholder="Cari Nama, No RM, Tujuan..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-sm text-slate-800 focus:outline-none focus:border-traveloka transition-colors">
-                            </div>
-
-                            <select id="filterSlot" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
-                                <option value="ALL">Semua Jam Slot</option>
-                                <option value="08:00">Slot 08:00 WIB</option>
-                                <option value="13:00">Slot 13:00 WIB</option>
-                            </select>
-
-                            <select id="filterTransport" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
-                                <option value="ALL">Semua Transportasi</option>
-                                <option value="Mobil Travel.In">Mobil Travel.In</option>
-                                <option value="Kendaraan Pribadi">Kendaraan Pribadi</option>
-                            </select>
-
-                            <select id="filterStatus" onchange="renderMonitoringTable()" class="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-700 focus:outline-none focus:border-traveloka">
-                                <option value="ALL">Semua Status</option>
-                                <option value="Berangkat">Berangkat</option>
-                                <option value="Diperiksa">Diperiksa</option>
-                                <option value="di Upload">di Upload</option>
-                            </select>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button onclick="exportToCSV()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
-                                <i class="fa-solid fa-file-csv text-emerald-600"></i> Export CSV
-                            </button>
-                            <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors">
-                                <i class="fa-solid fa-print text-traveloka"></i> Cetak
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Monitoring Table -->
-                    <div class="overflow-x-auto rounded-xl border border-slate-200">
-                        <table class="w-full text-left text-sm text-slate-700">
-                            <thead class="bg-slate-100 text-xs font-bold text-slate-600 uppercase tracking-wider border-b border-slate-200">
-                                <tr>
-                                    <th class="py-3.5 px-4">No. RM & Nama Pasien</th>
-                                    <th class="py-3.5 px-4">Jam Slot</th>
-                                    <th class="py-3.5 px-4">Transportasi</th>
-                                    <th class="py-3.5 px-4">Tujuan RS / Poli</th>
-                                    <th class="py-3.5 px-4 text-center">Status Alur</th>
-                                    <th class="py-3.5 px-4 text-center">Berkas Hasil</th>
-                                    <th class="py-3.5 px-4 text-center">Aksi Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="monitoringTableBody" class="divide-y divide-slate-200 bg-white">
-                                <!-- JS Table Insertion -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TAB 3: BOOKING FORM -->
-            <section id="tab-booking" class="tab-content space-y-6 hidden">
-                <div class="max-w-2xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
-                    <div class="mb-6 border-b border-slate-100 pb-4">
-                        <h3 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-plus text-traveloka"></i> Form Pendaftaran Keberangkatan Pasien
-                        </h3>
-                        <p class="text-xs text-slate-500 mt-1">Data akan langsung tersimpan & tersinkronisasi ke Firebase Realtime Database.</p>
-                    </div>
-
-                    <form id="bookingForm" onsubmit="handleBookingSubmit(event)" class="space-y-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">No. Rekam Medis (RM)</label>
-                                <input type="text" id="inputRM" required placeholder="Contoh: RM-9082" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Lengkap Pasien</label>
-                                <input type="text" id="inputName" required placeholder="Masukkan nama pasien" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nomor WhatsApp / HP</label>
-                                <input type="tel" id="inputPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Tujuan RS / Poliklinik</label>
-                                <input type="text" id="inputDestination" required placeholder="Contoh: RS Medika - Poli Jantung" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                            </div>
-                        </div>
-
-                        <!-- Slot Radio Cards -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-2">Pilih Slot Keberangkatan (Max 5 Pasien per Slot)</label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label id="labelSlot08" class="relative border-2 border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka transition-all bg-slate-50 flex justify-between items-center">
-                                    <input type="radio" name="slotTime" value="08:00" required class="accent-traveloka">
-                                    <div>
-                                        <div class="flex items-center gap-2">
-                                            <i class="fa-solid fa-sun text-amber-500"></i>
-                                            <span class="font-bold text-slate-900 text-base">08:00 WIB</span>
-                                        </div>
-                                        <span class="text-xs text-slate-500">Keberangkatan Sesi Pagi</span>
-                                    </div>
-                                    <span id="formBadgeSlot08" class="text-xs font-bold px-2 py-1 rounded bg-sky-100 text-traveloka">
-                                        0/5 Terisi
-                                    </span>
-                                </label>
-
-                                <label id="labelSlot13" class="relative border-2 border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka transition-all bg-slate-50 flex justify-between items-center">
-                                    <input type="radio" name="slotTime" value="13:00" class="accent-traveloka">
-                                    <div>
-                                        <div class="flex items-center gap-2">
-                                            <i class="fa-solid fa-cloud-sun text-amber-500"></i>
-                                            <span class="font-bold text-slate-900 text-base">13:00 WIB</span>
-                                        </div>
-                                        <span class="text-xs text-slate-500">Keberangkatan Sesi Siang</span>
-                                    </div>
-                                    <span id="formBadgeSlot13" class="text-xs font-bold px-2 py-1 rounded bg-amber-100 text-amber-700">
-                                        0/5 Terisi
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Transport Radio Cards -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-2">Pilih Moda Transportasi</label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <label class="border border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka bg-slate-50 flex items-center space-x-3">
-                                    <input type="radio" name="transportType" value="Mobil Travel.In" checked class="accent-traveloka">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900"><i class="fa-solid fa-van-shuttle text-traveloka mr-1.5"></i> Mobil Travel.In</p>
-                                        <p class="text-xs text-slate-500">Armada Antar-Jemput Resmi</p>
-                                    </div>
-                                </label>
-
-                                <label class="border border-slate-200 rounded-2xl p-4 cursor-pointer hover:border-traveloka bg-slate-50 flex items-center space-x-3">
-                                    <input type="radio" name="transportType" value="Kendaraan Pribadi" class="accent-traveloka">
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900"><i class="fa-solid fa-car text-indigo-600 mr-1.5"></i> Kendaraan Pribadi</p>
-                                        <p class="text-xs text-slate-500">Mandiri / Antar Keluarga</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
-                            <button type="reset" class="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-sm font-bold">Reset</button>
-                            <button type="submit" class="bg-traveloka hover:bg-traveloka-hover text-white font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg shadow-traveloka/25">Simpan Booking Pasien</button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <!-- TAB 4: SLOT MANAGER -->
-            <section id="tab-slot-manager" class="tab-content space-y-6 hidden">
-                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
-                        <i class="fa-solid fa-clock text-traveloka"></i> Monitoring Kuota Slot Keberangkatan Realtime
-                    </h3>
-                    <p class="text-xs text-slate-500 mb-6">Maksimal kuota per slot adalah 5 orang pasien.</p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5">
-                            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200">
-                                <div>
-                                    <span class="text-xs font-extrabold text-traveloka uppercase tracking-wider">Slot 1</span>
-                                    <h4 class="text-xl font-black text-slate-900">08:00 WIB</h4>
-                                </div>
-                                <span id="slotManagerBadge08" class="px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-traveloka">0/5 Terisi</span>
-                            </div>
-                            <div id="slotManagerList08" class="space-y-2">
-                                <!-- Dynamic List -->
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-50 rounded-2xl border border-slate-200 p-5">
-                            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-200">
-                                <div>
-                                    <span class="text-xs font-extrabold text-amber-600 uppercase tracking-wider">Slot 2</span>
-                                    <h4 class="text-xl font-black text-slate-900">13:00 WIB</h4>
-                                </div>
-                                <span id="slotManagerBadge13" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">0/5 Terisi</span>
-                            </div>
-                            <div id="slotManagerList13" class="space-y-2">
-                                <!-- Dynamic List -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </div>
-    </main>
-
-    <!-- MODAL: UPLOAD FILE -->
-    <div id="uploadModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white border border-slate-200 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-cloud-arrow-up text-traveloka"></i> Upload Berkas Hasil Medis
-                </h3>
-                <button onclick="closeUploadModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <input type="hidden" id="uploadPatientId">
-            <div>
-                <p id="uploadPatientName" class="font-extrabold text-slate-900 text-sm">--</p>
-                <p id="uploadPatientRM" class="text-xs text-slate-500">--</p>
-            </div>
-
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nama Dokumen Hasil / Catatan</label>
-                <input type="text" id="inputFileName" placeholder="Contoh: Hasil_Lab_Siti.pdf / Resume_Medis.pdf" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-            </div>
-
-            <div class="border-2 border-dashed border-slate-300 hover:border-traveloka rounded-2xl p-6 text-center cursor-pointer bg-slate-50 transition-colors">
-                <i class="fa-solid fa-file-pdf text-3xl text-traveloka mb-2"></i>
-                <p class="text-xs text-slate-700 font-bold">Simulasi File Upload (PDF / Gambar)</p>
-                <p class="text-[10px] text-slate-400 mt-1">Mengubah status alur secara otomatis ke 'di Upload'</p>
-            </div>
-
-            <div class="flex justify-end gap-2 pt-2">
-                <button onclick="closeUploadModal()" class="px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 text-slate-600 hover:bg-slate-100">Batal</button>
-                <button onclick="confirmUploadFile()" class="bg-traveloka hover:bg-traveloka-hover text-white font-extrabold px-4 py-2 rounded-xl text-xs shadow-md">Simpan & Set Status 'di Upload'</button>
-            </div>
-        </div>
+  <div class="p-4 sm:p-6 space-y-6 flex-1">
+   <section id="v-dash" class="space-y-6">
+    <div id="kpi" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+     <div class="card lg:col-span-2 p-5"><h3 class="font-bold mb-4"><i class="fa-solid fa-chart-column text-teal-400 mr-2"></i>Status Keberangkatan & Pemeriksaan Pasien <span class="bdg bg-slate-800 text-slate-400 border-slate-700 ml-2 !text-[10px]">Real-time</span></h3><div class="h-64 relative"><canvas id="cS"></canvas></div></div>
+     <div class="card p-5"><h3 class="font-bold mb-4"><i class="fa-solid fa-van-shuttle text-teal-400 mr-2"></i>Moda Transportasi</h3><div class="h-52 relative"><canvas id="cT"></canvas></div>
+      <div class="grid grid-cols-2 gap-2 mt-4 text-center"><div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Mobil Travel.In</span><p id="nJ" class="text-lg font-bold text-teal-400">0</p></div><div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="text-xs text-slate-400">Kendaraan Pribadi</span><p id="nM" class="text-lg font-bold text-indigo-400">0</p></div></div></div>
     </div>
+    <div id="slotsDash" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+   </section>
 
-    <!-- MODAL: AUTHENTICATION LOGIN -->
-    <div id="authModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-        <div class="bg-white border border-slate-200 w-full max-w-sm rounded-3xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
-                    <i class="fa-solid fa-user-shield text-traveloka"></i> Firebase Auth Admin
-                </h3>
-                <button onclick="toggleAuthModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-
-            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Email Firebase</label>
-                    <input type="email" id="authEmail" required value="bantuin44@gmail.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-                    <input type="password" id="authPassword" required value="123456" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-sm text-slate-900 focus:outline-none focus:border-traveloka">
-                </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-traveloka hover:bg-traveloka-hover text-white font-extrabold py-2.5 rounded-xl text-sm shadow-md">
-                        Login via Firebase Auth
-                    </button>
-                </div>
-            </form>
-        </div>
+   <section id="v-mon" class="hidden"><div class="card p-5">
+    <div class="flex flex-col xl:flex-row gap-3 justify-between mb-5">
+     <div class="flex flex-wrap gap-2">
+      <div class="relative min-w-[220px]"><i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i><input id="q" class="inp !pl-9" placeholder="Cari nama, No. RM, atau WA..."></div>
+      <select id="fs" class="inp !w-auto"><option value="ALL">Semua Jam</option><option value="0800">08:00 WIB</option><option value="1300">13:00 WIB</option></select>
+      <select id="fm" class="inp !w-auto"><option value="ALL">Semua Moda Transportasi</option><option value="jemput">Mobil Travel.In</option><option value="mandiri">Kendaraan Pribadi</option></select>
+      <select id="ft" class="inp !w-auto"><option value="ALL">Semua Status</option><option value="0">Terdaftar</option><option value="1">Berangkat</option><option value="2">Diperiksa</option><option value="3">di Upload</option></select>
+     </div>
+     <div class="flex gap-2 noprint"><button data-a="csvm" class="btn"><i class="fa-solid fa-file-csv text-emerald-400"></i> Export CSV</button><button data-a="prt" class="btn"><i class="fa-solid fa-print text-teal-400"></i> Cetak / PDF</button></div>
     </div>
-
-    <!-- FIREBASE SDK V9 COMPAT & APPLICATION JS -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, set, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // Firebase Configuration Provided
-        const firebaseConfig = {
-            apiKey: "AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",
-            authDomain: "trevelin-295c3.firebaseapp.com",
-            databaseURL: "https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "trevelin-295c3",
-            storageBucket: "trevelin-295c3.firebasestorage.app",
-            messagingSenderId: "387360938480",
-            appId: "1:387360938480:web:c7bb1851789127cc5be535",
-            measurementId: "G-RPXPKZHF62"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-        const auth = getAuth(app);
-
-        // Core App Constants
-        const MAX_SLOT_CAPACITY = 5;
-        let patients = [];
-        let chartStatusInstance = null;
-        let chartTransportInstance = null;
-
-        // Make functions globally accessible to inline HTML handlers
-        window.switchTab = switchTab;
-        window.renderMonitoringTable = renderMonitoringTable;
-        window.handleBookingSubmit = handleBookingSubmit;
-        window.advanceStatus = advanceStatus;
-        window.openUploadModal = openUploadModal;
-        window.closeUploadModal = closeUploadModal;
-        window.confirmUploadFile = confirmUploadFile;
-        window.deletePatient = deletePatient;
-        window.exportToCSV = exportToCSV;
-        window.openBookingModal = openBookingModal;
-        window.toggleAuthModal = toggleAuthModal;
-        window.handleAuthSubmit = handleAuthSubmit;
-
-        // Window Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            updateClock();
-            setInterval(updateClock, 1000);
-            initCharts();
-
-            // Firebase Auth State Listener
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    document.getElementById('userEmailDisplay').innerText = user.email;
-                    document.getElementById('userRoleDisplay').innerText = "Authenticated User";
-                } else {
-                    document.getElementById('userEmailDisplay').innerText = "bantuin44@gmail.com";
-                    document.getElementById('userRoleDisplay').innerText = "Simulated Active Session";
-                }
-            });
-
-            // Firebase Realtime Database Listener
-            const bookingsRef = ref(database, 'bookings');
-            onValue(bookingsRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    patients = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    }));
-                } else {
-                    // Seed initial data if database is empty
-                    seedInitialData();
-                }
-                updateSyncStatus(true);
-                refreshUI();
-            }, (error) => {
-                console.warn("Firebase fallback to local memory:", error);
-                updateSyncStatus(false);
-            });
-
-            // Mobile menu event
-            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-                document.getElementById('navMenu').classList.toggle('hidden');
-            });
-        });
-
-        // Seed default demo data if Realtime DB is fresh
-        function seedInitialData() {
-            const initialList = [
-                {
-                    rm: 'RM-8801',
-                    name: 'Budi Santoso',
-                    phone: '08123456789',
-                    slot: '08:00',
-                    transport: 'Mobil Travel.In',
-                    destination: 'RS Sehat Medika - Poli Jantung',
-                    status: 'di Upload',
-                    fileUploaded: 'Hasil_EKG_Budi.pdf'
-                },
-                {
-                    rm: 'RM-8802',
-                    name: 'Siti Rahmawati',
-                    phone: '08219876543',
-                    slot: '08:00',
-                    transport: 'Kendaraan Pribadi',
-                    destination: 'Klinik Spesialis Mata Utama',
-                    status: 'Diperiksa',
-                    fileUploaded: null
-                },
-                {
-                    rm: 'RM-8803',
-                    name: 'Ahmad Dahlan',
-                    phone: '08571234123',
-                    slot: '13:00',
-                    transport: 'Mobil Travel.In',
-                    destination: 'RSU Harapan - Ortopedi',
-                    status: 'Berangkat',
-                    fileUploaded: null
-                }
-            ];
-
-            initialList.forEach(item => {
-                const newRef = push(ref(database, 'bookings'));
-                set(newRef, item);
-            });
-        }
-
-        function updateSyncStatus(isOnline) {
-            const dot = document.getElementById('syncDot');
-            const text = document.getElementById('syncText');
-            if (isOnline) {
-                dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
-                text.innerText = "Firebase Realtime Sync";
-            } else {
-                dot.className = "w-2 h-2 rounded-full bg-amber-400";
-                text.innerText = "Local Mode Active";
-            }
-        }
-
-        function updateClock() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('currentDateDisplay').innerHTML = `${dateStr} | <span class="font-extrabold text-traveloka">${timeStr} WIB</span>`;
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-item').forEach(el => {
-                el.classList.remove('bg-traveloka', 'text-white', 'shadow-lg', 'shadow-traveloka/30');
-                el.classList.add('text-slate-300');
-            });
-
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            if (activeNav) {
-                activeNav.classList.add('bg-traveloka', 'text-white', 'shadow-lg', 'shadow-traveloka/30');
-                activeNav.classList.remove('text-slate-300');
-            }
-
-            if (window.innerWidth < 768) {
-                document.getElementById('navMenu').classList.add('hidden');
-            }
-        }
-
-        function refreshUI() {
-            updateKPIs();
-            renderSlotQuickLists();
-            renderMonitoringTable();
-            renderSlotManager();
-            updateCharts();
-            updateFormSlotStatus();
-        }
-
-        function updateKPIs() {
-            const total = patients.length;
-            const slot08Count = patients.filter(p => p.slot === '08:00').length;
-            const slot13Count = patients.filter(p => p.slot === '13:00').length;
-            const uploadedCount = patients.filter(p => p.status === 'di Upload').length;
-
-            document.getElementById('statTotalPatients').innerText = total;
-            document.getElementById('statSlot08').innerText = `${slot08Count} / ${MAX_SLOT_CAPACITY}`;
-            document.getElementById('statSlot13').innerText = `${slot13Count} / ${MAX_SLOT_CAPACITY}`;
-            document.getElementById('statUploaded').innerText = uploadedCount;
-
-            document.getElementById('barSlot08').style.width = `${(slot08Count / MAX_SLOT_CAPACITY) * 100}%`;
-            document.getElementById('barSlot13').style.width = `${(slot13Count / MAX_SLOT_CAPACITY) * 100}%`;
-
-            const percentage = total > 0 ? Math.round((uploadedCount / total) * 100) : 0;
-            document.getElementById('statUploadPercentage').innerText = `${percentage}%`;
-
-            const pending = patients.filter(p => p.status !== 'di Upload').length;
-            document.getElementById('badgePendingCount').innerText = pending;
-        }
-
-        function renderMonitoringTable() {
-            const tbody = document.getElementById('monitoringTableBody');
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const filterSlot = document.getElementById('filterSlot').value;
-            const filterTransport = document.getElementById('filterTransport').value;
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            let filtered = patients.filter(p => {
-                const matchesSearch = p.name?.toLowerCase().includes(search) || 
-                                      p.rm?.toLowerCase().includes(search) || 
-                                      p.destination?.toLowerCase().includes(search);
-                const matchesSlot = filterSlot === 'ALL' || p.slot === filterSlot;
-                const matchesTransport = filterTransport === 'ALL' || p.transport === filterTransport;
-                const matchesStatus = filterStatus === 'ALL' || p.status === filterStatus;
-                return matchesSearch && matchesSlot && matchesTransport && matchesStatus;
-            });
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center py-8 text-slate-400">
-                            <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
-                            Tidak ada data pasien yang sesuai kriteria filter.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            tbody.innerHTML = filtered.map(p => {
-                let statusBadge = '';
-                if (p.status === 'Berangkat') {
-                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700">
-                        <i class="fa-solid fa-truck-fast text-[10px]"></i> Berangkat
-                    </span>`;
-                } else if (p.status === 'Diperiksa') {
-                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
-                        <i class="fa-solid fa-stethoscope text-[10px]"></i> Diperiksa
-                    </span>`;
-                } else {
-                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">
-                        <i class="fa-solid fa-circle-check text-[10px]"></i> di Upload
-                    </span>`;
-                }
-
-                const transportBadge = p.transport === 'Mobil Travel.In'
-                    ? `<span class="text-xs font-bold text-traveloka flex items-center gap-1"><i class="fa-solid fa-van-shuttle"></i> ${p.transport}</span>`
-                    : `<span class="text-xs font-bold text-indigo-600 flex items-center gap-1"><i class="fa-solid fa-car"></i> ${p.transport}</span>`;
-
-                const fileCell = p.fileUploaded 
-                    ? `<span class="inline-flex items-center gap-1.5 text-xs text-traveloka font-bold bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-lg">
-                        <i class="fa-solid fa-file-pdf"></i> ${p.fileUploaded}
-                       </span>`
-                    : `<span class="text-xs text-slate-400 italic">Belum ada file</span>`;
-
-                return `
-                    <tr class="hover:bg-slate-50 transition-colors">
-                        <td class="py-3.5 px-4">
-                            <div class="font-bold text-slate-900">${p.name}</div>
-                            <div class="text-xs text-slate-500 flex items-center gap-2">
-                                <span class="text-traveloka font-mono font-bold">${p.rm}</span>
-                                <span>•</span>
-                                <span><i class="fa-brands fa-whatsapp text-emerald-600"></i> ${p.phone}</span>
-                            </div>
-                        </td>
-                        <td class="py-3.5 px-4 font-bold text-slate-800">
-                            <span class="px-2.5 py-1 bg-slate-100 rounded-lg border border-slate-200 text-xs">
-                                <i class="fa-regular fa-clock text-traveloka mr-1"></i>${p.slot} WIB
-                            </span>
-                        </td>
-                        <td class="py-3.5 px-4">${transportBadge}</td>
-                        <td class="py-3.5 px-4 text-xs text-slate-600 font-medium">${p.destination}</td>
-                        <td class="py-3.5 px-4 text-center">${statusBadge}</td>
-                        <td class="py-3.5 px-4 text-center">${fileCell}</td>
-                        <td class="py-3.5 px-4 text-center">
-                            <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="advanceStatus('${p.id}')" title="Lanjut Status" class="bg-slate-100 hover:bg-traveloka hover:text-white text-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all">
-                                    <i class="fa-solid fa-forward-step"></i> Advance
-                                </button>
-                                <button onclick="openUploadModal('${p.id}')" title="Upload Berkas" class="bg-slate-100 hover:bg-sky-500 hover:text-white text-slate-700 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all">
-                                    <i class="fa-solid fa-upload"></i> File
-                                </button>
-                                <button onclick="deletePatient('${p.id}')" title="Hapus" class="bg-slate-100 hover:bg-rose-500 hover:text-white text-slate-400 p-1.5 rounded-lg text-xs transition-all">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        // Sequential status flow: Berangkat -> Diperiksa -> di Upload
-        function advanceStatus(id) {
-            const patient = patients.find(p => p.id === id);
-            if (!patient) return;
-
-            let nextStatus = patient.status;
-            let fileName = patient.fileUploaded;
-
-            if (patient.status === 'Berangkat') {
-                nextStatus = 'Diperiksa';
-            } else if (patient.status === 'Diperiksa') {
-                nextStatus = 'di Upload';
-                if (!fileName) fileName = `Hasil_Medis_${patient.rm.replace('-', '')}.pdf`;
-            } else {
-                showToast(`Status ${patient.name} sudah 'di Upload' / selesai`, 'warning');
-                return;
-            }
-
-            const itemRef = ref(database, `bookings/${id}`);
-            update(itemRef, { status: nextStatus, fileUploaded: fileName })
-                .then(() => showToast(`Status ${patient.name} diperbarui ke '${nextStatus}'`, 'success'))
-                .catch(err => showToast("Gagal update Firebase: " + err.message, 'error'));
-        }
-
-        function renderSlotQuickLists() {
-            const list08 = document.getElementById('listSlot08');
-            const list13 = document.getElementById('listSlot13');
-
-            const p08 = patients.filter(p => p.slot === '08:00');
-            const p13 = patients.filter(p => p.slot === '13:00');
-
-            document.getElementById('badgeSlot08Capacity').innerText = `${MAX_SLOT_CAPACITY - p08.length} / ${MAX_SLOT_CAPACITY} Tersedia`;
-            document.getElementById('badgeSlot13Capacity').innerText = `${MAX_SLOT_CAPACITY - p13.length} / ${MAX_SLOT_CAPACITY} Tersedia`;
-
-            list08.innerHTML = renderSlotItems(p08);
-            list13.innerHTML = renderSlotItems(p13);
-        }
-
-        function renderSlotItems(items) {
-            if (items.length === 0) return `<p class="text-xs text-slate-400 italic py-2">Belum ada pasien terdaftar.</p>`;
-            return items.map(p => `
-                <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs">
-                    <div>
-                        <p class="font-bold text-slate-800">${p.name}</p>
-                        <p class="text-[10px] text-slate-500">${p.transport}</p>
-                    </div>
-                    <span class="text-[10px] font-bold px-2 py-0.5 rounded ${p.status === 'di Upload' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
-                        ${p.status}
-                    </span>
-                </div>
-            `).join('');
-        }
-
-        function renderSlotManager() {
-            const p08 = patients.filter(p => p.slot === '08:00');
-            const p13 = patients.filter(p => p.slot === '13:00');
-
-            document.getElementById('slotManagerBadge08').innerText = `${p08.length} / ${MAX_SLOT_CAPACITY} Pasien`;
-            document.getElementById('slotManagerBadge13').innerText = `${p13.length} / ${MAX_SLOT_CAPACITY} Pasien`;
-
-            document.getElementById('slotManagerList08').innerHTML = p08.map(p => `
-                <div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center shadow-sm">
-                    <div>
-                        <p class="text-sm font-bold text-slate-900">${p.name} <span class="text-xs font-normal text-traveloka">(${p.rm})</span></p>
-                        <p class="text-xs text-slate-500">${p.destination} • ${p.transport}</p>
-                    </div>
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">${p.status}</span>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 italic">Slot kosong.</p>';
-
-            document.getElementById('slotManagerList13').innerHTML = p13.map(p => `
-                <div class="p-3 bg-white border border-slate-200 rounded-xl flex justify-between items-center shadow-sm">
-                    <div>
-                        <p class="text-sm font-bold text-slate-900">${p.name} <span class="text-xs font-normal text-amber-600">(${p.rm})</span></p>
-                        <p class="text-xs text-slate-500">${p.destination} • ${p.transport}</p>
-                    </div>
-                    <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">${p.status}</span>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-400 italic">Slot kosong.</p>';
-        }
-
-        function updateFormSlotStatus() {
-            const p08 = patients.filter(p => p.slot === '08:00').length;
-            const p13 = patients.filter(p => p.slot === '13:00').length;
-
-            const badge08 = document.getElementById('formBadgeSlot08');
-            const badge13 = document.getElementById('formBadgeSlot13');
-            const label08 = document.getElementById('labelSlot08');
-            const label13 = document.getElementById('labelSlot13');
-
-            badge08.innerText = `${p08}/${MAX_SLOT_CAPACITY} Terisi`;
-            badge13.innerText = `${p13}/${MAX_SLOT_CAPACITY} Terisi`;
-
-            if (p08 >= MAX_SLOT_CAPACITY) {
-                label08.classList.add('opacity-50', 'pointer-events-none', 'bg-rose-50');
-                badge08.innerText = "PENUH (5/5)";
-                badge08.className = "text-xs font-bold px-2 py-1 rounded bg-rose-100 text-rose-700";
-            }
-            if (p13 >= MAX_SLOT_CAPACITY) {
-                label13.classList.add('opacity-50', 'pointer-events-none', 'bg-rose-50');
-                badge13.innerText = "PENUH (5/5)";
-                badge13.className = "text-xs font-bold px-2 py-1 rounded bg-rose-100 text-rose-700";
-            }
-        }
-
-        function handleBookingSubmit(e) {
-            e.preventDefault();
-
-            const rm = document.getElementById('inputRM').value.trim();
-            const name = document.getElementById('inputName').value.trim();
-            const phone = document.getElementById('inputPhone').value.trim();
-            const destination = document.getElementById('inputDestination').value.trim();
-
-            const slotRadio = document.querySelector('input[name="slotTime"]:checked');
-            const transportRadio = document.querySelector('input[name="transportType"]:checked');
-
-            if (!slotRadio) {
-                showToast("Pilih jam slot keberangkatan!", "error");
-                return;
-            }
-
-            const slot = slotRadio.value;
-            const transport = transportRadio.value;
-
-            // Quota check rule (Max 5)
-            const currentSlotCount = patients.filter(p => p.slot === slot).length;
-            if (currentSlotCount >= MAX_SLOT_CAPACITY) {
-                showToast(`Slot ${slot} WIB sudah penuh (Maksimal 5 pasien)!`, "error");
-                return;
-            }
-
-            const newPatientData = {
-                rm,
-                name,
-                phone,
-                slot,
-                transport,
-                destination,
-                status: 'Berangkat',
-                fileUploaded: null,
-                createdAt: new Date().toISOString()
-            };
-
-            const newBookingRef = push(ref(database, 'bookings'));
-            set(newBookingRef, newPatientData)
-                .then(() => {
-                    document.getElementById('bookingForm').reset();
-                    showToast(`Booking ${name} tersimpan di Firebase!`, "success");
-                    switchTab('monitoring');
-                })
-                .catch(err => {
-                    showToast("Gagal menyimpan data: " + err.message, "error");
-                });
-        }
-
-        function openUploadModal(id) {
-            const p = patients.find(item => item.id === id);
-            if (!p) return;
-
-            document.getElementById('uploadPatientId').value = p.id;
-            document.getElementById('uploadPatientName').innerText = p.name;
-            document.getElementById('uploadPatientRM').innerText = `RM: ${p.rm} | Slot: ${p.slot} WIB`;
-            document.getElementById('inputFileName').value = p.fileUploaded || `Hasil_Medis_${p.rm}.pdf`;
-
-            document.getElementById('uploadModal').classList.remove('hidden');
-        }
-
-        function closeUploadModal() {
-            document.getElementById('uploadModal').classList.add('hidden');
-        }
-
-        function confirmUploadFile() {
-            const id = document.getElementById('uploadPatientId').value;
-            const fileName = document.getElementById('inputFileName').value.trim();
-
-            if (!fileName) {
-                showToast("Masukkan nama dokumen!", "error");
-                return;
-            }
-
-            const itemRef = ref(database, `bookings/${id}`);
-            update(itemRef, {
-                fileUploaded: fileName,
-                status: 'di Upload'
-            }).then(() => {
-                showToast("Berkas berhasil diunggah!", "success");
-                closeUploadModal();
-            });
-        }
-
-        function deletePatient(id) {
-            if (confirm("Apakah Anda yakin menghapus data pasien ini dari Firebase?")) {
-                const itemRef = ref(database, `bookings/${id}`);
-                remove(itemRef).then(() => {
-                    showToast("Data pasien dihapus", "info");
-                });
-            }
-        }
-
-        function initCharts() {
-            const ctxStatus = document.getElementById('chartStatus').getContext('2d');
-            chartStatusInstance = new Chart(ctxStatus, {
-                type: 'bar',
-                data: {
-                    labels: ['Berangkat', 'Diperiksa', 'di Upload'],
-                    datasets: [{
-                        data: [0, 0, 0],
-                        backgroundColor: ['#f59e0b', '#6366f1', '#10b981'],
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
-                    }
-                }
-            });
-
-            const ctxTransport = document.getElementById('chartTransport').getContext('2d');
-            chartTransportInstance = new Chart(ctxTransport, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Mobil Travel.In', 'Kendaraan Pribadi'],
-                    datasets: [{
-                        data: [0, 0],
-                        backgroundColor: ['#0194da', '#4f46e5']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } },
-                    cutout: '68%'
-                }
-            });
-        }
-
-        function updateCharts() {
-            if (!chartStatusInstance || !chartTransportInstance) return;
-
-            const cBerangkat = patients.filter(p => p.status === 'Berangkat').length;
-            const cDiperiksa = patients.filter(p => p.status === 'Diperiksa').length;
-            const cUploaded = patients.filter(p => p.status === 'di Upload').length;
-
-            chartStatusInstance.data.datasets[0].data = [cBerangkat, cDiperiksa, cUploaded];
-            chartStatusInstance.update();
-
-            const cTravel = patients.filter(p => p.transport === 'Mobil Travel.In').length;
-            const cPrivate = patients.filter(p => p.transport === 'Kendaraan Pribadi').length;
-
-            chartTransportInstance.data.datasets[0].data = [cTravel, cPrivate];
-            chartTransportInstance.update();
-
-            document.getElementById('countTravelVehicle').innerText = cTravel;
-            document.getElementById('countPrivateVehicle').innerText = cPrivate;
-        }
-
-        function exportToCSV() {
-            if (patients.length === 0) {
-                showToast("Tidak ada data untuk diexport!", "warning");
-                return;
-            }
-
-            let csv = "ID,No RM,Nama Pasien,No HP,Slot,Transportasi,Tujuan,Status,Dokumen\n";
-            patients.forEach(p => {
-                csv += `"${p.id}","${p.rm}","${p.name}","${p.phone}","${p.slot}","${p.transport}","${p.destination}","${p.status}","${p.fileUploaded || '-'}"\n`;
-            });
-
-            const link = document.createElement("a");
-            link.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
-            link.download = `TravelIn_Data_${new Date().toISOString().slice(0,10)}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Export CSV Berhasil!", "success");
-        }
-
-        function openBookingModal() {
-            switchTab('booking');
-        }
-
-        function toggleAuthModal() {
-            document.getElementById('authModal').classList.toggle('hidden');
-        }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPassword').value;
-
-            signInWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    showToast(`Auth Berhasil: ${userCredential.user.email}`, 'success');
-                    toggleAuthModal();
-                })
-                .catch((err) => {
-                    showToast(`Auth Info: Login aktif dengan ${email}`, 'info');
-                    toggleAuthModal();
-                });
-        }
-
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-
-            let bgClass = 'bg-slate-900 text-white';
-            let icon = 'fa-info-circle text-traveloka';
-
-            if (type === 'success') {
-                bgClass = 'bg-emerald-600 text-white';
-                icon = 'fa-circle-check text-white';
-            } else if (type === 'error') {
-                bgClass = 'bg-rose-600 text-white';
-                icon = 'fa-triangle-exclamation text-white';
-            } else if (type === 'warning') {
-                bgClass = 'bg-amber-500 text-white';
-                icon = 'fa-circle-exclamation text-white';
-            }
-
-            toast.className = `flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl text-xs font-bold transform transition-all duration-300 translate-x-10 opacity-0 ${bgClass}`;
-            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i> <span>${message}</span>`;
-
-            container.appendChild(toast);
-
-            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-x-10');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-    </script>
+    <div class="overflow-x-auto rounded-xl border border-slate-800"><table class="w-full text-left text-sm text-slate-300">
+     <thead class="bg-slate-950 text-xs font-bold text-slate-400 uppercase tracking-wider"><tr><th class="p-3">Pasien</th><th class="p-3">Jam</th><th class="p-3">Moda Transportasi</th><th class="p-3 text-center">Status</th><th class="p-3">Ceklis Monitoring</th><th class="p-3 text-center noprint">Aksi</th></tr></thead>
+     <tbody id="tb" class="divide-y divide-slate-800/60"></tbody></table></div>
+   </div></section>
+
+   <section id="v-book" class="hidden"><div class="card max-w-3xl mx-auto p-6 sm:p-8">
+    <h3 class="text-lg font-bold mb-1"><i class="fa-solid fa-file-pen text-teal-400 mr-2"></i>Form Pendaftaran Keberangkatan Pasien</h3>
+    <p class="text-xs text-slate-400 mb-6 pb-4 border-b border-slate-800">Data akan langsung tersimpan &amp; tersinkronisasi ke Firebase Realtime Database.</p>
+    <form id="bf" class="space-y-5">
+     <div class="grid sm:grid-cols-2 gap-4">
+      <label class="text-xs font-semibold text-slate-300">No. Rekam Medis (RM)<input id="rm" required maxlength="30" class="inp mt-1.5" placeholder="RM-9082"></label>
+      <label class="text-xs font-semibold text-slate-300">Nama Lengkap Pasien<input id="nm" required minlength="2" maxlength="40" class="inp mt-1.5"></label>
+      <label class="text-xs font-semibold text-slate-300">Nomor WhatsApp / HP<input id="wa" type="tel" required class="inp mt-1.5" placeholder="08xxxxxxxxxx"></label>
+      
+      
+     </div>
+     <div><p class="text-xs font-semibold text-slate-300 mb-2">Pilih Tanggal Keberangkatan</p><div class="flex flex-wrap gap-2 items-center"><div id="dChips" class="flex gap-2"></div><input id="fdate" type="date" required class="inp !w-auto"></div><p id="dLbl" class="text-xs text-teal-400 mt-2"></p></div>
+     <div><p class="text-xs font-semibold text-slate-300 mb-2">Pilih Slot Keberangkatan (Max 5 Pasien per Slot)</p><div id="slotPick" class="grid sm:grid-cols-2 gap-4"></div></div>
+     <div><p class="text-xs font-semibold text-slate-300 mb-2">Pilih Moda Transportasi</p><div class="grid sm:grid-cols-2 gap-4">
+      <label class="border border-slate-800 rounded-xl p-3.5 cursor-pointer bg-slate-950 flex items-center gap-3"><input type="radio" name="md" value="jemput" checked class="accent-teal-500"><div><p class="text-sm font-semibold"><i class="fa-solid fa-van-shuttle text-teal-400 mr-1.5"></i>Mobil Travel.In</p><p class="text-xs text-slate-400">Armada Antar-Jemput Resmi</p></div></label>
+      <label class="border border-slate-800 rounded-xl p-3.5 cursor-pointer bg-slate-950 flex items-center gap-3"><input type="radio" name="md" value="mandiri" class="accent-teal-500"><div><p class="text-sm font-semibold"><i class="fa-solid fa-car text-indigo-400 mr-1.5"></i>Kendaraan Pribadi</p><p class="text-xs text-slate-400">Mandiri / Antar Keluarga</p></div></label></div></div>
+     <label id="adw" class="block text-xs font-semibold text-slate-300">Alamat Penjemputan<input id="ad" maxlength="120" class="inp mt-1.5" placeholder="Jalan, RT/RW, patokan"></label>
+     <div class="flex justify-end gap-3"><button type="reset" class="btn py-2.5">Reset</button><button class="btn pri py-2.5 px-6">Simpan Booking Pasien</button></div>
+    </form>
+   </div></section>
+
+   <section id="v-slot" class="hidden space-y-4">
+    <div class="card p-5"><h3 class="font-bold"><i class="fa-solid fa-sliders text-teal-400 mr-2"></i>Manajemen Kuota Keberangkatan Real-Time</h3><p class="text-xs text-slate-400 mt-1">Aturan bisnis: tiap slot maksimal <b>5 pasien</b>. Tutup pemesanan publik atau isi nama driver (tampil di layar TV).</p></div>
+    <div id="slotsMan" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+   </section>
+
+   <section id="v-rep" class="hidden"><div class="card p-6 space-y-5">
+    <div class="flex flex-wrap justify-between gap-3"><div><h3 class="text-lg font-bold"><i class="fa-solid fa-chart-line text-teal-400 mr-2"></i>Laporan & Riwayat Keberangkatan</h3><p class="text-xs text-slate-400">Rekap performa, ceklis pemeriksaan, dan riwayat berkas ter-upload.</p></div>
+     <div class="flex gap-2 noprint"><select id="rg" class="inp !w-auto"><option value="7">7 hari terakhir</option><option value="14">14 hari terakhir</option><option value="30">30 hari terakhir</option></select><button data-a="csvr" class="btn"><i class="fa-solid fa-file-csv text-emerald-400"></i> Export CSV</button></div></div>
+    <div id="repK" class="grid md:grid-cols-4 gap-4"></div>
+    <div class="overflow-x-auto rounded-xl border border-slate-800"><table class="w-full text-left text-sm text-slate-300">
+     <thead class="bg-slate-950 text-xs font-bold text-slate-400 uppercase tracking-wider"><tr><th class="p-3">Tanggal</th><th class="p-3">Pasien</th><th class="p-3">Cara</th><th class="p-3">Status</th><th class="p-3">Berkas</th></tr></thead><tbody id="repT" class="divide-y divide-slate-800/60"></tbody></table></div>
+   </div></section>
+  </div>
+ </main>
+</div>
+
+<div id="um" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+ <div class="card w-full max-w-md p-6 space-y-4 shadow-2xl">
+  <h3 class="font-bold"><i class="fa-solid fa-cloud-arrow-up text-teal-400 mr-2"></i>Konfirmasi Upload Berkas Hasil</h3>
+  <div><p id="un" class="font-bold text-sm"></p><p id="ur" class="text-xs text-slate-400"></p></div>
+  <label class="block text-xs font-semibold text-slate-300">Nama / jenis dokumen<input id="ufn" maxlength="80" class="inp mt-1.5" placeholder="Resume_Medis.pdf"></label>
+  <input type="hidden" id="uid">
+  <div class="flex justify-end gap-2"><button data-a="ucl" class="btn">Batal</button><button data-a="usave" class="btn pri">Simpan & tandai 'Sudah di Upload'</button></div>
+ </div>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import{getDatabase,ref,onValue,update,set,push,query,orderByKey,orderByChild,startAt,endAt,equalTo,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+const app=initializeApp({apiKey:"AIzaSyALABO8pz4nMQUbhgEIfOvq0xmqNTAj_DY",authDomain:"trevelin-295c3.firebaseapp.com",databaseURL:"https://trevelin-295c3-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"trevelin-295c3",storageBucket:"trevelin-295c3.firebasestorage.app",messagingSenderId:"387360938480",appId:"1:387360938480:web:c7bb1851789127cc5be535"});
+const db=getDatabase(app),auth=getAuth(app);
+const ADMIN="qx2cpbYpIlXcUvDbTT0MIQneUeE2",Q=5,SL=[{id:"0800",l:"08:00",ic:"fa-sun",c:"emerald",n:"Keberangkatan Pagi"},{id:"1300",l:"13:00",ic:"fa-cloud-sun",c:"amber",n:"Keberangkatan Siang"}];
+const S=[["Terdaftar","slate","fa-clipboard-list"],["Berangkat","amber","fa-truck-fast"],["Diperiksa","indigo","fa-stethoscope"],["di Upload","cyan","fa-circle-check"]],CK=[["exam","Selesai Diperiksa"],["up","Sudah di Upload"]];
+const NAV=[["dash","fa-chart-pie","Dashboard Utama","Executive Dashboard"],["mon","fa-table-list","Tabel Monitoring","Tabel Monitoring Pasien"],["book","fa-calendar-plus","Pendaftaran Slot","Form Pendaftaran Keberangkatan"],["slot","fa-clock","Kapasitas Slot Jam","Kapasitas & Kuota Slot"],["rep","fa-file-invoice","Laporan & Riwayat","Laporan & Riwayat"]];
+const $=i=>document.getElementById(i),pad=n=>String(n).padStart(2,"0"),W=7*36e5;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dk=d=>`${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`,today=()=>dk(new Date(Date.now()+W)),pt=k=>k.split("-").map(Number),addD=(k,n)=>{const[y,m,d]=pt(k);return dk(new Date(Date.UTC(y,m-1,d+n)))};
+const hm=t=>{const d=new Date(t+W);return `${pad(d.getUTCDate())}/${pad(d.getUTCMonth()+1)} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`};
+const fd=k=>{const[y,m,d]=pt(k);return new Date(Date.UTC(y,m-1,d)).toLocaleDateString("id-ID",{timeZone:"UTC",day:"numeric",month:"short",year:"numeric"})};
+const normWA=v=>{let d=v.replace(/\D/g,"");if(d.startsWith("0"))d="62"+d.slice(1);else if(d.startsWith("8"))d="62"+d;return/^628\d{7,12}$/.test(d)?d:null};
+const mask=n=>{const p=n.trim().split(/\s+/);return(p.length>1?p[0]+" "+p[1][0].toUpperCase()+".":p[0]).slice(0,32)};
+const sl=id=>SL.find(s=>s.id===id)?.l||id,stage=b=>b.checks?.up?3:b.checks?.exam?2:(b.status==="naik"||b.status==="tiba")?1:0;
+let D=today(),seats={},slots={},bks={},rec={},L=[],rng=7,bkSlot=null,tab="dash",bkD=today(),bseats={},unS,unB,unR,unSl,unBk;
+
+function toast(m,t="info"){const c={success:"bg-emerald-950 border-emerald-800 text-emerald-200",error:"bg-rose-950 border-rose-800 text-rose-200",warning:"bg-amber-950 border-amber-800 text-amber-200",info:"bg-slate-800 border-slate-700 text-white"}[t],e=document.createElement("div");
+  e.className=`px-4 py-3 rounded-xl border shadow-xl text-xs font-semibold ${c}`;e.textContent=m;$("toasts").append(e);setTimeout(()=>e.remove(),3500)}
+const modeBdg=b=>b.mode==="jemput"?`<span class="text-xs font-medium text-teal-300"><i class="fa-solid fa-van-shuttle"></i> Mobil Travel.In</span>`:b.mode==="mandiri"?`<span class="text-xs font-medium text-indigo-300"><i class="fa-solid fa-car"></i> Kendaraan Pribadi</span>`:`<span class="text-xs text-slate-500 italic">Moda belum diisi</span>`;
+const stBdg=b=>{const[t,c,i]=S[stage(b)];return `<span class="bdg bg-${c}-500/10 text-${c}-400 border-${c}-500/30"><i class="fa-solid ${i} text-[10px]"></i>${t}</span>`};
+const bar=(p,c)=>`<div class="w-full bg-slate-800 rounded-full h-1.5"><div class="bg-${c}-500 h-1.5 rounded-full" style="width:${p}%"></div></div>`;
+const kpi=(t,v,sub,ic,c)=>`<div class="card p-4"><div class="flex justify-between items-start"><div><p class="text-xs font-medium text-slate-400">${t}</p><h3 class="text-2xl font-black text-${c}-400 mt-1">${v}</h3></div><div class="w-10 h-10 rounded-xl bg-${c}-500/10 text-${c}-400 border border-${c}-500/20 flex items-center justify-center"><i class="fa-solid ${ic}"></i></div></div><div class="mt-3 text-xs text-slate-400">${sub}</div></div>`;
+
+/* ---- koneksi data ---- */
+function subD(){unS&&unS();unB&&unB();
+  unS=onValue(query(ref(db,"seats"),orderByKey(),startAt(D),endAt(D+"\uf8ff")),s=>{seats=s.val()||{};paint()});
+  unB=onValue(query(ref(db,"bookings"),orderByChild("date"),equalTo(D)),s=>{bks=s.val()||{};paint()},()=>toast("Gagal membaca bookings. Periksa RULES Firebase.","error"))}
+function subR(){unR&&unR();unR=onValue(query(ref(db,"bookings"),orderByChild("date"),startAt(addD(today(),-rng))),s=>{rec=s.val()||{};rRep()},()=>{})}
+const setD=d=>{if(!d)return;D=d;bks={};seats={};subD();paint()};
+function subBk(){unBk&&unBk();unBk=onValue(query(ref(db,"seats"),orderByKey(),startAt(bkD),endAt(bkD+"\uf8ff")),s=>{bseats=s.val()||{};rBook()})}
+const setBD=d=>{if(!d||d<today())return toast("Pilih tanggal hari ini atau sesudahnya","warning");bkD=d;bkSlot=null;bseats={};subBk();rBook()};
+onValue(ref(db,".info/connected"),s=>{$("dot").classList.toggle("text-emerald-400",!!s.val());$("dot").classList.toggle("text-rose-500",!s.val())});
+onAuthStateChanged(auth,u=>{const ok=!!u&&u.uid===ADMIN;if(u&&!ok){signOut(auth);$("le").textContent="Akun ini bukan admin."}
+  $("login").classList.toggle("hidden",ok);$("app").classList.toggle("hidden",!ok);
+  [unS,unB,unR,unSl,unBk].forEach(f=>f&&f());seats={};bks={};rec={};bseats={};
+  if(ok){$("who").textContent=u.email;unSl=onValue(ref(db,"slots"),s=>{slots=s.val()||{};paint()});subD();subR();subBk()}paint()});
+$("lf").onsubmit=async e=>{e.preventDefault();$("le").textContent="";try{await signInWithEmailAndPassword(auth,$("em").value,$("pw").value);$("pw").value=""}
+  catch(x){$("le").textContent=/credential|password|user/.test(x.code)?"Email atau kata sandi salah.":"Gagal masuk: "+x.code}};
+
+/* ---- aksi data ---- */
+async function book(o){const k=`${o.date}_${o.slot}`,ts=serverTimestamp();
+  for(const n of [1,2,3,4,5].filter(n=>!(bseats[k]||{})[n])){const id=push(ref(db,"bookings")).key;
+    try{await update(ref(db),{[`seats/${k}/${n}`]:{name:mask(o.name),id,ts,mode:o.mode},[`bookings/${id}`]:{name:o.name.trim(),phone:o.phone,date:o.date,slot:o.slot,seat:String(n),status:"dikonfirmasi",mode:o.mode,rm:o.rm,ts,...(o.addr&&{addr:o.addr})}});return n}
+    catch(e){if(!/permission/i.test(e.message))throw e}}
+  throw new Error("Slot "+sl(o.slot)+" WIB sudah penuh (maksimal 5 pasien)")}
+async function adv(id){const b=bks[id];if(!b)return;const s=stage(b);
+  if(s===0){await update(ref(db,`bookings/${id}`),{status:"naik"});toast(`${b.name}: Berangkat`,"info")}
+  else if(s===1){await set(ref(db,`bookings/${id}/checks/exam`),serverTimestamp());toast(`${b.name}: Selesai Diperiksa`,"success")}
+  else if(s===2)openUp(id);else toast("Pasien ini sudah selesai (di Upload)","warning")}
+function openUp(id){const b=bks[id];if(!b)return;$("uid").value=id;$("un").textContent=b.name;$("ur").textContent=`No. RM: ${b.rm||"-"} | ${sl(b.slot)} WIB`;$("ufn").value=b.file||`Hasil_${(b.rm||"pasien").replace(/\W/g,"")}.pdf`;$("um").classList.remove("hidden")}
+async function saveUp(){const id=$("uid").value,f=$("ufn").value.trim();if(!f)return toast("Isi nama dokumen","error");
+  await update(ref(db,`bookings/${id}`),{file:f,"checks/up":serverTimestamp()});$("um").classList.add("hidden");toast("Berkas dicatat, status: di Upload","success")}
+
+/* ---- render ---- */
+const slotCard=(s,m)=>{const k=`${D}_${s.id}`,P=L.filter(b=>b.slot===s.id),cl=slots[k]?.closed,dr=slots[k]?.driver;
+  return `<div class="card p-5"><div class="flex justify-between items-center pb-3 border-b border-slate-800"><div class="flex items-center gap-3"><span class="px-3 py-1 bg-${s.c}-500/20 text-${s.c}-400 font-extrabold text-sm rounded-lg border border-${s.c}-500/30">${s.l} WIB</span><h4 class="font-bold">${s.n}</h4></div><span class="bdg ${cl?"bg-rose-500/10 text-rose-400 border-rose-500/30":"bg-slate-800 text-slate-300 border-slate-700"}">${cl?"Ditutup":`${Q-P.length}/${Q} Tersedia`}</span></div>`+
+  (m?`<div class="flex gap-2 mt-4"><input class="inp" data-drv="${k}" value="${esc(dr||"")}" maxlength="30" placeholder="Nama driver (tampil di TV)"><button class="btn shrink-0" data-a="close" data-k="${k}">${cl?"Buka":"Tutup"} pemesanan</button></div>`:dr?`<p class="text-xs text-slate-400 mt-3"><i class="fa-solid fa-id-card-clip text-teal-400"></i> Driver: <b class="text-slate-200">${esc(dr)}</b></p>`:"")+
+  `<div class="mt-4 space-y-2">${P.length?P.map(b=>`<div class="flex items-center justify-between p-2.5 bg-slate-950 rounded-xl border border-slate-800 text-xs"><div><p class="font-bold text-slate-200">${b.seat}. ${esc(b.name)}</p><p class="text-slate-400">${b.mode==="jemput"?"Mobil Travel.In":b.mode==="mandiri"?"Kendaraan Pribadi":"Moda belum diisi"}</p></div>${stBdg(b)}</div>`).join(""):'<p class="text-xs text-slate-500 italic">Belum ada pasien terdaftar.</p>'}</div></div>`};
+let cS,cT;const mk=(i,c)=>typeof Chart!=="undefined"?new Chart($(i),c):null;
+function charts(){if(!cS){const o={responsive:true,maintainAspectRatio:false};
+  cS=mk("cS",{type:"bar",data:{labels:S.map(s=>s[0]),datasets:[{data:[0,0,0,0],backgroundColor:["#64748b","#f59e0b","#6366f1","#06b6d4"],borderRadius:8}]},options:{...o,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:"#94a3b8"},grid:{color:"#334155"}},x:{ticks:{color:"#94a3b8"},grid:{display:false}}}}});
+  cT=mk("cT",{type:"doughnut",data:{labels:["Mobil Travel.In","Kendaraan Pribadi"],datasets:[{data:[0,0],backgroundColor:["#14b8a6","#6366f1"],borderWidth:0}]},options:{...o,cutout:"70%",plugins:{legend:{position:"bottom",labels:{color:"#cbd5e1"}}}}})}
+  const c=[0,1,2,3].map(i=>L.filter(b=>stage(b)===i).length),j=L.filter(b=>b.mode==="jemput").length,m=L.filter(b=>b.mode==="mandiri").length;
+  if(cS){cS.data.datasets[0].data=c;cS.update()}if(cT){cT.data.datasets[0].data=[j,m];cT.update()}$("nJ").textContent=j;$("nM").textContent=m}
+function rDash(){const n=L.length,up=L.filter(b=>b.checks?.up).length,per=s=>L.filter(b=>b.slot===s.id).length;
+  $("kpi").innerHTML=kpi("Total Pasien",n,`Kuota maks ${2*Q} / hari · ${fd(D)}`,"fa-users","teal")+SL.map(s=>kpi(`Slot ${s.l} WIB`,`${per(s)} / ${Q}`,bar(per(s)/Q*100,s.c),s.ic,s.c)).join("")+kpi("Selesai / di Upload",up,`Progres Penyelesaian <b class="text-cyan-400 float-right">${n?Math.round(up/n*100):0}%</b>`,"fa-file-circle-check","cyan");
+  $("slotsDash").innerHTML=SL.map(s=>slotCard(s,0)).join("");charts()}
+const ck=b=>CK.map(([k,l])=>{const v=b.checks?.[k];return `<label class="flex items-center gap-2 text-xs cursor-pointer ${v?"text-emerald-400":"text-slate-400"}"><input type="checkbox" class="accent-emerald-500" data-ck="${b.id}|${k}" ${v?"checked":""}>${l}${v?` <span class="text-[10px] text-slate-500">${hm(v)}</span>`:""}</label>`}).join("");
+const row=b=>`<tr class="hover:bg-slate-800/40 align-top"><td class="p-3"><div class="font-bold text-white">${esc(b.name)}</div><div class="text-xs text-slate-400"><span class="text-teal-400 font-mono">${esc(b.rm||"-")}</span> • <a target="_blank" rel="noopener" href="https://wa.me/${b.phone}" class="hover:text-emerald-400"><i class="fa-brands fa-whatsapp text-emerald-500"></i> ${b.phone}</a></div></td>
+<td class="p-3"><span class="px-2.5 py-1 bg-slate-950 rounded-lg border border-slate-800 text-xs font-bold"><i class="fa-regular fa-clock text-teal-400 mr-1"></i>${sl(b.slot)} · K${b.seat}</span></td>
+<td class="p-3">${modeBdg(b)}${b.addr?`<div class="text-[11px] text-slate-400 mt-1">📍 ${esc(b.addr)} <a target="_blank" rel="noopener" class="text-teal-400" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.addr)}">peta</a></div>`:""}</td>
+<td class="p-3 text-center">${stBdg(b)}</td>
+<td class="p-3 space-y-1">${ck(b)}${b.file?`<div class="text-[11px] text-cyan-400"><i class="fa-solid fa-file-pdf"></i> ${esc(b.file)}</div>`:""}</td>
+<td class="p-3 noprint"><div class="flex gap-1.5 justify-center"><button class="btn !px-2.5 !py-1.5 hover:!bg-teal-500 hover:!text-slate-950" data-a="adv" data-id="${b.id}"><i class="fa-solid fa-forward-step"></i> Advance</button><button class="btn !px-2.5 !py-1.5 hover:!bg-cyan-500 hover:!text-slate-950" data-a="up" data-id="${b.id}"><i class="fa-solid fa-upload"></i> File</button><button class="btn !px-2 !py-1.5 hover:!bg-rose-500 hover:!text-white" data-a="del" data-id="${b.id}"><i class="fa-solid fa-trash-can"></i></button></div></td></tr>`;
+function rMon(){const q=$("q").value.toLowerCase(),a=$("fs").value,m=$("fm").value,t=$("ft").value;
+  const R=L.filter(b=>(!q||[b.name,b.rm,b.phone].some(x=>(x||"").toLowerCase().includes(q)))&&(a==="ALL"||b.slot===a)&&(m==="ALL"||b.mode===m)&&(t==="ALL"||stage(b)==t));
+  $("tb").innerHTML=R.length?R.map(row).join(""):`<tr><td colspan="6" class="text-center py-10 text-slate-500"><i class="fa-solid fa-folder-open text-3xl block mb-2"></i>Tidak ada data pasien pada ${fd(D)} sesuai filter.</td></tr>`;return R}
+function rBook(){const t=today(),[y,m,d]=pt(bkD);$("fdate").min=t;$("fdate").value=bkD;$("adw").classList.toggle("hidden",document.querySelector("[name=md]:checked").value!=="jemput");
+  $("dChips").innerHTML=[["Hari ini",0],["Besok",1],["Lusa",2]].map(([l,i])=>`<button type="button" data-a="bd" data-d="${addD(t,i)}" class="btn ${addD(t,i)===bkD?"!bg-teal-500 !text-slate-950 !border-teal-500":""}">${l}</button>`).join("");
+  $("dLbl").innerHTML=`<i class="fa-regular fa-calendar-check"></i> ${new Date(Date.UTC(y,m-1,d)).toLocaleDateString("id-ID",{timeZone:"UTC",weekday:"long",day:"numeric",month:"long",year:"numeric"})}`;
+  $("slotPick").innerHTML=SL.map(s=>{const f=[1,2,3,4,5].filter(n=>(bseats[`${bkD}_${s.id}`]||{})[n]).length,full=f>=Q,on=bkSlot===s.id;
+    return `<label class="border-2 ${on?"border-teal-500":"border-slate-800"} rounded-xl p-4 bg-slate-950 flex justify-between items-center ${full?"opacity-50 pointer-events-none":"cursor-pointer hover:border-teal-500/50"}"><input type="radio" name="sl" value="${s.id}" class="hidden" ${on?"checked":""}><div><div class="flex items-center gap-2"><i class="fa-solid ${s.ic} text-${s.c}-400"></i><b>${s.l} WIB</b></div><span class="text-xs text-slate-400">${s.n.replace("Keberangkatan","Keberangkatan Sesi")}</span></div><span class="bdg ${full?"bg-rose-500/20 text-rose-400 border-rose-500/30":`bg-${s.c}-500/10 text-${s.c}-400 border-${s.c}-500/20`}">${full?"SLOT PENUH":`${f}/${Q} Terisi`}</span></label>`}).join("")}
+function rRep(){const R=Object.entries(rec).map(([id,b])=>({id,...b})).sort((a,b)=>(b.date+b.slot+b.seat).localeCompare(a.date+a.slot+a.seat)),n=R.length,up=R.filter(b=>b.checks?.up).length,ex=R.filter(b=>b.checks?.exam).length,j=R.filter(b=>b.mode==="jemput").length,tr=new Set(R.map(b=>b.date+b.slot)).size;
+  $("repK").innerHTML=kpi("Okupansi Slot",(tr?Math.round(n/(tr*Q)*100):0)+"%",`${tr} keberangkatan · ${n} pasien`,"fa-gauge-high","teal")+kpi("Selesai Diperiksa",n?Math.round(ex/n*100)+"%":"0%",`${ex} dari ${n} pasien`,"fa-stethoscope","indigo")+kpi("Sudah di Upload",n?Math.round(up/n*100)+"%":"0%",`${up} dari ${n} pasien`,"fa-file-circle-check","cyan")+kpi("Mobil Travel.In",n?Math.round(j/n*100)+"%":"0%",`${j} dari ${n} pasien`,"fa-van-shuttle","emerald");
+  $("repT").innerHTML=R.length?R.map(b=>`<tr class="hover:bg-slate-800/40"><td class="p-3 text-xs">${fd(b.date)} · ${sl(b.slot)}</td><td class="p-3"><div class="font-bold text-white text-sm">${esc(b.name)}</div><div class="text-xs text-teal-400 font-mono">${esc(b.rm||"-")}</div></td><td class="p-3">${modeBdg(b)}</td><td class="p-3">${stBdg(b)}</td><td class="p-3 text-xs ${b.file?"text-cyan-400":"text-slate-500 italic"}">${b.file?esc(b.file):"Belum ada"}</td></tr>`).join(""):'<tr><td colspan="5" class="text-center py-8 text-slate-500">Belum ada data pada rentang ini.</td></tr>'}
+function paint(){L=Object.entries(bks).map(([id,b])=>({id,...b})).sort((a,b)=>(a.slot+a.seat).localeCompare(b.slot+b.seat));
+  $("dtp").value=D;rDash();rMon();rBook();$("slotsMan").innerHTML=SL.map(s=>slotCard(s,1)).join("");rRep();
+  const p=L.filter(b=>!b.checks?.up).length;document.querySelector("[data-t=mon] b").textContent=p}
+function go(t){tab=t;NAV.forEach(([k,,,h])=>{$("v-"+k).classList.toggle("hidden",k!==t);if(k===t)$("ttl").innerHTML=`<i class="fa-solid ${NAV.find(x=>x[0]===t)[1]} text-teal-400"></i> ${h}`});
+  document.querySelectorAll(".nav").forEach(a=>a.classList.toggle("on",a.dataset.t===t));if(innerWidth<768)$("nav").classList.add("hidden")}
+$("nav").innerHTML=NAV.map(([k,i,l])=>`<a class="nav" data-a="nav" data-t="${k}"><i class="fa-solid ${i} w-5 text-center"></i><span>${l}</span>${k==="mon"?'<b class="ml-auto bg-teal-500/20 text-teal-300 text-xs px-2 py-0.5 rounded-full">0</b>':""}</a>`).join("");
+
+/* ---- event ---- */
+const csv=(rows,name)=>{const q=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+  const t=[["Tanggal","Jam","Kursi","Nama","No RM","WA","Moda transportasi","Alamat jemput","Status","Selesai Diperiksa","Sudah di Upload","Berkas"],...rows.map(b=>[b.date,sl(b.slot),b.seat,b.name,b.rm,b.phone,b.mode==="jemput"?"Mobil Travel.In":b.mode==="mandiri"?"Kendaraan Pribadi":"",b.addr,S[stage(b)][0],b.checks?.exam?hm(b.checks.exam):"",b.checks?.up?hm(b.checks.up):"",b.file])].map(r=>r.map(q).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download=name;a.click()};
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-a]");if(!b)return;const d=b.dataset;
+  try{switch(d.a){
+    case"nav":go(d.t);break;case"menu":$("nav").classList.toggle("hidden");break;
+    case"dd":setD(addD(D,+d.v));break;case"today":setD(today());break;case"bd":setBD(d.d);break;
+    case"adv":await adv(d.id);break;case"up":openUp(d.id);break;case"usave":await saveUp();break;case"ucl":$("um").classList.add("hidden");break;
+    case"del":if(confirm("Hapus pasien ini dan kosongkan kursi?")){const x=bks[d.id];await update(ref(db),{[`seats/${x.date}_${x.slot}/${x.seat}`]:null,[`bookings/${d.id}`]:null});toast("Data pasien dihapus","info")}break;
+    case"close":await set(ref(db,`slots/${d.k}/closed`),slots[d.k]?.closed?null:true);break;
+    case"csvm":csv(rMon(),`TravelIN_${D}.csv`);break;case"csvr":csv(Object.values(rec),`TravelIN_riwayat_${today()}.csv`);break;
+    case"prt":print();break;case"out":signOut(auth);break}}catch(x){toast(x.message,"error")}});
+document.addEventListener("change",async e=>{const t=e.target;try{
+  if(t.dataset.ck){const[id,k]=t.dataset.ck.split("|");await set(ref(db,`bookings/${id}/checks/${k}`),t.checked?serverTimestamp():null)}
+  else if(t.dataset.drv)await set(ref(db,`slots/${t.dataset.drv}/driver`),t.value.trim()||null)}catch(x){toast(x.message,"error")}});
+["q","fs","fm","ft"].forEach(i=>$(i).oninput=rMon);
+$("dtp").onchange=e=>setD(e.target.value);$("fdate").onchange=e=>setBD(e.target.value);
+$("rg").onchange=e=>{rng=+e.target.value;subR()};
+$("slotPick").onchange=e=>{bkSlot=e.target.value;rBook()};
+document.querySelectorAll("[name=md]").forEach(r=>r.onchange=rBook);
+$("bf").onsubmit=async e=>{e.preventDefault();const phone=normWA($("wa").value),mode=document.querySelector("[name=md]:checked").value,addr=$("ad").value.trim();
+  if(!bkSlot)return toast("Pilih jam keberangkatan terlebih dahulu","error");if(!phone)return toast("Nomor WhatsApp tidak valid","error");if(mode==="jemput"&&addr.length<5)return toast("Isi alamat penjemputan","error");
+  try{const n=await book({name:$("nm").value,phone,date:bkD,slot:bkSlot,mode,rm:$("rm").value.trim(),addr:mode==="jemput"?addr:""});
+    toast(`${$("nm").value} terdaftar · ${sl(bkSlot)} WIB · kursi ${n}`,"success");e.target.reset();bkSlot=null;rBook();setD(bkD);go("mon")}catch(x){toast(x.message,"error")}};
+setInterval(()=>{const n=new Date(Date.now()+W);$("clk").textContent=`${pad(n.getUTCHours())}:${pad(n.getUTCMinutes())}:${pad(n.getUTCSeconds())}`},1e3);
+go("dash");paint();
+</script>
 </body>
 </html>
